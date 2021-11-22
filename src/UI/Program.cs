@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using UI.Interfaces;
+using UI.Services;
 
 namespace UI
 {
@@ -18,6 +20,10 @@ namespace UI
             builder.RootComponents.Add<App>("#app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+            builder.Services.AddScoped<IAuthenticationHttpService, AuthenticationHttpService>();
+            builder.Services.AddScoped<IHttpService, HttpService>();
+            builder.Services.AddScoped<IUserHttpService, UserHttpService>();
 
             await builder.Build().RunAsync();
         }

@@ -33,36 +33,37 @@ namespace WebAPI
         {
             services.AddControllers()
                 .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<Result>());
+            services.AddRazorPages();
             services.AddInfrastructure(Configuration);
             services.AddApplication();
             services.AddScoped<ErrorHandlingMiddleware>();
-            services.AddSwaggerGen(c =>
-            {
-                c.EnableAnnotations();
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Description = "Insert token",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT",
-                    Scheme = "bearer"
-                });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new string[] { }
-                    }
-                });
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.EnableAnnotations();
+            //    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            //    {
+            //        In = ParameterLocation.Header,
+            //        Description = "Insert token",
+            //        Name = "Authorization",
+            //        Type = SecuritySchemeType.Http,
+            //        BearerFormat = "JWT",
+            //        Scheme = "bearer"
+            //    });
+            //    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+            //        {
+            //            new OpenApiSecurityScheme
+            //            {
+            //                Reference = new OpenApiReference
+            //                {
+            //                    Type = ReferenceType.SecurityScheme,
+            //                    Id = "Bearer"
+            //                }
+            //            },
+            //            new string[] { }
+            //        }
+            //    });
 
-            });
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,18 +72,28 @@ namespace WebAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1"));
+                app.UseWebAssemblyDebugging();
             }
-
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+            app.UseHttpsRedirection();
+            app.UseBlazorFrameworkFiles();
+            app.UseStaticFiles();
             app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseAuthentication();
-            app.UseHttpsRedirection();
+           
+
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapRazorPages();
                 endpoints.MapControllers();
+                endpoints.MapFallbackToFile("index.html");
             });
         }
     }
