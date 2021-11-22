@@ -1,5 +1,14 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+section {
+    min-height: calc(100vh - 170px);
+}
+
+#app {
+    min-height: 100vh;
+    height: 100%;
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
@@ -115,6 +124,9 @@ ul {
 a {
     text-decoration: none;
 }
+
+
+
 
 body {
     min-height: 100vh;
