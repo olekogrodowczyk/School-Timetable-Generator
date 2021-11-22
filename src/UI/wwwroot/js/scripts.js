@@ -21,6 +21,19 @@ class Student {
 
 }
 
+var nauczycieleId = 0;
+let nauczycieleList = [];
+class Nauczyciel {
+    constructor(imie, nazwisko, ilosc_godzin, tablica) {
+        this.id = nauczycieleId++;
+        this.imie = imie;
+        this.nazwisko = nazwisko;
+        this.ilosc_godzin = ilosc_godzin;
+        this.dostepnoscArr = tablica;
+    }
+
+}
+
 var classID = 0;
 let classesList = [];
 
@@ -402,6 +415,7 @@ function initializeAddClass() {
 }
 
 
+
 function initializeAddTeachers() {
     var addNew = document.querySelector('#addNew');
     addNew.addEventListener('click', (e) => {
@@ -502,7 +516,7 @@ function initializeAddTeachers() {
 
         console.log(dostepnosc);
 
-        nauczyciel = new Nauczyciel(imie, nazwisko, ilosc, dostepnosc);
+        var nauczyciel = new Nauczyciel(imie, nazwisko, ilosc, dostepnosc);
 
         nauczycieleList.push(nauczyciel);
 

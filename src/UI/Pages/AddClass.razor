@@ -3,6 +3,7 @@
 @inject Blazored.LocalStorage.ILocalStorageService ls
 @using Blazored.LocalStorage
 
+<div id="add-class">
 <header class="tittle-container">
         <h1>Dodaj klasę</h1>
     </header>
@@ -55,29 +56,17 @@
                 </div>
 
                 <div class="Wypisz">
-                   @result
+                   @value
                 </div>
 
           <!--</form>-->  
             </div>
         </div>
     </section>
+    </div>
 
 @code{
-    protected string result = "Hej";
-
-    class Student
-    {
-        public string FirstName { get; set; }      
-        public string LastName { get; set; }      
-    }
-
-    class Class
-    {
-        public string Name { get; set; }
-        Student student { get; set; }
-    }
-
+    protected string value = "Hej";
 
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
@@ -89,7 +78,7 @@
 
     protected async Task GetJson()
     {
-        result = await js.InvokeAsync<string>("getClasses");
+        value = await ls.GetItemAsync<string>("MyClasses");
     }
 
     }
