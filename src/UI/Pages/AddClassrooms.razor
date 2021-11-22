@@ -1,4 +1,6 @@
 ﻿@page "/addclassrooms"
+@inject IJSRuntime js
+
 <header class="tittle-container">
         <h1>Dodaj sale</h1>
     </header>
@@ -40,3 +42,15 @@
 
         </div>
     </section>
+
+    @code{
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
+        {
+            await js.InvokeVoidAsync("initializeAddClassrooms");
+        }
+    }
+
+    }

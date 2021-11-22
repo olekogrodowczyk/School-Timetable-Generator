@@ -209,7 +209,7 @@ addNew.addEventListener('click', (e) => {
 
     console.log(dostepnosc);
 
-    nauczyciel = new Nauczyciel(imie, nazwisko, ilosc, dostepnosc);
+    var nauczyciel = new Nauczyciel(imie, nazwisko, ilosc, dostepnosc);
 
     nauczycieleList.push(nauczyciel);
 
