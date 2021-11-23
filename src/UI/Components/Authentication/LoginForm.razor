@@ -1,0 +1,22 @@
+﻿
+         <EditForm Model="@_model" OnValidSubmit="@LoginUser">
+            <div class="container-input dark-shadow">
+                    <div class="input-box">
+                        <span class="detail">E-mail</span>
+                        <InputText type="text" placeholder="Podaj e-mail" @bind-Value="_model.Email" />
+                    </div>
+                    <div class="input-box">
+                        <span class="detail">Hasło</span>
+                        <InputText type="text" placeholder="Podaj haslo" @bind-Value="_model.Password" />
+                      </div>
+
+                      <button  class="btn btn-dark">
+                        ZALOGUJ SIĘ<a href="index.html"></a>
+                    </button>
+              
+            </div>
+           </EditForm>
+
+@code {
+
+}

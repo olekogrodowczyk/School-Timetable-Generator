@@ -71,7 +71,7 @@ namespace UI.Services
             else
             {
                 var errorResponse = await response.Content.ReadFromJsonAsync<ErrorResult>();
-                throw new ApiException(errorResponse, response.StatusCode, errorResponse.Errors);
+                throw new ApiException(errorResponse, response.StatusCode);
             }
         }
     }

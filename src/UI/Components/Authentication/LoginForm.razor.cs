@@ -1,18 +1,17 @@
-﻿using Application.Dto.RegisterUserVm;
+﻿using Application.Dto.LoginUserVm;
+using Application.Dto.RegisterUserVm;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using UI.Exceptions;
 using UI.Interfaces;
 
 namespace UI.Components.Authentication
 {
-    public partial class RegisterForm
+    public partial class LoginForm
     {
-        private RegisterUserDto _model = new RegisterUserDto();
+        private LoginUserDto _model = new LoginUserDto();
         private string _errorMessage = String.Empty;
         private string[] _errors;
 
@@ -30,31 +29,31 @@ namespace UI.Components.Authentication
             base.OnInitialized();
         }
 
-        public async Task RegisterUser()
+        public async Task LoginUser()
         {
             try
             {
-                await authenticationHttpService.RegisterUser(_model);
+                await authenticationHttpService.LoginUser(_model);
             }
             catch (ApiException e)
             {
                 _errorMessage = e.ErrorResult.Message;
                 _errors = e.ErrorResult.Errors;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _errorMessage = e.Message;
             }
-            if(_errorMessage != String.Empty) { toastService.ShowError("", _errorMessage); }
-            if(_errors.Length > 0)
+            if (_errorMessage != String.Empty) { toastService.ShowError(String.Empty, _errorMessage); }
+            if (_errors != null)
             {
                 foreach (string error in _errors)
                 {
                     toastService.ShowError(error);
                 }
             }
-            if(_errorMessage == String.Empty) { toastService.ShowSuccess("Pomyślnie zarejestrowano");}
-            Navigation.NavigateTo("/login");
+            if (_errorMessage == String.Empty) { toastService.ShowSuccess("Pomyślnie zalogowano"); }
+            Navigation.NavigateTo("/");
         }
     }
 }
