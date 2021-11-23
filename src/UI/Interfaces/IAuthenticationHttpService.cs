@@ -6,6 +6,6 @@ namespace UI.Interfaces
 {
     public interface IAuthenticationHttpService
     {
-        public Task<Result<int>> RegisterUserAsync(RegisterUserDto model);
+        public Task<Result<int>> RegisterUser(RegisterUserDto model);
     }
 }

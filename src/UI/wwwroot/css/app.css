@@ -1,15 +1,12 @@
-﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
-
-section {
-    min-height: calc(100vh - 170px);
-}
-
-:root {
+﻿:root {
     --primary-color: #386150;
     --secondary-color: #FFFFFF;
     --dark-color: #0b2712;
-    ;
     --max-width: 1100px;
+}
+
+section {
+    min-height: calc(100vh - 170px);
 }
 
 ::-webkit-scrollbar {
@@ -41,8 +38,6 @@ section {
     font-style: normal;
     font-weight: bold;
 }
-
-
 
 
 .green-shadow {
@@ -79,6 +74,10 @@ body {
     background-image: linear-gradient(180deg, rgba(9, 54, 55, 0.2) 4.1%, rgba(132, 205, 199, 0.2) 50.85%, rgba(68, 160, 141, 0.2) 94.63%);
     display: flex;
     flex-direction: column;
+}
+
+section {
+    min-height: calc(100vh - 170px);
 }
 
 
@@ -195,7 +194,7 @@ input[type=submit]:hover {
 
 .tittle-container h1 {
     font-size: 45px;
-    margin-top: 2rem;
+    margin-top: 1rem;
 }
 
 
@@ -660,4 +659,43 @@ input[type="checkbox"] {
 #liczba {
     visibility: hidden;
 }
-  
+
+/*LOGOWANIE*/
+
+#logowanie {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+    #logowanie .container-input {
+        width: 100%;
+        color: #FFFFFF;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #logowanie .container-input {
+        padding: 2rem;
+        height: max-content;
+        margin-top: 3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+        #logowanie .container-input .input-box {
+            width: 400px;
+            margin-top: 1rem;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+        }
+
+    #logowanie button {
+        margin-top: 2rem;
+    }

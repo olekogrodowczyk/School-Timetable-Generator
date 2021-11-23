@@ -23,6 +23,10 @@ namespace Application.Dto.RegisterUserVm
 
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage("Nie podano hasła");
+
+            RuleFor(x => x.ConfirmPassword)
+                .NotEmpty().WithMessage("Nie podano potwierdzenia hasła")
+                .Equal(x => x.Password).WithMessage("Podane hasła nie zgadzają się");
         }
     }
 }

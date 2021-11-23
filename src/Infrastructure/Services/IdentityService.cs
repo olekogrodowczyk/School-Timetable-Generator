@@ -103,12 +103,17 @@ namespace Infrastructure.Services
 
         public async Task<int> RegisterAsync(RegisterUserDto model)
         {
+            string roleName = "User";
+            var role = await _context.Roles.FirstOrDefaultAsync(x => x.Name == roleName);
+            if(role == null) { throw new NotFoundException($"Role with name: {roleName} "); }
+
             var newUser = new User()
             {
                 Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                Role = await _context.Roles.FirstOrDefaultAsync(x => x.Name == "User")
+                Role = role,
+                RoleId = role.Id
             };
             var hashedPassword = _hasher.HashPassword(newUser, model.Password);
 

@@ -11,16 +11,16 @@ namespace UI.Services
     {
         private readonly HttpClient _httpClient;
         private readonly NavigationManager _navigationManager;
-        private readonly HttpService _httpService;
+        private readonly IHttpService _httpService;
 
-        public AuthenticationHttpService(HttpClient client, NavigationManager navigationManager, HttpService httpService)
+        public AuthenticationHttpService(HttpClient client, NavigationManager navigationManager, IHttpService httpService)
         {
             _httpClient = client;
             _navigationManager = navigationManager;
             _httpService = httpService;
         }
 
-        public async Task<Result<int>> RegisterUserAsync(RegisterUserDto model)
+        public async Task<Result<int>> RegisterUser(RegisterUserDto model)
         {
             return await _httpService.Post<Result<int>>("api/account/register", model);
         }

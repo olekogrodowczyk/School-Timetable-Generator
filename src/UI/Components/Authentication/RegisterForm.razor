@@ -1,0 +1,51 @@
+﻿
+
+<EditForm Model="@_model" OnValidSubmit="@RegisterUser">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+            <div class="container-input dark-shadow"> 
+                      <div class="input-box">
+                            <span class="detail">
+                                  Imie
+                            </span>
+                            <InputText placeholder="Podaj imię" required type="text" data-val="true"
+                                  data-val-required="Prosz&#x119; poda&#x107; imi&#x119;" id="FirstName"
+                                  @bind-Value="_model.FirstName" />
+                            <span class="field-validation-valid" data-valmsg-for="FirstName"
+                                  data-valmsg-replace="true"></span>
+                      </div>
+                      <div class="input-box">
+                            <span class="detail">
+                                  Nazwisko
+                            </span>
+                            <InputText placeholder="Podaj nazwisko" required type="text" data-val="true"
+                                  data-val-required="Prosz&#x119; poda&#x107; nazwisko" id="LastName"
+                                  @bind-Value="_model.LastName" />
+                            <span class="field-validation-valid" data-valmsg-for="LastName"
+                                  data-valmsg-replace="true"></span>
+                      </div>
+                      <div class="input-box">
+                            <span class="detail">
+                                  E-mail
+                            </span>
+                            <InputText placeholder="Podaj e-mail" id="Email" type="text" @bind-Value="_model.Email" />
+                      </div>
+                      <div class="input-box">
+                            <span class="detail">Hasło  </span>
+                            <InputText placeholder="Podaj hasło" id="Password" type="text" @bind-Value="_model.Password" />
+                          
+                      </div>
+                      <div class="input-box">
+                            <span class="detail">Potwiedź hasło</span>
+                            <InputText placeholder="Potwierdź hasło" type="text" @bind-Value="_model.ConfirmPassword" />               
+                      </div>
+                      <button  class="btn btn-dark">
+                        ZAREJESTRUJ SIĘ<a href="index.html"></a>
+                    </button>
+                      </div>                                  
+               
+</EditForm>
+
+
+
+
