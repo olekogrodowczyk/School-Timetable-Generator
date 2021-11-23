@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Role : AuditableEntity
+    public class Subject : AuditableEntity
     {
         public string Name { get; set; }
-        public virtual ICollection<User> Users { get; set; }
+        public virtual ICollection<Lesson> Lessons { get; set; }
     }
 }
