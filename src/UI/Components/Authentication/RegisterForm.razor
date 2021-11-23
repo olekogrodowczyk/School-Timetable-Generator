@@ -1,15 +1,13 @@
 ﻿
 
 <EditForm Model="@_model" OnValidSubmit="@RegisterUser">
-    <DataAnnotationsValidator />
     <ValidationSummary />
             <div class="container-input dark-shadow"> 
                       <div class="input-box">
                             <span class="detail">
                                   Imie
                             </span>
-                            <InputText placeholder="Podaj imię" required type="text" data-val="true"
-                                  data-val-required="Prosz&#x119; poda&#x107; imi&#x119;" id="FirstName"
+                            <InputText placeholder="Podaj imię" type="text" id="FirstName"
                                   @bind-Value="_model.FirstName" />
                             <span class="field-validation-valid" data-valmsg-for="FirstName"
                                   data-valmsg-replace="true"></span>
@@ -18,8 +16,7 @@
                             <span class="detail">
                                   Nazwisko
                             </span>
-                            <InputText placeholder="Podaj nazwisko" required type="text" data-val="true"
-                                  data-val-required="Prosz&#x119; poda&#x107; nazwisko" id="LastName"
+                            <InputText placeholder="Podaj nazwisko" type="text" id="LastName"
                                   @bind-Value="_model.LastName" />
                             <span class="field-validation-valid" data-valmsg-for="LastName"
                                   data-valmsg-replace="true"></span>

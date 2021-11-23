@@ -8,6 +8,14 @@ namespace UI.Exceptions
     {
         public ErrorResult ErrorResult { get; set; }
         public HttpStatusCode StatusCode { get; set; }
+        public string[] Errors { get; set; }
+
+        public ApiException(ErrorResult error, HttpStatusCode statusCode, string[] errors)
+        {
+            ErrorResult = error;
+            StatusCode = statusCode;
+            Errors = errors;
+        }
 
         public ApiException(ErrorResult error, HttpStatusCode statusCode)
         {

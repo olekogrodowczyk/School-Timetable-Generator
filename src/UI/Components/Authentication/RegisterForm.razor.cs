@@ -3,6 +3,7 @@ using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using UI.Exceptions;
 using UI.Interfaces;
@@ -12,7 +13,8 @@ namespace UI.Components.Authentication
     public partial class RegisterForm
     {
         private RegisterUserDto _model = new RegisterUserDto();
-        private string _error = String.Empty;
+        private string _errorMessage = String.Empty;
+        private string[] _errors;
 
         [Inject]
         public IAuthenticationHttpService authenticationHttpService { get; set; }
@@ -37,14 +39,22 @@ namespace UI.Components.Authentication
             }
             catch (ApiException e)
             {
-                _error = e.ErrorResult.Message;
+                _errorMessage = e.ErrorResult.Message;
+                _errors = e.Errors;
             }
             catch(Exception e)
             {
-                _error = e.Message;
+                _errorMessage = e.Message;
             }
-            if(_error!=String.Empty) { toastService.ShowError(_error); }
-            else { toastService.ShowSuccess("Pomyślnie zarejestrowano");}
+            if(_errorMessage != String.Empty) { toastService.ShowError("", _errorMessage); }
+            if(_errors.Length > 0)
+            {
+                foreach (string error in _errors)
+                {
+                    toastService.ShowError(error);
+                }
+            }
+            if(_errorMessage == String.Empty) { toastService.ShowSuccess("Pomyślnie zarejestrowano");}
         }
     }
 }
