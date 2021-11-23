@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared.Responses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,22 +7,20 @@ using System.Threading.Tasks;
 
 namespace Application.Responses
 {
-    public class Result
-    {
-        public string Message { get; set; }
-        public bool Success { get; set; }
-        public Result(string message)
+    public class OkResult : ResultBase
+    {        
+        public OkResult(string message)
         {
             Success = true;
             Message = message;
         }
-        public Result()
+        public OkResult()
         {
             Success = true;
         }
     }
 
-    public class Result<T> : Result
+    public class Result<T> : OkResult
     {
         public T Value { get; set; }
 
