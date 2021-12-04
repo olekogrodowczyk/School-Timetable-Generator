@@ -17,10 +17,10 @@ namespace UI.Components.Authentication
         private string[] _errors;
 
         [Inject]
-        public IAuthenticationHttpService authenticationHttpService { get; set; }
+        public IAuthenticationHttpService AuthenticationHttpService { get; set; }
 
         [Inject]
-        public IToastService toastService { get; set; }
+        public IToastService ToastService { get; set; }
 
         [Inject]
         public NavigationManager Navigation { get; set; }
@@ -37,7 +37,7 @@ namespace UI.Components.Authentication
         {
             try
             {
-                await authenticationHttpService.LoginUser(_model);
+                await AuthenticationHttpService.LoginUser(_model);
             }
             catch (ApiException e)
             {
@@ -48,15 +48,15 @@ namespace UI.Components.Authentication
             {
                 _errorMessage = e.Message;
             }
-            if (_errorMessage != String.Empty) { toastService.ShowError(String.Empty, _errorMessage); }
+            if (_errorMessage != String.Empty) { ToastService.ShowError(String.Empty, _errorMessage); }
             if (_errors != null)
             {
                 foreach (string error in _errors)
                 {
-                    toastService.ShowError(error);
+                    ToastService.ShowError(error);
                 }
             }
-            if (_errorMessage == String.Empty) { toastService.ShowSuccess("Pomyślnie zalogowano"); }
+            if (_errorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zalogowano"); }
             Navigation.NavigateTo("/");
         }
     }

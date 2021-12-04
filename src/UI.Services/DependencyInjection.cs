@@ -15,7 +15,9 @@ namespace UI.Services
         {
             return services.AddScoped<IAuthenticationHttpService, AuthenticationHttpService>()
                 .AddScoped<IUserHttpService, UserHttpService>()
-                .AddScoped<IHttpService, HttpService>();
+                .AddScoped<IHttpService, HttpService>()
+                .AddScoped<IClassHttpService, ClassHttpService>()
+                .AddScoped<ITimetableHttpService, TimetableHttpService>();
         }
     }
 }

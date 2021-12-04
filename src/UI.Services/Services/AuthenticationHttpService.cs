@@ -27,14 +27,14 @@ namespace UI.Services.Services
             _authenticationStateProvider = authenticationStateProvider;
         }
 
-        public async Task<Result<int>> RegisterUser(RegisterUserDto model)
+        public async Task<OkResult<int>> RegisterUser(RegisterUserDto model)
         {
-            return await _httpService.Post<Result<int>>("api/account/register", model);
+            return await _httpService.Post<OkResult<int>>("api/account/register", model);
         }
 
-        public async Task<Result<string>> LoginUser(LoginUserDto model)
+        public async Task<OkResult<string>> LoginUser(LoginUserDto model)
         {
-            var result = await _httpService.Post<Result<string>>("api/account/login", model);
+            var result = await _httpService.Post<OkResult<string>>("api/account/login", model);
             if(result.Success)
             {
                 await _localStorageService.SetItemAsStringAsync("access_token", result.Value);

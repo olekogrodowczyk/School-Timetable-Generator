@@ -20,22 +20,22 @@ namespace Shared.Responses
         }
     }
 
-    public class Result<T> : OkResult
+    public class OkResult<T> : OkResult
     {
         public T Value { get; set; }
 
-        public Result()
+        public OkResult()
         {
             Success = true;
         }
 
-        public Result(T value)
+        public OkResult(T value)
         {
             Success = true;
             Value = value;
         }
 
-        public Result(T value, string message)
+        public OkResult(T value, string message)
         {
             Success = true;
             Value = value;

@@ -19,6 +19,7 @@ namespace UI
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            builder.Services.AddServices();
             builder.RootComponents.Add<App>("#app");
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddHttpClient("TimeTable.Api", client =>
@@ -33,7 +34,7 @@ namespace UI
             
             builder.Services.AddOptions();      
             builder.Services.AddBlazoredToast();
-            builder.Services.AddServices();
+            
 
             await builder.Build().RunAsync();
         }

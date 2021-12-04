@@ -31,6 +31,9 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddInfrastructure(Configuration);
+            services.AddApplication();
+            
             services.AddControllers(options =>
             {
                 options.Filters.Add(typeof(CustomValidationAttribute));
@@ -41,8 +44,7 @@ namespace WebAPI
                 options.SuppressModelStateInvalidFilter = true;
             });
             services.AddRazorPages();
-            services.AddInfrastructure(Configuration);
-            services.AddApplication();
+                      
             services.AddScoped<ErrorHandlingMiddleware>();
             //services.AddSwaggerGen(c =>
             //{

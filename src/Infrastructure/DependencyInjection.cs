@@ -55,6 +55,9 @@ namespace Infrastructure
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IUserContextService, UserContextService>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IClassRepository, ClassRepository>();
+            services.AddScoped<IStudentRepository, StudentRepository>();
+            services.AddScoped<ITimetableRepository, TimetableRepository>();
 
             return services;
         }

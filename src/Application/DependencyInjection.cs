@@ -10,6 +10,7 @@ using AutoMapper;
 using System.Reflection;
 using Domain.Interfaces;
 using FluentValidation.AspNetCore;
+using Application.Services;
 
 namespace Application
 {
@@ -17,7 +18,10 @@ namespace Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddAutoMapper(typeof(MappingProfile));
+            services.AddScoped<IClassService, ClassService>();
+            services.AddScoped<ITimetableService, TimetableService>();
+
             return services;
         }
     }
