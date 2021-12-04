@@ -1,6 +1,5 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
-using Application.Responses;
 using Application.Dto.LoginUserVm;
 using Application.Dto.RegisterUserVm;
 using Domain.Entities;

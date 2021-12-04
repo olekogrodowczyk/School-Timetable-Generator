@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using UI.Interfaces;
 using UI.Services;
 
 namespace UI
@@ -33,10 +32,8 @@ namespace UI
             builder.Services.AddScoped(sp => sp.GetService<IHttpClientFactory>().CreateClient("TimeTable.Api"));
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddOptions();      
-            builder.Services.AddScoped<IAuthenticationHttpService, AuthenticationHttpService>();
-            builder.Services.AddScoped<IUserHttpService, UserHttpService>();
             builder.Services.AddBlazoredToast();
-            builder.Services.AddScoped<IHttpService, HttpService>();
+            builder.Services.AddServices();
 
             await builder.Build().RunAsync();
         }

@@ -1,8 +1,8 @@
-﻿using Application.Responses;
+﻿using Shared.Responses;
 using System;
 using System.Net;
 
-namespace UI.Exceptions
+namespace UI.Services.Exceptions
 {
     public class ApiException : Exception
     {

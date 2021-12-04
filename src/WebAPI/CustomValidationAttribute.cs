@@ -1,6 +1,6 @@
-﻿using Application.Responses;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Shared.Responses;
 using System.Linq;
 
 namespace WebAPI

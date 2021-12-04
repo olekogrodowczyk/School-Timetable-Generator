@@ -4,8 +4,8 @@ using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Threading.Tasks;
-using UI.Exceptions;
-using UI.Interfaces;
+using UI.Services.Exceptions;
+using UI.Services.Interfaces;
 
 namespace UI.Components.Authentication
 {

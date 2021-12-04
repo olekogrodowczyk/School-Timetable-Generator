@@ -1,8 +1,8 @@
 ﻿using Application.Exceptions;
-using Application.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
+using Shared.Responses;
 using System;
 using System.Net;
 using System.Text.Json;

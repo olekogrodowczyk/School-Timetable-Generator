@@ -4,7 +4,7 @@ using Application.Dto.RegisterUserVm;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Application.Responses;
+using Shared.Responses;
 
 namespace WebAPI.Controllers
 {

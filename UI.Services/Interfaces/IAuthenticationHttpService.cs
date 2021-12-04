@@ -1,9 +1,9 @@
 ﻿using Application.Dto.LoginUserVm;
 using Application.Dto.RegisterUserVm;
-using Application.Responses;
+using Shared.Responses;
 using System.Threading.Tasks;
 
-namespace UI.Interfaces
+namespace UI.Services.Interfaces
 {
     public interface IAuthenticationHttpService
     {

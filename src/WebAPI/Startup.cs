@@ -1,5 +1,4 @@
 using Application;
-using Application.Responses;
 using FluentValidation.AspNetCore;
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;
@@ -9,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Components.WebAssembly;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
@@ -34,7 +34,7 @@ namespace WebAPI
             services.AddControllers(options =>
             {
                 options.Filters.Add(typeof(CustomValidationAttribute));
-            }).AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<Application.Responses.OkResult>());
+            }).AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<Shared.Responses.OkResult>());
 
             services.Configure<ApiBehaviorOptions>(options =>
             {

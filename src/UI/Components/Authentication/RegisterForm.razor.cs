@@ -5,8 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using UI.Exceptions;
-using UI.Interfaces;
+using UI.Services.Exceptions;
+using UI.Services.Interfaces;
 
 namespace UI.Components.Authentication
 {

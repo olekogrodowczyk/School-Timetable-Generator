@@ -1,4 +1,4 @@
-﻿namespace UI.Interfaces
+﻿namespace UI.Services.Interfaces
 {
     public interface IUserHttpService
     {

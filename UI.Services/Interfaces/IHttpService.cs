@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace UI.Interfaces
+namespace UI.Services.Interfaces
 {
     public interface IHttpService
     {

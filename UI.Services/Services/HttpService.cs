@@ -1,7 +1,7 @@
-﻿using Application.Responses;
-using Blazored.LocalStorage;
+﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
+using Shared.Responses;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -9,10 +9,10 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using UI.Exceptions;
-using UI.Interfaces;
+using UI.Services.Exceptions;
+using UI.Services.Interfaces;
 
-namespace UI.Services
+namespace UI.Services.Services
 {
     public class HttpService : IHttpService
     {
