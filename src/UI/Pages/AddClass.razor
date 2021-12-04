@@ -1,87 +1,11 @@
 ﻿@page "/addclass"
-@inject IJSRuntime js
-@inject Blazored.LocalStorage.ILocalStorageService ls
-@using Blazored.LocalStorage
 
 <div id="add-class">
-<header class="tittle-container">
-        <h1>Dodaj klasę</h1>
-    </header>
-    <section id="add">
-        <div class="container">
+  <Header Title="Dodaj klasę"></Header>  
+  <AddClassComponent></AddClassComponent>
+</div>
 
-            <div class="card-container">
-                <div class="card-tittle">
-                    <ul>
-                        <li>KOD</li>
-                    </ul>
-                </div>
-               <!--<form action="#" id="class-ad">--> 
-                <ul class="ul-add green-shadow">
-                    <li> <input type="text" id="name" name="name" placeholder="Kod"></li>
-                    <li>
-                        <div class="btn-container">
-                            <button class="btn btn-dark" id="addNewClass" type="submit" value="DODAJ">DODAJ </button>
-                        </div>
-                    </li>
-                    <li class="addStudent dark-shadow">
-                        <input type="text" id="imie" placeholder="Imie">
-                        <input type="text" id="nazwisko" placeholder="Nazwisko">
-                        <div class="btn-container"><button id="addNew" type="submit" class="btn btn-dark"> DODAJ </button></div>
-                    </li>
-                    <li class="studentListContainer">
-                        <div id="studentList">
-                           <!--from js-->
-                        </div>
-                    </li>
 
-                    <li id="liczba">
-                        <p>Liczba dodanych uczniów: 0</p>
-                    </li>
-                    <li>
-                        <div class="btn-container"><button id="submitNewClass" type="submit" class="btn btn-dark"> DODAJ KLASE </button></div>
-                    </li>
-                </ul>
-                <div class="under-tittle-container">
-                    <h6>Dodane klasy</h6>
-                </div>
-                <div class="all-seperate">
-                   
-                </div>
-                   
-                <div class="btn-container-center">
-                    <a class="btn btn-dark" @onclick="GetJson">
-                        <p>ZAPISZ</p>
-                    </a>
-                </div>
-
-                <div class="Wypisz">
-                   @value
-                </div>
-
-          <!--</form>-->  
-            </div>
-        </div>
-    </section>
-    </div>
-
-@code{
-    protected string value = "Hej";
-
-    protected async override Task OnAfterRenderAsync(bool firstRender)
-    {
-        if(firstRender)
-        {
-            await js.InvokeVoidAsync("initializeAddClass");
-        }
-    }
-
-    protected async Task GetJson()
-    {
-        value = await ls.GetItemAsync<string>("MyClasses");
-    }
-
-    }
     
 
 
