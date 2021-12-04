@@ -27,6 +27,7 @@ namespace UI
                 var user = new ClaimsPrincipal(identity);
                 var authState = new AuthenticationState(user);
 
+
                 NotifyAuthenticationStateChanged(Task.FromResult(authState));
 
                 return authState;

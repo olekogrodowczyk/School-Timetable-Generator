@@ -20,17 +20,17 @@ namespace UI
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
-
+            builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddHttpClient("TimeTable.Api", client =>
             {
                 client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
             }).AddHttpMessageHandler<AuthorizationMessageHandler>();
 
             builder.Services.AddAuthorizationCore();
-            builder.Services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>();
             builder.Services.AddTransient<AuthorizationMessageHandler>();
+            builder.Services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>();
             builder.Services.AddScoped(sp => sp.GetService<IHttpClientFactory>().CreateClient("TimeTable.Api"));
-            builder.Services.AddBlazoredLocalStorage();
+            
             builder.Services.AddOptions();      
             builder.Services.AddBlazoredToast();
             builder.Services.AddServices();

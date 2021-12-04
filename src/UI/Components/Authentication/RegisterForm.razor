@@ -1,6 +1,7 @@
 ﻿
-
-<EditForm Model="@_model" OnValidSubmit="@RegisterUser">
+<AuthorizeView Context="Register">
+    <NotAuthorized>
+        <EditForm Model="@_model" OnValidSubmit="@RegisterUser">
             <div class="container-input dark-shadow"> 
                       <div class="input-box">
                             <span class="detail">
@@ -41,6 +42,12 @@
                       </div>                                  
                
 </EditForm>
+    </NotAuthorized>
+    <Authorized>
+        <h1>Najpierw musisz się wylogować!</h1>
+    </Authorized>
+</AuthorizeView>
+
 
 
 

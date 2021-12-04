@@ -1,5 +1,6 @@
-﻿
-         <EditForm Model="@_model" OnValidSubmit="@LoginUser">
+﻿<AuthorizeView Context="Login">
+    <NotAuthorized>
+        <EditForm Model="@_model" OnValidSubmit="@LoginUser">
             <div class="container-input dark-shadow">
                     <div class="input-box">
                         <span class="detail">E-mail</span>
@@ -16,6 +17,12 @@
               
             </div>
            </EditForm>
+    </NotAuthorized>
+    <Authorized>
+        <h1>Już jesteś zalogowany/a!</h1>
+    </Authorized>
+</AuthorizeView>
+         
 
 @code {
 

@@ -1,4 +1,6 @@
-﻿@page "/"
+﻿@using Blazored.LocalStorage;
+
+@page "/"
 
     <header class="tittle-container">
                 <h1>Twoja szkoła</h1>     
@@ -44,19 +46,12 @@
                         <p>GENERUJ PLAN ZAJĘĆ</p>           
                      <i class="fas fa-users"></i>
               </a>
-              <AuthorizeView>
-                  <NotAuthorized>
-                      <a href="/login"><button>Logowanie</button></a>
-                      <a href="/register"><button>Rejestracja</button></a>
-                  </NotAuthorized>
-                  <Authorized>
-                      <a href="/"><button>Wyloguj się</button></a>
-                  </Authorized>             
-              </AuthorizeView>
               
+              <AuthenticationMenu></AuthenticationMenu>
             
         </div>
     </section>
+
 
     
 

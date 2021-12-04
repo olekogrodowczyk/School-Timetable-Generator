@@ -28,8 +28,4 @@
     <ProjectReference Include="..\UI.Services\UI.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Shared\" />
-  </ItemGroup>
-
 </Project>

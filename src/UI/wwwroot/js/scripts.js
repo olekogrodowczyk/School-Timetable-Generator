@@ -1,5 +1,4 @@
 ﻿
-localStorage.clear();
 
 var studentId = 0;
 var studentsList = [];

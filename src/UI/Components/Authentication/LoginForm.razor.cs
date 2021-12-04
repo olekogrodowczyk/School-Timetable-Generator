@@ -1,5 +1,6 @@
 ﻿using Application.Dto.LoginUserVm;
 using Application.Dto.RegisterUserVm;
+using Blazored.LocalStorage;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using System;
@@ -23,6 +24,9 @@ namespace UI.Components.Authentication
 
         [Inject]
         public NavigationManager Navigation { get; set; }
+
+        [Inject]
+        public ILocalStorageService LocalStorageService { get; set; }
 
         protected override void OnInitialized()
         {
