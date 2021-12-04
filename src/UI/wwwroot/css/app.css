@@ -95,7 +95,7 @@ footer {
     justify-content: center;
     align-items: center;
     font-size: 10px;
-}
+}y
 
 section {
     flex: 1;
@@ -121,7 +121,15 @@ input[type=number] {
     border-radius: 26px;
 }
 
-input[type=text] {
+input[type=text]  {
+    padding: 0.5rem 1rem;
+    color: var(--dark-color);
+    background-color: var(--secondary-color);
+    border: hidden;
+    border-radius: 26px;
+}
+
+input[type=password] {
     padding: 0.5rem 1rem;
     color: var(--dark-color);
     background-color: var(--secondary-color);
