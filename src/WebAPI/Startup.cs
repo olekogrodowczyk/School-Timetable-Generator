@@ -80,6 +80,7 @@ namespace WebAPI
             {
                 app.UseDeveloperExceptionPage();
                 app.UseWebAssemblyDebugging();
+                app.UseBrowserLink();
             }
             else
             {

@@ -46,7 +46,7 @@ namespace UI.Components.Authentication
                 _errorMessage = e.Message;
             }
             if(_errorMessage != String.Empty) { toastService.ShowError("", _errorMessage); }
-            if(_errors.Length > 0)
+            if(_errors != null)
             {
                 foreach (string error in _errors)
                 {
