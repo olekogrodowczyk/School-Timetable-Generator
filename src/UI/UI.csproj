@@ -24,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\UI.Services\UI.Services.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\UI.Services\UI.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

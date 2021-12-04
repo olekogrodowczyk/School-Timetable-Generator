@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "src\WebAPI\WebAPI
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI", "src\UI\UI.csproj", "{85B9DA81-6E71-4F33-90ED-EC0BF301DEB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI.Services", "UI.Services\UI.Services.csproj", "{A0BE5BDC-8ECC-47B6-9DD0-ADE241B9EE39}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI.Services", "src\UI.Services\UI.Services.csproj", "{A0BE5BDC-8ECC-47B6-9DD0-ADE241B9EE39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
