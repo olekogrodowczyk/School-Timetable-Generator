@@ -10,6 +10,6 @@ namespace UI.Services.Interfaces
 {
     public interface ITimetableHttpService
     {
-        Task<OkResult<int>> CreateTimetable(CreateTimetableDto model);
+        Task CreateTimetable(CreateTimetableDto model);
     }
 }

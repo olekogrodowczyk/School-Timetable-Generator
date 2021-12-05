@@ -18,10 +18,9 @@ namespace UI.Services.Services
             _httpService = httpService;
         }
 
-        public async Task<OkResult<int>> CreateTimetable(CreateTimetableDto model)
+        public async Task CreateTimetable(CreateTimetableDto model)
         {
-            var result = await _httpService.Post<OkResult<int>>("api/timetable", model);
-            return result;
+            await _httpService.Post<OkResult<int>>("api/timetable", model);
         }
 
     }

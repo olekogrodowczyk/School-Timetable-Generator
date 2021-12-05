@@ -30,7 +30,7 @@ namespace Application.Services
             int loggedUserId = _userContextService.GetUserId ?? 0;
             var timetable = _mapper.Map<TimeTable>(model);
             timetable.CreatorId = loggedUserId;
-            await _timetableRepository.Add(timetable);
+            await _timetableRepository.AddAsync(timetable);
             return timetable.Id;
         }
     }

@@ -17,7 +17,7 @@ namespace UI.Shared
         public ITimetableHttpService TimetableHttpService { get; set; }
 
         [Inject]
-        public IToastService toastService { get; set; }
+        public IToastService ToastService { get; set; }
 
         private async Task CreateTimetable()
         {
@@ -35,15 +35,15 @@ namespace UI.Shared
             {
                 _errorMessage = e.Message;
             }
-            if (_errorMessage != String.Empty) { toastService.ShowError(String.Empty, _errorMessage); }
+            if (_errorMessage != String.Empty) { ToastService.ShowError(String.Empty, _errorMessage); }
             if (_errors != null)
             {
                 foreach (string error in _errors)
                 {
-                    toastService.ShowError(error);
+                    ToastService.ShowError(error);
                 }
             }
-            if (_errorMessage == String.Empty) { toastService.ShowSuccess("Pomyślnie utworzono plan zajęć"); }
+            if (_errorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie utworzono plan zajęć"); }
         }
     }
 }

@@ -12,10 +12,13 @@ namespace Shared.Dto.CreateClassDto
     public class CreateClassDto : IMap
     {
         public string Name { get; set; }
+        public int TimetableId { get; set; }
+        public int TeacherId { get; set; }
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<CreateClassDto, Class>();
+            profile.CreateMap<CreateClassDto, Class>()
+                .ForMember(x => x.TimetableId, y => y.MapFrom(z => z.TimetableId));
         }
     }
 }
