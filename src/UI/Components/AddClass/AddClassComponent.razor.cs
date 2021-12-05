@@ -12,11 +12,12 @@ using UI.Services.Models;
 
 namespace UI.Components.AddClass
 {
-    public partial class AddClassComponent
+    public partial class AddClassComponent : ComponentBase
     {
         protected string value = String.Empty;
-        private string _errorMessage = String.Empty;
-        private string[] _errors;
+        protected string _errorMessage = String.Empty;
+        protected string[] _errors;
+        private List<ClassModel> deserializedValue = new List<ClassModel>();
 
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
@@ -25,10 +26,15 @@ namespace UI.Components.AddClass
         public ILocalStorageService LocalStorageService { get; set; }
 
         [Inject]
-        public IToastService ToastService { get; set; }
+        public IClassHttpService ClassHttpService { get; set; }
 
         [Inject]
-        public IClassHttpService ClassHttpService { get; set; }
+        public IToastService ToastService { get; set; }
+
+        protected async override Task OnInitializedAsync()
+        {
+            await LocalStorageService.RemoveItemAsync("MyClasses");
+        }
 
         protected async override Task OnAfterRenderAsync(bool firstRender)
         {
@@ -38,10 +44,9 @@ namespace UI.Components.AddClass
             }
         }
 
-        protected async Task HandleAddClass()
+        protected async Task HandleJson()
         {
             value = await LocalStorageService.GetItemAsync<string>("MyClasses");
-            List<ClassModel> deserializedValue = new List<ClassModel>();
             try
             {
                 deserializedValue = JsonConvert.DeserializeObject<List<ClassModel>>(value);
@@ -50,31 +55,16 @@ namespace UI.Components.AddClass
             {
                 ToastService.ShowError("Nastąpił problem z serializacją danych");
             }
+        }
 
-            try
-            {
-                await ClassHttpService.CreateClass(deserializedValue);
-            }
-            catch (ApiException e)
-            {
-                _errorMessage = e.ErrorResult.Message;
-                _errors = e.ErrorResult.Errors;
-            }
-            catch (Exception e)
-            {
-                _errorMessage = e.Message;
-            }
-            if (_errorMessage != String.Empty) { ToastService.ShowError(String.Empty, _errorMessage); }
-            if (_errors != null)
-            {
-                foreach (string error in _errors)
-                {
-                    ToastService.ShowError(error);
-                }
-            }
-            if (_errorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
 
-            
+
+        protected async Task HandleAddClass()
+        {
+            await HandleJson();
+            await ComponentRequestHandler.HandleRequest<List<ClassModel>>
+                (ClassHttpService.CreateClass, deserializedValue, _errorMessage, _errors, ToastService);
+            //if (_errorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
         }
     }
 }

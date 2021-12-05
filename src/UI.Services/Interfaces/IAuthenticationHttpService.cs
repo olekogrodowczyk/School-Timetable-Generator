@@ -7,7 +7,7 @@ namespace UI.Services.Interfaces
 {
     public interface IAuthenticationHttpService
     {
-        Task<OkResult<string>> LoginUser(LoginUserDto model);
-        public Task<OkResult<int>> RegisterUser(RegisterUserDto model);
+        Task LoginUser(LoginUserDto model);
+        public Task RegisterUser(RegisterUserDto model);
     }
 }
