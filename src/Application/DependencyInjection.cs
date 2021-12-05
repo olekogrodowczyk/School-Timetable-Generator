@@ -21,6 +21,7 @@ namespace Application
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddScoped<IClassService, ClassService>();
             services.AddScoped<ITimetableService, TimetableService>();
+            services.AddScoped<ITeacherService, TeacherService>();
 
             return services;
         }

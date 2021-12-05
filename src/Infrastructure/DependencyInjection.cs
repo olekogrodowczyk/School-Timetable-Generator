@@ -58,6 +58,7 @@ namespace Infrastructure
             services.AddScoped<IClassRepository, ClassRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped<ITimetableRepository, TimetableRepository>();
+            services.AddScoped<ITeacherRepository, TeacherRepository>();
 
             return services;
         }
