@@ -3,6 +3,7 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
 using Shared.Dto.CreateClassDto;
+using Shared.Dto.CreateStudentDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,13 @@ namespace Application.Services
             var classToAdd = _mapper.Map<Class>(model);
             await _classRepository.AddAsync(classToAdd);
             return classToAdd.Id;
+        }
+
+        public async Task<int> CreateStudent(CreateStudentDto model)
+        {
+            var student = _mapper.Map<Student>(model);
+            await _studentRepository.AddAsync(student);
+            return student.Id;
         }
 
     }

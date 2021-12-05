@@ -1,4 +1,5 @@
 ﻿using Shared.Dto.CreateClassDto;
+using Shared.Dto.CreateStudentDto;
 using Shared.Responses;
 using System;
 using System.Collections.Generic;
@@ -19,13 +20,18 @@ namespace UI.Services.Services
             _httpService = httpService;
         }
 
-        public async Task CreateClass(List<ClassModel> model)
+        public async Task CreateClasses(List<ClassModel> models)
         {
-            var classesWithoutCollection = model.Select(x => x.name).ToList();
-            foreach (var item in classesWithoutCollection)
+            foreach(ClassModel model in models)            
             {
-                CreateClassDto createClassDto = new CreateClassDto { Name = item, TimetableId = 1, TeacherId = 1 };
-                await _httpService.Post<OkResult<int>>("api/class", createClassDto);
+                CreateClassDto createClassDto = new CreateClassDto { Name = model.name, TimetableId = 1, TeacherId = 1 };
+                var result = await _httpService.Post<OkResult<int>>("api/class", createClassDto);
+                foreach(StudentModel student in model.studentsArr)
+                {
+                    CreateStudentDto createStudentDto =
+                    new CreateStudentDto { FirstName = student.imie, LastName = student.nazwisko, ClassId = result.Value };
+                    await _httpService.Post<OkResult<int>>("api/student", createStudentDto);
+                }
             }
         }
     }

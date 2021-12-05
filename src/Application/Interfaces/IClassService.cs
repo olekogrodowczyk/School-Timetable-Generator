@@ -1,4 +1,5 @@
 ﻿using Shared.Dto.CreateClassDto;
+using Shared.Dto.CreateStudentDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace Application.Interfaces
     public interface IClassService
     {
         Task<int> CreateClass(CreateClassDto model);
+        Task<int> CreateStudent(CreateStudentDto model);
     }
 }
