@@ -14,5 +14,6 @@ namespace Domain.Entities
         public int TimetableId { get; set; }
         public virtual TimeTable TimeTable { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
+        public virtual ICollection<Student> Students { get; set; }
     }
 }

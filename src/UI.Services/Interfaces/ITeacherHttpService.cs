@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared.Dto.CreateTeacherDto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +8,8 @@ using UI.Services.Models;
 
 namespace UI.Services.Interfaces
 {
-    public interface IClassHttpService
+    public interface ITeacherHttpService
     {
-        Task CreateClasses(List<ClassModel> model);
+        Task CreateTeachersWithStudents(List<TeacherModel> models)
     }
 }

@@ -520,9 +520,8 @@ function initializeAddTeachers() {
         nauczycieleList.push(nauczyciel);
 
         UI.addNauczycielToList(nauczyciel);
-        localStorage.setItem('MyClasses', JSON.stringify(nauczycieleList));
+        localStorage.setItem('MyTeachers', JSON.stringify(nauczycieleList));
         UI.clearFields();
-        hidden();
     });
 }
 

@@ -20,7 +20,7 @@ namespace UI.Components.AddClassrooms
         {
             if (firstRender)
             {
-                await JSRuntime.InvokeVoidAsync("initializeAddClass");
+                await JSRuntime.InvokeVoidAsync("initializeAddTeachers");
             }
         }
 

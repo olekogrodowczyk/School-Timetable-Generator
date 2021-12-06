@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Dto.CreateClassDto;
+using Shared.Dto.CreateStudentDto;
 using Shared.Responses;
 using System.Threading.Tasks;
 
@@ -18,10 +19,13 @@ namespace WebAPI.Controllers
             _classService = classService;
         }
 
+        [HttpPost]
         public async Task<IActionResult> CreateClass(CreateClassDto model)
         {
             int result = await _classService.CreateClass(model);
             return Ok(new OkResult<int>(result, "Pomyślnie utworzono nową klasę"));
         }
+
+        
     }
 }
