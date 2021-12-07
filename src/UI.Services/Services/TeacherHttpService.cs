@@ -24,7 +24,8 @@ namespace UI.Services.Services
         {
             foreach (TeacherModel teacher in models)
             {
-                var createTeacherDto = new CreateTeacherDto { FirstName = teacher.imie, LastName = teacher.nazwisko };
+                var createTeacherDto = new CreateTeacherDto 
+                { FirstName = teacher.imie, LastName = teacher.nazwisko, HoursAvailability = teacher.ilosc_godzin };
                 var teacherResult = await _httpService.Post<OkResult<int>>("api/teacher", createTeacherDto);
                 var availabilities = await HandleAvailabilities(teacher.dostepnoscArr, teacherResult.Value);
                 foreach (var availabilityDto in availabilities)
