@@ -22,10 +22,10 @@ namespace Shared.Dto.CreateAvailabilityDto
                 .MustAsync(DefinedDayOfWeekValid).WithMessage("Podany dzień tygodnia jest nieprawidłowy");
 
             RuleFor(x => x.StartsAt)
-                .ExclusiveBetween(8, 16).WithMessage("Podano nieprawidłową czas startu");
+                .InclusiveBetween(8, 16).WithMessage("Podano nieprawidłową czas startu");
 
             RuleFor(x => x.EndsAt)
-                .ExclusiveBetween(9, 17).WithMessage("Podano nie prawidłowy czas zakończenia");
+                .InclusiveBetween(9, 17).WithMessage("Podano nie prawidłowy czas zakończenia");
 
             RuleFor(x => x.TeacherId)
                 .MustAsync(TeacherExists).WithMessage("Podany nauczyciel nie istnieje");
