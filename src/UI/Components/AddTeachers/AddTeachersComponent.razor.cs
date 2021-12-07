@@ -59,8 +59,8 @@ namespace UI.Components.AddTeachers
         protected async Task HandleAddClass()
         {
             await HandleJson();
-            //await ComponentRequestHandler.HandleRequest<List<ClassModel>>
-            //    (TeacherHttpService.CreateTeachers, deserializedValue, _errorMessage, _errors, ToastService);
+            await ComponentRequestHandler.HandleRequest<List<TeacherModel>>
+                (TeacherHttpService.CreateTeachersWithStudents, deserializedValue, _errorMessage, _errors, ToastService);
             if (_errorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
         }
     }

@@ -12,6 +12,6 @@ namespace UI.Services.Models
         public string imie { get; set; }
         public string nazwisko { get; set; }
         public int ilosc_godzin { get; set; }
-        public List<List<string>> dostepnoscArr { get; set; }
+        public char[][] dostepnoscArr { get; set; }
     }
 }
