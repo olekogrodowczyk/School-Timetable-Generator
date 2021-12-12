@@ -15,6 +15,8 @@ namespace Domain.Entities
         public virtual Group Group { get; set; }
         public int TeacherId { get; set; }
         public virtual Teacher Teacher { get; set; }
+        public int ClassroomId { get; set; }
+        public virtual Classroom Classroom { get; set; }
         public DateTime StartsAt { get; set; }
         public DateTime EndsAt { get; set; }
     }
