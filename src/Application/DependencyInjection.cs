@@ -23,6 +23,7 @@ namespace Application
             services.AddScoped<ITimetableService, TimetableService>();
             services.AddScoped<ITeacherService, TeacherService>();
             services.AddScoped<IAvailabilityService, AvailabilityService>();
+            services.AddScoped<IClassroomService, ClassroomService>();
 
             return services;
         }
