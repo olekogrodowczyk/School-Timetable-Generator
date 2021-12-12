@@ -1,9 +1,9 @@
 ﻿:root {
     --primary-color: #386150;
     --secondary-color: #FFFFFF;
-    --dark-color: #dd7616;
-    --light-color: #ffa600;
-    --light-green-color: #dd7616;
+    --dark-color: #2B6169;
+    --light-color: #2B6169;
+    --light-green-color: #2B6169;
     ;
     --max-width: 1100px;
 }
@@ -68,6 +68,17 @@
     border: 2px rgba(255, 255, 255, 0.041) solid;
 }
 
+.glow:hover {
+    transition: ease-in-out 1000ms;
+    box-shadow: 0 8px 32px 0 rgba(4, 54, 23, 0.37);
+    backdrop-filter: blur( 6.5px );
+    -webkit-backdrop-filter: blur( 6.5px );
+    -webkit-box-shadow: 0px 0px 88px 39px #1f41465b;
+    -moz-box-shadow: 0px 0px 88px 39px #1f41465b;
+    box-shadow: 0px 0px 10px 10px #1f41465b;
+    background-color: rgba(0,210,161,0.24);
+}
+
 
 ul {
     list-style: none;
@@ -82,10 +93,14 @@ body {
     min-height: 100vh;
     height: 100%;
     width: 100%;
-    /*  font-family:'Roboto',  sans-serif ;*/
+    /*  font-family:'Roboto',  sans-serif ;
     background-color: var(--primary-color);
     background-image: linear-gradient(180deg, rgba(9, 54, 55, 0.2) 4.1%, rgba(132, 205, 199, 0.2) 50.85%, rgba(68, 160, 141, 0.2) 94.63%);
-    background-color: black;
+   background-color: black;*/
+    background: hsla(187, 56%, 12%, 1);
+    background: radial-gradient(circle at -100% -100%, hsla(187, 56%, 12%, 1) 0%, hsla(188, 42%, 29%, 1) 0%, hsla(0, 0%, 0%, 1) 100%);
+    background: -moz-radial-gradient(circle at -100% -100%, hsla(187, 56%, 12%, 1) 0%, hsla(188, 42%, 29%, 1) 0%, hsla(0, 0%, 0%, 1) 100%);
+    background: -webkit-radial-gradient(circle at -100% -100%, hsla(187, 56%, 12%, 1) 0%, hsla(188, 42%, 29%, 1) 0%, hsla(0, 0%, 0%, 1) 100%);
     display: flex;
     flex-direction: column;
 }
@@ -104,7 +119,7 @@ header {
 
 footer {
     height: 60px;
-    background-color: rgba(4, 32, 2, 0.1);
+    background-color: #142f32;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -128,6 +143,10 @@ section {
         -webkit-backdrop-filter: blur( 6.5px );
         border-radius: 0px;
         transition: 1000ms ease;
+        -webkit-backdrop-filter: blur( 6.5px );
+        -webkit-box-shadow: 0px 0px 88px 39px #1f41465b;
+        -moz-box-shadow: 0px 0px 88px 39px #1f41465b;
+        box-shadow: 0px 0px 10px 10px #1f41465b;
     }
 
 
@@ -205,7 +224,7 @@ a {
     justify-items: center;
     /*  background-color: #bb8a52;*/
     background-color: #79a56c56;
-    background-color: #6d977321;
+    background-color: #142f32;
     box-shadow: 0 8px 32px 0 rgba(3, 19, 9, 0.336);
     backdrop-filter: blur( 6.5px );
     -webkit-backdrop-filter: blur( 6.5px );
@@ -298,20 +317,31 @@ a {
         display: flex;
         width: 100%;
         height: 100%;
-        background: rgba(100, 155, 137, 0.13);
+        background: rgba(34, 36, 35, 0.13);
         flex-direction: column;
         align-content: center;
         justify-content: center;
         padding: 1rem;
         transition: all 0.5s ease;
+        cursor: context-menu;
     }
 
-.allow:hover {
-    background-color: none;
-    border-radius: 0;
-    box-shadow: 0 8px 32px 0 rgba(4, 54, 23, 0.37);
-    backdrop-filter: blur( 6.5px );
-    -webkit-backdrop-filter: blur( 6.5px );
+.allow {
+    background: rgba(100, 155, 137, 0.13) !important;
+    animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 10px -10px #2b616942;
+    }
+
+    to {
+        box-shadow: 0 0 10px 10px #2b616942;
+    }
+}
+
+#basic-add .card:hover {
     cursor: pointer;
 }
 
@@ -408,16 +438,20 @@ a {
         margin-top: 2rem;
     }
 
-        #add .card-container .all-seperate .item,
-        #add .card-container .ul-add,
-        #add .card-container .all .item {
-            display: grid;
-            padding: 1rem;
-            grid-gap: 2rem;
-            grid-template-columns: 3fr 4fr 2fr 2fr;
-            justify-content: start;
-            align-items: center;
-        }
+.card-container .ul-add {
+    background-color: #122a2d;
+}
+
+#add .card-container .all-seperate .item,
+#add .card-container .ul-add,
+#add .card-container .all .item {
+    display: grid;
+    padding: 1rem;
+    grid-gap: 2rem;
+    grid-template-columns: 3fr 4fr 2fr 2fr;
+    justify-content: start;
+    align-items: center;
+}
 
 #add-class #add .card-container .all-seperate .item {
     grid-template-columns: 3fr 4fr;
@@ -474,11 +508,18 @@ button {
 
 
 
-    .active, button:hover {
+    button:hover {
         box-shadow: 0 8px 32px 0 rgba(4, 54, 23, 0.37);
         backdrop-filter: blur( 6.5px );
         -webkit-backdrop-filter: blur( 6.5px );
+        -webkit-box-shadow: 0px 0px 88px 39px #1f41465b;
+        -moz-box-shadow: 0px 0px 88px 39px #1f41465b;
+        box-shadow: 0px 0px 10px 10px #1f41465b;
     }
+
+.unhiden_item:hover {
+    background-color: #1f4146;
+}
 
 #add ul .btn-container {
     width: 100%;
