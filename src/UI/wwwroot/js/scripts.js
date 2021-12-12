@@ -836,8 +836,6 @@ function initializeAddClass() {
         console.log(studentsList);
 
         UI.addStudentToList(student);
-
-        UI.clearFields();
     });
 
     var addNewClass = document.querySelector('#addNewClass');
@@ -1004,7 +1002,6 @@ function initializeAddTeachers() {
 
         UI.addNauczycielToList(nauczyciel);
         localStorage.setItem('MyTeachers', JSON.stringify(nauczycieleList));
-        UI.clearFields();
     });
 }
 
@@ -1022,8 +1019,6 @@ function initializeAddClassrooms() {
         clasroomsList.push(klasa);
 
         UI.addClassRoomToList(klasa);
-
-        UI.clearFields();
 
         localStorage.setItem('MyClassrooms', JSON.stringify(clasroomsList));
     });

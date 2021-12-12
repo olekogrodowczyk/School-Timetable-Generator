@@ -9,7 +9,6 @@
                         <li>ILOŚĆ MIEJSC</li>
                     </ul>
                 </div>
-                <form action="#">
                     <ul class="ul-add green-shadow">
                         <li> <input type="text" id="kod" name="kod" value="Kod"></li>
                         <li> <input type="text" id="name" name="name" value="Nazwa"></li>
@@ -26,11 +25,10 @@
                     </ul>
 
                     <div class="btn-container-center">
-                        <a class="btn btn-dark" href="index.html">
-                            <p>ZAPISZ</p>
-                        </a>
+                        <button class="btn btn-dark" @onclick = "HandleAddClassrooms">
+                        <p>ZAPISZ</p>
+                    </button>
                     </div>
-                </form>
 
             </div>
 
