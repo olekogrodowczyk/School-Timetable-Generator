@@ -13,6 +13,7 @@ namespace Domain.Entities
         public virtual Teacher Teacher { get; set; }
         public int TimetableId { get; set; }
         public virtual TimeTable TimeTable { get; set; }
+        public string Name { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
         public virtual ICollection<Student> Students { get; set; }
     }
