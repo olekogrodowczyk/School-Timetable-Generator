@@ -7,6 +7,7 @@ using UI.Services.Models;
 
 namespace UI.Services.Models
 {
+    [Serializable]
     public class ClassModel
     {
         public string id { get; set; }

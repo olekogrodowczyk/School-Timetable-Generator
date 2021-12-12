@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace UI.Services.Models
 {
+    [Serializable]
     public class StudentModel
     {
         public string id { get; set; }

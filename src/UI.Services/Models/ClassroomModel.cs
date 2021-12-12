@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 namespace UI.Services.Models
 {
     [Serializable]
-    public class TeacherModel
+    public class ClassroomModel
     {
         public int id { get; set; }
-        public string imie { get; set; }
-        public string nazwisko { get; set; }
-        public int ilosc_godzin { get; set; }
-        public char[][] dostepnoscArr { get; set; }
+        public string kod { get; set; }
+        public string nazwa { get; set; }
+        public string ilosc_miejsc { get; set; }
     }
 }
