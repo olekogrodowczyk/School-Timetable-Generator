@@ -33,6 +33,9 @@ namespace Infrastructure.Data
         {
             ModelBuilderRelations.InitializeRelations(modelBuilder);
 
+            modelBuilder.Entity<Classroom>()
+                .HasAlternateKey(x => new { x.Code });
+                
 
         }
 
