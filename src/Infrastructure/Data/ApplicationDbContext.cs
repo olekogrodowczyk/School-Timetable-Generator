@@ -22,6 +22,7 @@ namespace Infrastructure.Data
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<Subject> Subjects { get; set; }
+        public DbSet<Classroom> Classrooms { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {

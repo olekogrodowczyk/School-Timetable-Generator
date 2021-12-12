@@ -12,8 +12,9 @@ namespace Shared.Dto.CreateClassroomDto
     public class CreateClassroomDto : IMap
     {
         public string Code { get; set; }
+        public string Name { get; set; }
         public int NumberOfSeats { get; set; }
-
+        
         public void Mapping(Profile profile)
         {
             profile.CreateMap<CreateClassroomDto, Classroom>();

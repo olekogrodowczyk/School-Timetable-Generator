@@ -10,7 +10,8 @@ namespace Domain.Entities
     public class Classroom : AuditableEntity
     {
         public string Code { get; set; }
-        public int NumberOfSeats { get; set; }
+        public string Name { get; set; }
+        public int NumberOfSeats { get; set; }    
         public virtual ICollection<Lesson> Lessons { get; set; }
     }
 }
