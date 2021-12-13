@@ -1,15 +1,11 @@
-﻿
-
-var studentId = 0;
+﻿var studentId = 0;
 var studentsList = [];
 class Student {
-
     constructor(imie, nazwisko) {
         this.id = studentId++;
         this.imie = imie;
         this.nazwisko = nazwisko;
     }
-
 
     get Imie() {
         return this.imie;
@@ -17,7 +13,6 @@ class Student {
     get Nazwisko() {
         return this.nazwisko;
     }
-
 }
 
 var nauczycieleId = 0;
@@ -30,7 +25,6 @@ class Nauczyciel {
         this.ilosc_godzin = ilosc_godzin;
         this.dostepnoscArr = tablica;
     }
-
 }
 
 var classID = 0;
@@ -69,20 +63,17 @@ class Class {
         this.id = classID++;
         this.studentsArr = [];
     }
-
 }
 
 var classroomId = 0;
 var clasroomsList = [];
 class Classroom {
-
     constructor(kod, nazwa, ilosc_miejsc) {
         this.id = classroomId++;
         this.kod = kod;
         this.nazwa = nazwa;
         this.ilosc_miejsc = ilosc_miejsc;
     }
-
 
     get Kod() {
         return this.kod;
@@ -98,7 +89,6 @@ class Classroom {
 var retrievedData = localStorage.getItem("MyClasses");
 var classes = JSON.parse(retrievedData);
 function areData() {
-
     if (classes.length == []) {
         const bt = document.querySelector('#filldetails')
         console.log(bt);
@@ -160,10 +150,7 @@ class Subject {
 }
 
 class UI {
-
-
     static addNauczycielToList(nauczyciel) {
-
         const list2 = document.querySelector('.all-seperate');
         const row2 = document.createElement('button');
         row2.className = "unhiden_item dark-shadow";
@@ -174,7 +161,7 @@ class UI {
                             <li> <p>${nauczyciel.imie}</p> </li>
                             <li> <p>${nauczyciel.nazwisko}</p> </li>
                                 <li><p>${nauczyciel.ilosc_godzin}</p> </li>
-                           
+
                             <li>
                                 <div class="btn-container">
                                     <input class="btn btn-dark" type="submit" value="USUŃ">
@@ -182,7 +169,6 @@ class UI {
                             </li>
                  </ul>
                 `;
-
 
         row2.addEventListener("click", function () {
             this.classList.toggle("active");
@@ -238,11 +224,9 @@ class UI {
             row6.appendChild(row5);
         }
 
-
         row4.appendChild(row6);
         row3.appendChild(row4);
         list2.appendChild(row3);
-
     }
 
     static clearFields() {
@@ -255,7 +239,6 @@ class UI {
         for (var i = 0; i < checkBoxes.length; i++) {
             checkBoxes[i].checked = false;
         }
-
     }
 
     static displayClassroom() {
@@ -265,7 +248,6 @@ class UI {
     }
 
     static addClassRoomToList(klasa) {
-
         const list2 = document.querySelector('.all');
         const row2 = document.createElement('ul');
         row2.className = "item";
@@ -277,7 +259,7 @@ class UI {
              <li> <p>${klasa.ilosc_miejsc}</p> </li>
              <li> <div class="btn-container">
               <input class="btn btn-dark" type="submit" value="USUŃ">
-            
+
                    </div>
             </li>
         `;
@@ -288,7 +270,6 @@ class UI {
         document.querySelector('#kod').placeholder = 'kod';
         document.querySelector('#name').placeholder = 'nazwa';
         document.querySelector('#count').placeholder = '1';
-
     }
     static clearAllSubjectFields() {
         document.querySelector('#nameSubject').value = '';
@@ -313,8 +294,6 @@ class UI {
                 e.style.visibility = "hidden";
             });
         });
-
-
     }
 
     static deleteStudent(element) {
@@ -326,13 +305,11 @@ class UI {
         if (element.classList.contains('delete')) {
             element.parentElement.parentElement.parentElement.remove();
         }
-
     }
     static deleteSubject(element) {
         if (element.classList.contains('delete')) {
             element.parentElement.parentElement.parentElement.remove();
         }
-
     }
 
     static deletePanelClass(element, id) {
@@ -345,12 +322,10 @@ class UI {
     }
 
     static addStudentToList(student) {
-
         const list = document.querySelector('#studentList');
 
         const row = document.createElement('ul');
         row.className = "dark-shadow";
-
 
         row.innerHTML = `
          <li>${student.imie} ${student.nazwisko}</li>
@@ -370,7 +345,6 @@ class UI {
     static clearFields() {
         document.querySelector('#imie').value = '';
         document.querySelector('#nazwisko').value = '';
-
     }
 
     clearAllFields() {
@@ -382,7 +356,6 @@ class UI {
     }
 
     static displayClasses() {
-
         var tmp = new Class("tmp");
         tmp.ChangeName("1b");
         tmp.newStudent("Tomek", "Guz");
@@ -393,7 +366,6 @@ class UI {
     }
 
     static addClassToList(klasa) {
-
         const list2 = document.querySelector('.all-seperate');
         const row2 = document.createElement('button');
         row2.className = "unhiden_item dark-shadow";
@@ -425,7 +397,6 @@ class UI {
         //usuwanie nauczyciela i update tablicy nauczyciela, usuniecie schowanego panelu
 
         row2.addEventListener('click', (e) => {
-
             UI.deleteClass(e.target);
             let s = e.target.id;
 
@@ -450,14 +421,14 @@ class UI {
             const row5 = document.createElement('ul');
             row5.className = "dark-shadow";
             row5.innerHTML = `
-                    
+
                     <li>${klasa.studentsArr[i].Imie} ${klasa.studentsArr[i].Nazwisko}</li>
                     <li>
                     <div class="btn-container">
                     <input id=${klasa.studentsArr[i].id} class="btn btn-dark  delete" type="submit" value="USUŃ">
                      </div>
                      </li>
-                    
+
                     `;
 
             row5.addEventListener('click', (e) => {
@@ -466,8 +437,6 @@ class UI {
                 for (var i = 0; i < klasa.studentsArr.length; i++) {
                     if (klasa.studentsArr[i].Id == I) { klasa.studentsArr.splice(i, 1); }
                 }
-
-
 
                 localStorage.setItem('MyClasses', JSON.stringify(classesList));
             });
@@ -509,7 +478,6 @@ class UI {
         });
 
         row2.addEventListener('click', (e) => {
-
             UI.deleteSubject(e.target);
             let s = e.target.id;
 
@@ -518,7 +486,7 @@ class UI {
                 if (subjectList[i].id == s) { subjectList.splice(i, 1); }
             }
 
-            localStorage.setItem('MySubject', JSON.stringify(subjectList));
+            localStorage.setItem('MySubjects', JSON.stringify(subjectList));
         });
 
         list2.appendChild(row2);
@@ -531,9 +499,7 @@ class UI {
         row4.id = 'groupSubjectList';
         let i;
 
-
         if (newSubject.groupSubjectList.length > 1) {
-
             for (i = 0; i < newSubject.groupSubjectList.length; i++) {
                 const list = document.createElement('div');
                 list.id = i;
@@ -556,7 +522,6 @@ class UI {
 
                 row5.innerHTML = `<h3>LISTA UCZNIÓW</h3>`;
                 r.appendChild(row5);
-
 
                 for (let j = 0; j < newSubject.groupSubjectList[i].studentsName.length; j++) {
                     const row6 = document.createElement('div');
@@ -638,7 +603,6 @@ function setHours(id_div, value) {
 }
 
 function displayStudents() {
-
     const list = document.querySelector('.studentList');
     list.style.visibility = "visible";
     while (list.hasChildNodes()) {
@@ -654,7 +618,6 @@ function displayStudents() {
     row2.appendChild(row4);
     //dla mnie dodałam sobie 0, ale ma być to id wybranej klasy
     for (let i = 0; i < classes[0].studentsArr.length; i++) {
-
         const row3 = document.createElement('li');
         row3.className = "dark-shadow";
         row3.id = "studentDraggable";
@@ -683,7 +646,6 @@ function setGroupSubjectOfAllStudents() {
 
     return group;
 }
-
 
 let draggableStudent = null;
 
@@ -723,11 +685,9 @@ function addGroupSubjectFields() {
         list.addEventListener("drop", dragDrop);
         container.appendChild(list);
     }
-
 }
 
 function displayTeacherFiels() {
-
     var container = document.querySelector(".addTeacher");
     container.style.visibility = "visible";
     container.style.gridColumn = "1 / span 4";
@@ -752,8 +712,6 @@ function displayTeacherFiels() {
     const b = document.querySelector("#addSubject");
     b.removeAttribute("disabled");
     bt.style.display = "flex";
-
-
 }
 
 function checkStudentsList() {
@@ -769,11 +727,10 @@ function checkStudentsList() {
 
 function dragStart() {
     draggableStudent = this;
-    // console.log(this.parentElement.id); 
-    //console.log(this.children[0].id) 
+    // console.log(this.parentElement.id);
+    //console.log(this.children[0].id)
     let name = this.children[0].innerHTML;
     removeStudent(this.parentElement.id, this.children[0].id, name); //id_div,id_ucznia
-
 }
 
 function dragEnd() {
@@ -794,8 +751,6 @@ function dragDrop() {
 
 //dodawanie divow dla grupy, lub dodanie nauczyczyciela do klasy, jeżeli nie ma grup, to grupa to cała klasa
 
-
-
 //odpowiada za pojawianie sie możliwości dodawania grupy, jeśli jest chcech, to przycisk submit musi pokazywać podział grup,
 //jeżeli nie, to grupa to cała klasa, a submit pokazuje tylko opcje dodawania nauczycieli;
 function divisionOn(elem) {
@@ -805,22 +760,19 @@ function divisionOn(elem) {
         el.forEach(e => {
             e.style.visibility = "visible";
         });
-
     } else {
-
         el.forEach(e => {
             e.style.visibility = "hidden";
         });
     }
 }
 
-
 function initializeAddClass() {
     var addNew = document.querySelector('#addNew');
     addNew.addEventListener('click', (e) => {
         e.preventDefault();
         //const t = document.querySelector("#liczba");
-        //t.style.visibility = "visible"; 
+        //t.style.visibility = "visible";
         const element = document.querySelector("#submitNewClass");
         element.style.visibility = "visible";
 
@@ -870,9 +822,7 @@ function initializeAddClass() {
 
             const s = document.querySelector("#submitNewClass");
             s.style.visibility = "hidden";
-
         });
-
 
         classesList.push(newclass);
         localStorage.setItem('MyClasses', JSON.stringify(classesList));
@@ -906,8 +856,6 @@ function initializeAddTeachers() {
         const imie = document.querySelector('#imie').value;
         const nazwisko = document.querySelector('#nazwisko').value;
         const ilosc = document.querySelector('#count').value;
-
-
 
         let dostepnosc = [];
         let array8 = [], array9 = [], array10 = [], array11 = [], array12 = [], array13 = [], array14 = [], array15 = [], array16 = [], array17 = [];
@@ -1026,7 +974,7 @@ function initializeAddClassrooms() {
     });
 }
 
-function initializeSubject() {
+function initializeSubjects() {
     var submitNewSubject = document.querySelector('#addSubject');
     submitNewSubject.addEventListener('click', (e) => {
         e.preventDefault();
@@ -1041,8 +989,7 @@ function initializeSubject() {
 
         subjectList.push(newSubject);
 
-        localStorage.setItem('MySubject', JSON.stringify(subjectList));
-
+        localStorage.setItem('MySubjects', JSON.stringify(subjectList));
 
         const bt = document.querySelector(".btnNext");
         bt.disabled = true;
@@ -1054,11 +1001,9 @@ function initializeSubject() {
         container.style.maxHeight = null;
         container.style.display = "none";
 
-
         UI.addSubjectToList(newSubject);
         UI.clearAllSubjectFields();
         groupSubjectList = [];
-
     });
 
     var addGroupSubjects = document.querySelector('#filldetails');
@@ -1089,11 +1034,9 @@ function initializeSubject() {
             bt.style.display = "flex";
         }
         else { //jezeli nie ma podzialu
-
             let oneGroupSubject = setGroupSubjectOfAllStudents();
             displayTeacherFiels();
         }
-
     });
 
     back.addEventListener('click', (e) => {
@@ -1122,8 +1065,5 @@ function initializeSubject() {
         container.style.visibility = "hidden";
         container.style.maxHeight = null;
         container.style.display = "none";
-
-
     });
-
 }

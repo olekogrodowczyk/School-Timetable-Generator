@@ -19,6 +19,6 @@ namespace Application.Interfaces
 
         Task<ClassVm> GetClassByName(string name);
 
-        Task<IEnumerable<StudentVm>> GetStudentsFromGroup(string className);
+        Task<IEnumerable<StudentVm>> GetStudentsFromClass(string className);
     }
 }

@@ -23,16 +23,13 @@ namespace UI.Components.AddSubjects
         public IToastService ToastService { get; set; }
 
         [Inject]
-        public IClassHttpService ClassHttpService { get; set; }   
+        public IClassHttpService ClassHttpService { get; set; }
 
-        protected async override Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
             isBusy = true;
-            classessNames = await ClassHttpService.GetAllClassessNames();
+            classessNames = await ClassHttpService.GetAllClassessNames(1);
             isBusy = false;
         }
-
-
-
     }
 }

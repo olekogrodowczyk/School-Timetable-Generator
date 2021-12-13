@@ -60,7 +60,7 @@ namespace Application.Services
             return _mapper.Map<ClassVm>(classToMap);
         }
 
-        public async Task<IEnumerable<StudentVm>> GetStudentsFromGroup(string className)
+        public async Task<IEnumerable<StudentVm>> GetStudentsFromClass(string className)
         {
             await _studentRepository.GetAllAsync();
             var classFound = await _classRepository.SingleOrDefaultAsync(x => x.Name == className, x => x.Students);

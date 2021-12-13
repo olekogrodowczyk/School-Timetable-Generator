@@ -1,0 +1,11 @@
+﻿@page "/addsubjects/{ClassName}"
+
+<div id="add-subject">
+    <Header Title="Dodaj przedmiot"></Header>
+    <AddSubjectsToClassComponent ClassName = "@ClassName"></AddSubjectsToClassComponent>
+</div>
+
+@code {
+    [Parameter]
+    public string ClassName { get; set; }
+}
