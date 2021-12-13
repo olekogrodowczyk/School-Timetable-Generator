@@ -98,6 +98,12 @@ namespace Infrastructure.Data
                 .WithMany(x => x.Classrooms)
                 .HasForeignKey(x => x.TimetableId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Teacher>()
+                .HasOne<TimeTable>(x => x.TimeTable)
+                .WithMany(x => x.Teachers)
+                .HasForeignKey(x => x.TimetableId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
