@@ -1,4 +1,5 @@
 ﻿using Shared.Dto.CreateTeacherDto;
+using Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace Application.Interfaces
     public interface ITeacherService
     {
         Task<int> CreateTeacher(CreateTeacherDto model);
+
+        Task<IEnumerable<TeacherVm>> GetAllTeachersFromTimetable(int timetableId);
     }
 }

@@ -1,8 +1,10 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
 using Shared.Dto.CreateTeacherDto;
+using Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +29,13 @@ namespace Application.Services
             var teacher = _mapper.Map<Teacher>(model);
             await _teacherRepository.AddAsync(teacher);
             return teacher.Id;
+        }
+
+        public async Task<IEnumerable<TeacherVm>> GetAllTeachersFromTimetable(int timetableId)
+        {
+            var teachers = await _teacherRepository.GetWhereAsync(x => x.TimetableId == timetableId);
+            if (teachers == null) { throw new NotFoundException($"Timetable entity with id: {timetableId} is not found"); }
+            return _mapper.Map<IEnumerable<TeacherVm>>(teachers);
         }
     }
 }
