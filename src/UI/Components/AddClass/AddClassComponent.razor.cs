@@ -3,12 +3,14 @@ using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
+using Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UI.Services.Exceptions;
 using UI.Services.Interfaces;
 using UI.Services.Models;
+using System.Linq;
 
 namespace UI.Components.AddClass
 {
@@ -17,7 +19,10 @@ namespace UI.Components.AddClass
         protected string value = String.Empty;
         protected string _errorMessage = String.Empty;
         protected string[] _errors;
+        private int currentTimetable = 1;
         private List<ClassModel> deserializedValue = new List<ClassModel>();
+        private IEnumerable<TeacherVm> teachers;
+        private bool isBusy = false;
 
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
@@ -29,14 +34,29 @@ namespace UI.Components.AddClass
         public IClassHttpService ClassHttpService { get; set; }
 
         [Inject]
+        public ITeacherHttpService TeacherHttpService { get; set; }
+
+        [Inject]
         public IToastService ToastService { get; set; }
 
-        protected async override Task OnInitializedAsync()
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
+
+        protected override async Task OnInitializedAsync()
         {
+            isBusy = true;
+            teachers = await TeacherHttpService.GetAllTeachersFromTimetable(currentTimetable);
+            if (teachers.Count() == 0)
+            {
+                ToastService.ShowError("Brak nauczycieli do wyboru");
+                NavigationManager.NavigateTo("/");
+                return;
+            }
+            isBusy = false;
             await LocalStorageService.RemoveItemAsync("MyClasses");
         }
 
-        protected async override Task OnAfterRenderAsync(bool firstRender)
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
@@ -56,8 +76,6 @@ namespace UI.Components.AddClass
                 ToastService.ShowError("Nastąpił problem z serializacją danych");
             }
         }
-
-
 
         protected async Task HandleAddClass()
         {

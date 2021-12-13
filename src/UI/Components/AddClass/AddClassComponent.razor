@@ -11,7 +11,8 @@
                     <li> <input type="text" id="name" name="name" placeholder="Kod"></li>
                     <li>
                         <div class="btn-container">
-                            <button class="btn btn-dark" id="addNewClass" type="submit" value="DODAJ">DODAJ </button>
+                            <button class="btn btn-dark" id="addNewClass" type="submit" value="DODAJ"
+                            disabled="@isBusy">DODAJ </button>
                         </div>
                     </li>
                     <li class="addStudent dark-shadow">
@@ -40,7 +41,7 @@
                 </div>
                    
                  <div class="btn-container-center">
-                    <button @onclick="HandleAddClass" class="btn btn-dark">
+                    <button @onclick="HandleAddClass" class="btn btn-dark" disabled="@isBusy">
                         <p>ZAPISZ</p>
                     </button>
                 </div>

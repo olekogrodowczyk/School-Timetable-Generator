@@ -1,6 +1,7 @@
 ﻿using Shared.Dto.CreateAvailabilityDto;
 using Shared.Dto.CreateTeacherDto;
 using Shared.Responses;
+using Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace UI.Services.Services
         {
             foreach (TeacherModel teacher in models)
             {
-                var createTeacherDto = new CreateTeacherDto 
+                var createTeacherDto = new CreateTeacherDto
                 { FirstName = teacher.imie, LastName = teacher.nazwisko, HoursAvailability = teacher.ilosc_godzin };
                 var teacherResult = await _httpService.Post<OkResult<int>>("api/teacher", createTeacherDto);
                 var availabilities = await HandleAvailabilities(teacher.dostepnoscArr, teacherResult.Value);
@@ -33,6 +34,13 @@ namespace UI.Services.Services
                     var availabilityResult = await _httpService.Post<OkResult<int>>("api/availability", availabilityDto);
                 }
             }
+        }
+
+        public async Task<IEnumerable<TeacherVm>> GetAllTeachersFromTimetable(int timetableId)
+        {
+            var result = await _httpService.Get<OkResult<IEnumerable<TeacherVm>>>
+                ($"api/teacher/getallfromtimetable?timetableid={timetableId}");
+            return result.Value;
         }
 
         private Task<List<CreateAvailabilityDto>> HandleAvailabilities(char[][] values, int teacherId)
@@ -69,6 +77,5 @@ namespace UI.Services.Services
             4 => "Piątek",
             _ => "Błąd"
         };
-
     }
 }
