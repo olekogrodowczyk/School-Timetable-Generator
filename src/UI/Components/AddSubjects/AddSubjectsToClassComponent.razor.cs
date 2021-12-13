@@ -13,6 +13,7 @@ namespace UI.Components.AddSubjects
     public partial class AddSubjectsToClassComponent
     {
         private bool isDataLoaded = false;
+        private IEnumerable<StudentVm> students;
 
         [Parameter]
         public string ClassName { get; set; }
@@ -35,21 +36,15 @@ namespace UI.Components.AddSubjects
         protected override async Task OnInitializedAsync()
         {
             await LocalStorageService.RemoveItemAsync("MySubjects");
-            IEnumerable<StudentVm> students = await ClassHttpService.GetAllStudentsFromClass(ClassName);
+            students = await ClassHttpService.GetAllStudentsFromClass(ClassName);
             if (students.Count() == 0)
             {
                 ToastService.ShowError("W tej klasie nie ma żadnych uczniów!", "Błąd");
                 NavigationManager.NavigateTo("/");
                 return;
             }
-        }
-
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            if (firstRender && isDataLoaded)
-            {
-                await JSRuntime.InvokeVoidAsync("initializeSubjects");
-            }
+            await LocalStorageService.SetItemAsync("MyStudents", students);
+            await JSRuntime.InvokeVoidAsync("initializeSubjects");
         }
     }
 }

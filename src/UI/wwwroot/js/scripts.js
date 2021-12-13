@@ -609,7 +609,7 @@ function displayStudents() {
         list.removeChild(list.lastChild);
     }
 
-    var retrievedData = localStorage.getItem("MyClasses");
+    var retrievedData = localStorage.getItem("MyStudents");
     var classes = JSON.parse(retrievedData);
     const row2 = document.createElement('ul');
     const row4 = document.createElement('li');
@@ -617,14 +617,14 @@ function displayStudents() {
         `<p>Uczniowie</p>`
     row2.appendChild(row4);
     //dla mnie dodałam sobie 0, ale ma być to id wybranej klasy
-    for (let i = 0; i < classes[0].studentsArr.length; i++) {
+    for (let i = 0; i < classes.length; i++) {
         const row3 = document.createElement('li');
         row3.className = "dark-shadow";
         row3.id = "studentDraggable";
         row3.style.background = "rgb(67,113,98)";
         row3.setAttribute("draggable", "true");
         row3.innerHTML = `
-            <p id=${classes[0].studentsArr[i].id}>${classes[0].studentsArr[i].imie} ${classes[0].studentsArr[i].nazwisko}</p>`
+            <p id=${classes[i].id}>${classes[i].FirstName} ${classes[i].LastName}</p>`
 
         row3.addEventListener("dragstart", dragStart);
         row3.addEventListener("dragend", dragEnd);
@@ -636,9 +636,9 @@ function displayStudents() {
 
 function setGroupSubjectOfAllStudents() {
     let group = new GroupSubject("1");
-    for (let i = 0; i < classes[0].studentsArr.length; i++) {
-        let id = classes[0].studentsArr[i].id;
-        let name = classes[0].studentsArr[i].imie + " " + classes[0].studentsArr[i].nazwisko;
+    for (let i = 0; i < classes.length; i++) {
+        let id = classes[i].id;
+        let name = classes[i].imie + " " + classes[i].nazwisko;
         group.addStudent(id, name);
     }
 

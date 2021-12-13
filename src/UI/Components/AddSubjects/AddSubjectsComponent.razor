@@ -1,17 +1,17 @@
 ﻿<section>
-    <div class="all-seperate">
-        @if (!isBusy)
-        {
+    @if (!isBusy)
+    {
+        <div class="all-seperate">
             @foreach (string className in classessNames)
             {
                 <div>
                     <a href="/addsubjects/@className" class="button dark-shadow">@className</a>
                 </div>
             }
-        }
-        else
-        {
-            <div class="lds-dual-ring"></div>
-        }
-    </div>
+        </div>
+    }
+    else
+    {
+        <div class="lds-dual-ring"></div>
+    }
 </section>
