@@ -42,5 +42,11 @@ namespace Application.Services
             return student.Id;
         }
 
+        public async Task<IEnumerable<string>> GetAllClassessNames(int timetableId)
+        {
+            var result = await _classRepository.GetWhereAsync(x => x.TimetableId == timetableId);
+            return result.Select(x => x.Name);
+        }
+
     }
 }

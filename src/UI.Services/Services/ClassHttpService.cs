@@ -34,5 +34,11 @@ namespace UI.Services.Services
                 }
             }
         }
+
+        public async Task<IEnumerable<string>> GetAllClassessNames()
+        {
+            var result = await _httpService.Get<OkResult<IEnumerable<string>>>("api/class/getallnames?timetableid=1");
+            return result.Value;
+        }
     }
 }

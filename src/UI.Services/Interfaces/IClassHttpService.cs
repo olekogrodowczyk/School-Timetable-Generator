@@ -10,5 +10,6 @@ namespace UI.Services.Interfaces
     public interface IClassHttpService
     {
         Task CreateClasses(List<ClassModel> model);
+        Task<IEnumerable<string>> GetAllClassessNames();
     }
 }
