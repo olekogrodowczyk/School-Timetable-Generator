@@ -17,7 +17,7 @@ namespace Infrastructure.Data
         public DbSet<TimeTable> TimeTables { get; set; }
         public DbSet<Class> Classess { get; set; }
         public DbSet<Group> Groups { get; set; }
-        public DbSet<Teacher> Teachers { get; set; }    
+        public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
@@ -26,7 +26,6 @@ namespace Infrastructure.Data
 
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,7 +36,7 @@ namespace Infrastructure.Data
                 .HasAlternateKey(x => new { x.Code });
 
             modelBuilder.Entity<Class>()
-                .HasAlternateKey(x => new { x.Name });
+                .HasAlternateKey(x => new { x.TimetableId, x.Name });
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

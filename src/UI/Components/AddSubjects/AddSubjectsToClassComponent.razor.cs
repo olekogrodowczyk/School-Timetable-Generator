@@ -40,6 +40,7 @@ namespace UI.Components.AddSubjects
             {
                 ToastService.ShowError("W tej klasie nie ma żadnych uczniów!", "Błąd");
                 NavigationManager.NavigateTo("/");
+                return;
             }
         }
 
