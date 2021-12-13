@@ -4,14 +4,16 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211213045742_addTimetableForeignKeyToClassroom")]
+    partial class addTimetableForeignKeyToClassroom
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,12 +134,14 @@ namespace Infrastructure.Migrations
                     b.Property<int>("NumberOfSeats")
                         .HasColumnType("int");
 
-                    b.Property<int>("TimetableId")
+                    b.Property<int?>("TimetableId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("TimetableId", "Code");
+                    b.HasAlternateKey("Code");
+
+                    b.HasIndex("TimetableId");
 
                     b.ToTable("Classrooms");
                 });
@@ -424,9 +428,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.TimeTable", "TimeTable")
                         .WithMany("Classrooms")
-                        .HasForeignKey("TimetableId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("TimetableId");
 
                     b.Navigation("TimeTable");
                 });

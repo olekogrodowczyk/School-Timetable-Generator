@@ -11,7 +11,9 @@ namespace Domain.Entities
     {
         public string Code { get; set; }
         public string Name { get; set; }
-        public int NumberOfSeats { get; set; }    
+        public int NumberOfSeats { get; set; }
+        public int TimetableId { get; set; }
+        public virtual TimeTable TimeTable { get; set; }
         public virtual ICollection<Lesson> Lessons { get; set; }
     }
 }
