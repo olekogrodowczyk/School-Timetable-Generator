@@ -52,12 +52,21 @@ namespace Application.Services
             return result.Select(x => x.Name);
         }
 
-        public async Task<ClassVm> GetClassByName(string name)
+        public async Task<ClassVm> GetClassByName(string className)
         {
             await _teacherRepository.GetAllAsync();
-            var classToMap = await _classRepository.SingleOrDefaultAsync(x => x.Name == name, x => x.Teacher);
+            var classToMap = await _classRepository.SingleOrDefaultAsync(x => x.Name == className, x => x.Teacher);
             if (classToMap == null) { throw new NotFoundException("Class name couldn't be found"); }
             return _mapper.Map<ClassVm>(classToMap);
+        }
+
+        public async Task<IEnumerable<StudentVm>> GetStudentsFromGroup(string className)
+        {
+            await _studentRepository.GetAllAsync();
+            var classFound = await _classRepository.SingleOrDefaultAsync(x => x.Name == className, x => x.Students);
+            if (classFound == null) { throw new NotFoundException("Class name couldn't be found"); }
+            var result = _mapper.Map<IEnumerable<StudentVm>>(classFound.Students);
+            return result;
         }
     }
 }

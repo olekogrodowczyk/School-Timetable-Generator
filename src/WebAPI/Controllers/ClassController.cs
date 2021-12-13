@@ -41,5 +41,12 @@ namespace WebAPI.Controllers
             var result = await _classService.GetClassByName(name);
             return Ok(new OkResult<ClassVm>(result, "Pomyślnie zwrócono klasę"));
         }
+
+        [HttpGet("getstudentsbyclassname")]
+        public async Task<IActionResult> GetStudentsFromClass([FromQuery] string name)
+        {
+            var result = await _classService.GetStudentsFromGroup(name);
+            return Ok(new OkResult<IEnumerable<StudentVm>>(result, "Pomyślnie zwrócono uczniów"));
+        }
     }
 }
