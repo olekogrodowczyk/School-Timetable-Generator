@@ -37,6 +37,9 @@ namespace Infrastructure.Data
 
             modelBuilder.Entity<Class>()
                 .HasAlternateKey(x => new { x.TimetableId, x.Name });
+
+            modelBuilder.Entity<Subject>()
+                .HasAlternateKey(x => new { x.TimetableId, x.Name });
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

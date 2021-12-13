@@ -15,5 +15,6 @@ namespace Domain.Entities
         public virtual ICollection<Class> Classes { get; set; }
         public virtual ICollection<Classroom> Classrooms { get; set; }
         public virtual ICollection<Teacher> Teachers { get; set; }
+        public virtual ICollection<Subject> Subjects { get; set; }
     }
 }

@@ -10,6 +10,8 @@ namespace Domain.Entities
     public class Subject : AuditableEntity
     {
         public string Name { get; set; }
+        public int? TimetableId { get; set; }
+        public virtual TimeTable TimeTable { get; set; }
         public virtual ICollection<Lesson> Lessons { get; set; }
     }
 }

@@ -61,6 +61,7 @@ namespace Infrastructure
             services.AddScoped<ITeacherRepository, TeacherRepository>();
             services.AddScoped<IAvailabilityRepository, AvailabilityRepository>();
             services.AddScoped<IClassroomRepository, ClassroomRepository>();
+            services.AddScoped<ISubjectRepository, SubjectRepository>();
 
             return services;
         }
