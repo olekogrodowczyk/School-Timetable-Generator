@@ -109,7 +109,7 @@ class GroupSubject {
     }
 
     addStudent(i, name) {
-        this.studentsIdArr.push(i);
+        this.studentsIdArr.push(parseInt(i));
         this.studentsName.push(name);
     }
 
@@ -624,7 +624,7 @@ function displayStudents() {
         row3.style.background = "rgb(67,113,98)";
         row3.setAttribute("draggable", "true");
         row3.innerHTML = `
-            <p id=${classes[i].id}>${classes[i].FirstName} ${classes[i].LastName}</p>`
+            <p id=${classes[i].Id}>${classes[i].FirstName} ${classes[i].LastName}</p>`
 
         row3.addEventListener("dragstart", dragStart);
         row3.addEventListener("dragend", dragEnd);
@@ -639,8 +639,8 @@ function setGroupSubjectOfAllStudents() {
     var classes = JSON.parse(retrievedData);
     let group = new GroupSubject("1");
     for (let i = 0; i < classes.length; i++) {
-        let id = classes[i].id;
-        let name = classes[i].imie + " " + classes[i].nazwisko;
+        let id = parseInt(classes[i].Id);
+        let name = classes[i].FirstName + " " + classes[i].LastName;
         group.addStudent(id, name);
     }
 
