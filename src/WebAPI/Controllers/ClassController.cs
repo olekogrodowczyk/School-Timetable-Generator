@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Shared.Dto.CreateClassDto;
 using Shared.Dto.CreateStudentDto;
 using Shared.Responses;
+using Shared.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -34,5 +35,11 @@ namespace WebAPI.Controllers
             return Ok(new OkResult<IEnumerable<string>>(result, "Pomyślnie zwrócono nazwy klas"));
         }
 
+        [HttpGet("getbyname")]
+        public async Task<IActionResult> GetClassByName([FromQuery] string name)
+        {
+            var result = await _classService.GetClassByName(name);
+            return Ok(new OkResult<ClassVm>(result, "Pomyślnie zwrócono klasę"));
+        }
     }
 }

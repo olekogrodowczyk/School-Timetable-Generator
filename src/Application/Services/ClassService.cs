@@ -1,9 +1,11 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
 using Shared.Dto.CreateClassDto;
 using Shared.Dto.CreateStudentDto;
+using Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +20,16 @@ namespace Application.Services
         private readonly IStudentRepository _studentRepository;
         private readonly ITimetableRepository _timetableRepository;
         private readonly IMapper _mapper;
+        private readonly ITeacherRepository _teacherRepository;
 
         public ClassService(IClassRepository classRepository, IStudentRepository studentRepository
-            ,ITimetableRepository timetableRepository, IMapper mapper)
+            , ITimetableRepository timetableRepository, IMapper mapper, ITeacherRepository teacherRepository)
         {
             _classRepository = classRepository;
             _studentRepository = studentRepository;
             _timetableRepository = timetableRepository;
             _mapper = mapper;
+            _teacherRepository = teacherRepository;
         }
 
         public async Task<int> CreateClass(CreateClassDto model)
@@ -48,5 +52,12 @@ namespace Application.Services
             return result.Select(x => x.Name);
         }
 
+        public async Task<ClassVm> GetClassByName(string name)
+        {
+            await _teacherRepository.GetAllAsync();
+            var classToMap = await _classRepository.SingleOrDefaultAsync(x => x.Name == name, x => x.Teacher);
+            if (classToMap == null) { throw new NotFoundException("Class name couldn't be found"); }
+            return _mapper.Map<ClassVm>(classToMap);
+        }
     }
 }
