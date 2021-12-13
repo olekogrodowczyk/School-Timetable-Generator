@@ -1,0 +1,17 @@
+﻿<section>
+    <div class="all-seperate">
+        @if (!isBusy)
+        {
+            @foreach (string className in classessNames)
+            {
+                <div>
+                    <a href="#" class="button dark-shadow">@className</a>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="lds-dual-ring"></div>
+        }
+    </div>
+</section>

@@ -161,6 +161,7 @@ class Subject {
 
 class UI {
 
+
     static addNauczycielToList(nauczyciel) {
 
         const list2 = document.querySelector('.all-seperate');
@@ -812,6 +813,7 @@ function divisionOn(elem) {
         });
     }
 }
+
 
 function initializeAddClass() {
     var addNew = document.querySelector('#addNew');
