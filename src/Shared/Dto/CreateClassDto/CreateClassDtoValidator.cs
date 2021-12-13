@@ -12,13 +12,17 @@ namespace Shared.Dto.CreateClassDto
     public class CreateClassDtoValidator : AbstractValidator<CreateClassDto>
     {
         private readonly ITimetableRepository _timetableRepository;
+        private readonly IClassRepository _classRepository;
 
-        public CreateClassDtoValidator(ITimetableRepository timetableRepository)
+        public CreateClassDtoValidator(ITimetableRepository timetableRepository, IClassRepository classRepository)
         {
             _timetableRepository = timetableRepository;
+            _classRepository = classRepository;
+
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Nie podano nazwy klasy")
-                .MinimumLength(5).WithMessage("Minimalna długość nazwy grupy to 5");
+                .MinimumLength(5).WithMessage("Minimalna długość nazwy grupy to 5")
+                .MustAsync(IsNameUnique).WithMessage(x => $"Klasa z nazwą: {x.Name} już istnieje");
 
             RuleFor(x => x.TimetableId)
                 .GreaterThan(0).WithMessage("Podano nie poprawny plan lekcji")
@@ -29,6 +33,11 @@ namespace Shared.Dto.CreateClassDto
         private async Task<bool> TimetableExists(int value, CancellationToken cancellationToken)
         {
             return await _timetableRepository.AnyAsync(x=>x.Id == value);
+        }
+
+        private async Task<bool> IsNameUnique(string value, CancellationToken cancellationToken)
+        {
+            return await _classRepository.AnyAsync(x => x.Name == value);
         }
     }
 }

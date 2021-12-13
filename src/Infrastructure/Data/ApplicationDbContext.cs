@@ -34,7 +34,10 @@ namespace Infrastructure.Data
             ModelBuilderRelations.InitializeRelations(modelBuilder);
 
             modelBuilder.Entity<Classroom>()
-                .HasAlternateKey(x => new { x.Code });               
+                .HasAlternateKey(x => new { x.Code });
+
+            modelBuilder.Entity<Class>()
+                .HasAlternateKey(x => new { x.Name });
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
