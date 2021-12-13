@@ -850,7 +850,7 @@ input:focus {
 }
 
     #add-subject .ul-add input[type="number"] {
-        width: 100px;
+        width: 200px;
     }
 
     #add-subject .ul-add li {
