@@ -1,6 +1,7 @@
 ﻿using Application.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Shared.Responses;
 using System;
@@ -38,18 +39,27 @@ namespace WebAPI.Middleware
                         code = HttpStatusCode.NotFound;
                         result = new ErrorResult(e.Message);
                         break;
+
                     case BadRequestException _:
                         code = HttpStatusCode.BadRequest;
                         result = new ErrorResult(e.Message);
                         break;
+
                     case ForbidException _:
                         code = HttpStatusCode.Forbidden;
                         result = new ErrorResult(e.Message);
                         break;
+
                     case ArgumentNullException _:
                         code = HttpStatusCode.InternalServerError;
                         result = new ErrorResult(e.Message);
                         break;
+
+                    case DbUpdateException _:
+                        code = HttpStatusCode.BadRequest;
+                        result = new ErrorResult("Nastąpił błąd przy wprowadzaniu danych do bazy danych");
+                        break;
+
                     case Exception:
                         code = HttpStatusCode.InternalServerError;
                         result = string.IsNullOrWhiteSpace(e.Message) ? new ErrorResult("Error") : new ErrorResult(e.Message);
@@ -61,9 +71,7 @@ namespace WebAPI.Middleware
                 string jsonResponse = JsonSerializer.Serialize(result);
 
                 await context.Response.WriteAsync(jsonResponse);
-
             }
-
         }
     }
 }
