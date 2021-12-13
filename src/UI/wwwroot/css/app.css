@@ -31,7 +31,6 @@
         background-color: #67a38034;
     }
 
-
 * {
     margin: 0;
     padding: 0;
@@ -40,7 +39,6 @@
     font-style: normal;
     font-weight: bold;
 }
-
 
 .green-shadow {
     /*  box-shadow: 0 8px 32px 0 rgba(4, 54, 23, 0.37);
@@ -79,7 +77,6 @@
     background-color: rgba(0,210,161,0.24);
 }
 
-
 ul {
     list-style: none;
 }
@@ -109,13 +106,11 @@ section {
     min-height: calc(100vh - 200px);
 }
 
-
 header {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-
 
 footer {
     height: 60px;
@@ -148,8 +143,6 @@ section {
         -moz-box-shadow: 0px 0px 88px 39px #1f41465b;
         box-shadow: 0px 0px 10px 10px #1f41465b;
     }
-
-
 
 .btn-dark {
     background-color: var(--dark-color);
@@ -211,7 +204,6 @@ a {
     color: var(--secondary-color);
 }
 
-
 /*nav*/
 
 .main-nav {
@@ -248,7 +240,6 @@ a {
         color: var(--dark-color);
     }
 
-
     .main-nav ul {
         display: flex;
         font-size: 12px;
@@ -265,7 +256,6 @@ a {
     font-size: 45px;
     margin-top: 1rem;
 }
-
 
 .under-tittle-container {
     width: 100%;
@@ -285,7 +275,6 @@ a {
         justify-content: center;
     }
 
-
     #basic-add .cards-container {
         width: 75vw;
         display: flex;
@@ -293,7 +282,6 @@ a {
         justify-content: center;
         margin-bottom: 30px;
     }
-
 
     #basic-add .card-container {
         width: 250px;
@@ -307,7 +295,6 @@ a {
         transition: all 0.5s ease;
         cursor: default;
     }
-
 
         #basic-add .card-container p {
             font-size: 20px;
@@ -345,7 +332,6 @@ a {
     cursor: pointer;
 }
 
-
 #basic-add .icon {
     height: 100%;
     font-size: 100px;
@@ -380,7 +366,6 @@ a {
     justify-content: space-between;
 }
 
-
     #basic-add .btn i {
         padding-left: 1rem;
     }
@@ -411,8 +396,6 @@ a {
         justify-content: center;
         align-items: center;
     }
-
-
 
 #add .card-container .card-tittle ul li {
     width: 100%;
@@ -466,8 +449,6 @@ a {
     align-items: center;
 }
 
-
-
 #add .card-container .all-seperate .item li,
 #add .card-container .ul-add li,
 #add .card-container .all .item li {
@@ -479,8 +460,6 @@ a {
 #add .card-container .all .item li {
     padding-left: 1rem;
 }
-
-
 
 .all-seperate .item {
     margin: 0;
@@ -505,8 +484,6 @@ button {
         background: #c1ccc5;
         color: var(--dark-color);
     }
-
-
 
     button:hover {
         box-shadow: 0 8px 32px 0 rgba(4, 54, 23, 0.37);
@@ -563,15 +540,12 @@ input:focus {
     transition: 1000ms ease;
 }
 
-
-
 #add .btn-container-center {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 5rem;
 }
-
 
 /*kalendarz*/
 
@@ -584,7 +558,6 @@ input:focus {
     height: max-content;
     grid-column: 1 / span 4;
 }
-
 
     .hidden_item,
     .planner table {
@@ -601,8 +574,6 @@ input:focus {
             justify-content: center;
             align-items: center;
         }
-
-
 
         .hidden_item td, .hidden_item th,
         .planner table td, .planner table th {
@@ -633,8 +604,6 @@ input:focus {
     align-items: center;
 }
 
-
-
 .panel {
     margin-top: 1rem;
     max-height: 0;
@@ -646,7 +615,6 @@ input:focus {
     -webkit-backdrop-filter: blur( 6.5px );
     transition: 1000ms ease max-height;
 }
-
 
 /*uczniowie*/
 
@@ -672,7 +640,6 @@ input:focus {
     padding-bottom: 6px;
 }
 
-
 .ul-add .btn-container {
     width: 100%;
     display: flex;
@@ -684,7 +651,6 @@ input:focus {
     height: 35px;
 }
 
-
 .studentListContainer .btn-container
 .addStudent .btn-container {
     display: flex;
@@ -695,7 +661,6 @@ input:focus {
 .addStudent .btn-container button {
     margin-top: 0;
 }
-
 
 .studentListContainer {
     width: 100%;
@@ -734,7 +699,6 @@ input:focus {
             align-items: center;
         }
 
-
 .all-seperate {
     background: none;
 }
@@ -768,9 +732,6 @@ input:focus {
 #submitNewClass {
     visibility: hidden;
 }
-
-
-
 
 #add-teachers input[type="checkbox"] {
     /* Add if not using autoprefixer */
@@ -863,8 +824,10 @@ input:focus {
 }
 
 #choose-class .all-seperate {
-    justify-self: center;
-    display: flex;
+    width: 80%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-gap: 1rem;
     justify-content: center;
     align-items: center;
 }
@@ -937,7 +900,6 @@ input:focus {
                 margin-top: 1.5rem;
             }
 
-
                 #add-subject .divisionStudent .studentList ul li:first-child {
                     margin-top: 0;
                 }
@@ -988,7 +950,6 @@ input:focus {
     border-radius: 10px;
 }
 
-
     #add-subject .divisionStudent #groupSubjectList .groupName .groupDetails input,
     #add-subject .divisionStudent #groupSubjectList .groupName .groupDetails label {
         margin: 0.5rem 0.5rem;
@@ -997,7 +958,6 @@ input:focus {
 #add-subject .divisionStudent #groupSubjectList .groupName h4 {
     margin: 0.8rem;
 }
-
 
 #add-subject .btnNext {
     justify-self: center;
@@ -1016,7 +976,6 @@ input:focus {
         align-items: center;
     }
 
-
 #add-subject .addTeacher {
     display: flex;
     align-items: center;
@@ -1025,7 +984,6 @@ input:focus {
     #add-subject .addTeacher input {
         margin: 1rem 0;
     }
-
 
 #hidden-element {
     visibility: hidden;
@@ -1101,7 +1059,6 @@ input:focus {
     justify-content: start;
     align-items: center;
 }
-
 
 #add-subject .btn-container-center {
     margin-top: 1rem;
