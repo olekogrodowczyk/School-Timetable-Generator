@@ -12,6 +12,7 @@ namespace Shared.Dto.CreateGroupDto
         public string ClassName { get; set; }
         public string SubjectName { get; set; }
         public string TeacherName { get; set; }
+        public int NumberOfLessonsInWeek { get; set; }
         public IEnumerable<int> StudentIds { get; set; }
     }
 }

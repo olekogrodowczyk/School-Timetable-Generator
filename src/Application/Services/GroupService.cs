@@ -1,5 +1,8 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
+using Domain.Entities;
+using Domain.Interfaces;
+using Shared.Dto.CreateGroupDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +14,69 @@ namespace Application.Services
     public class GroupService : IGroupService
     {
         private readonly IMapper _mapper;
+        private readonly ISubjectRepository _subjectRepository;
+        private readonly ITeacherRepository _teacherRepository;
+        private readonly IClassRepository _classRepository;
+        private readonly IStudentRepository _studentRepository;
+        private readonly IAssignmentRepository _assignmentRepository;
+        private readonly IGroupRepository _groupRepository;
 
-        public GroupService(IMapper mapper)
+        public GroupService(IMapper mapper, ISubjectRepository subjectRepository, ITeacherRepository teacherRepository
+            , IClassRepository classRepository, IStudentRepository studentRepository, IAssignmentRepository assignmentRepository
+            , IGroupRepository groupRepository)
         {
             _mapper = mapper;
+            _subjectRepository = subjectRepository;
+            _teacherRepository = teacherRepository;
+            _classRepository = classRepository;
+            _studentRepository = studentRepository;
+            _assignmentRepository = assignmentRepository;
+            _groupRepository = groupRepository;
+        }
+
+        public async Task<int> CreateGroup(CreateGroupDto model)
+        {
+            var subject = await _subjectRepository.SingleOrDefaultAsync(s => s.Name == model.Name);
+            var teacher = await _teacherRepository.SingleOrDefaultAsync(t => t.FirstName + " " + t.LastName == model.TeacherName);
+            var classEntity = await _classRepository.SingleOrDefaultAsync(c => c.Name == model.Name);
+            var students = await getStudentEntities(model.StudentIds);
+
+            var group = new Group
+            {
+                SubjectId = subject.Id,
+                TeacherId = teacher.Id,
+                ClassId = classEntity.Id,
+                Name = model.Name,
+                NumberOfLessonInWeek = model.NumberOfLessonsInWeek
+            };
+            await _groupRepository.AddAsync(group);
+            await HandleAssignmentsCreating(students, group.Id);
+
+            return group.Id;
+        }
+
+        private async Task HandleAssignmentsCreating(IEnumerable<Student> students, int groupId)
+        {
+            foreach (Student student in students)
+            {
+                Assignment assignment = new Assignment
+                {
+                    StudentId = student.Id,
+                    GroupId = groupId
+                };
+                await _assignmentRepository.AddAsync(assignment);
+            }
+        }
+
+        private async Task<IEnumerable<Student>> getStudentEntities(IEnumerable<int> StudentIds)
+        {
+            IEnumerable<Student> students = new List<Student>();
+            foreach (int studentId in StudentIds)
+            {
+                var student = await _studentRepository.GetByIdAsync(studentId);
+                students.Append(student);
+            }
+            return students;
         }
     }
 }

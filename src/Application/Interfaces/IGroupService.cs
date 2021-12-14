@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared.Dto.CreateGroupDto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace Application.Interfaces
 {
     public interface IGroupService
     {
+        Task<int> CreateGroup(CreateGroupDto model);
     }
 }

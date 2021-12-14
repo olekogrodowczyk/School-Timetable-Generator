@@ -44,6 +44,9 @@ namespace Shared.Dto.CreateGroupDto
                 .MustAsync(subjectExists)
                 .When(x => !string.IsNullOrEmpty(x.SubjectName))
                 .WithMessage("Podany przedmiot nie istnieje");
+
+            RuleFor(x => x.NumberOfLessonsInWeek)
+                .GreaterThan(0).WithMessage("Ilość dostępnych godzin musi być większa od 0");
         }
 
         private async Task<bool> classExists(string value, CancellationToken cancellationToken)
