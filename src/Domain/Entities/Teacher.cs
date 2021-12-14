@@ -17,5 +17,6 @@ namespace Domain.Entities
         public virtual TimeTable TimeTable { get; set; }
         public virtual ICollection<Lesson> Lessons { get; set; }
         public virtual ICollection<Availability> Availabilities { get; set; }
+        public virtual ICollection<Group> Groups { get; set; }
     }
 }

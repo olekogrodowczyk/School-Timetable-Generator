@@ -13,8 +13,9 @@ namespace Domain.Entities
         public virtual Class Class { get; set; }
         public string Name { get; set; }
         public int? SubjectId { get; set; }
-        public int TeacherId { get; set; }
         public virtual Subject Subject { get; set; }
+        public int TeacherId { get; set; }
+        public virtual Teacher Teacher { get; set; }
         public virtual ICollection<Assignment> Assignments { get; set; }
         public virtual ICollection<Lesson> Lessons { get; set; }
     }
