@@ -156,12 +156,10 @@ class UI {
         row2.className = "unhiden_item dark-shadow";
 
         row2.innerHTML = `
-
                 <ul class="item">
                             <li> <p>${nauczyciel.imie}</p> </li>
                             <li> <p>${nauczyciel.nazwisko}</p> </li>
                                 <li><p>${nauczyciel.ilosc_godzin}</p> </li>
-
                             <li>
                                 <div class="btn-container">
                                     <input class="btn btn-dark" type="submit" value="USUŃ">
@@ -229,7 +227,24 @@ class UI {
         list2.appendChild(row3);
     }
 
-    static clearFields() {
+    static clearStudentForm() {
+        document.querySelector('#imie').value = '';
+        document.querySelector('#nazwisko').value = '';
+    }
+
+    static clearClassForm() {
+        this.clearStudentForm();
+        document.querySelector('#name').value = '';
+        document.querySelector('#teacherSelect').value = '';
+    }
+
+    static clearClassRoomForm() {
+        document.querySelector('#name').value = '';
+        document.querySelector('#count').value = '';
+        document.querySelector('#kod').value = '';
+    }
+
+    static clearTeacherForm() {
         document.querySelector('#imie').value = '';
         document.querySelector('#nazwisko').value = '';
         document.querySelector('#count').value = '';
@@ -253,13 +268,11 @@ class UI {
         row2.className = "item";
 
         row2.innerHTML = `
-
              <li> <p>${klasa.kod}</p></li>
              <li> <p>${klasa.nazwa}</p></li>
              <li> <p>${klasa.ilosc_miejsc}</p> </li>
              <li> <div class="btn-container">
               <input class="btn btn-dark" type="submit" value="USUŃ">
-
                    </div>
             </li>
         `;
@@ -372,10 +385,12 @@ class UI {
         row2.id = klasa.id + "item";
 
         row2.innerHTML = `
-
                 <ul class="item">
                             <li>
                             <p>${klasa.name}</p>
+                            </li>
+                            <li>
+                            <p>${klasa.te}</p>
                             </li>
                             <li>
                                 <div class="btn-container">
@@ -421,14 +436,12 @@ class UI {
             const row5 = document.createElement('ul');
             row5.className = "dark-shadow";
             row5.innerHTML = `
-
                     <li>${klasa.studentsArr[i].Imie} ${klasa.studentsArr[i].Nazwisko}</li>
                     <li>
                     <div class="btn-container">
                     <input id=${klasa.studentsArr[i].id} class="btn btn-dark  delete" type="submit" value="USUŃ">
                      </div>
                      </li>
-
                     `;
 
             row5.addEventListener('click', (e) => {
@@ -455,7 +468,6 @@ class UI {
         row2.id = newSubject.id + "item";
 
         row2.innerHTML = `
-
                 <ul class="item">
                 <li>
                 <p>${newSubject.name}</p>
@@ -676,8 +688,8 @@ function addGroupSubjectFields() {
         <input id=${i} type="text" placeholder="Grupa ${i}" onchange ="setName(this.id, this.value)">
         <label for=${i}>Nauczyciel:</label>
         <input id=${i} type="text" placeholder="Podaj nauczyciela" onchange ="setTeacher(this.id, this.value)">
-        <label for=${i}>Ilość godzin:</label>
-        <input id=${i} type="number" placeholder="Ilość godzin przedmiotu:" onchange ="setHours(this.id, this.value)">
+        <label for=${i}>Ilość godzin w tygodniu:</label>
+        <input id=${i} type="number" placeholder="1" onchange ="setHours(this.id, this.value)">
         `;
         list.appendChild(row);
         const row2 = document.createElement('div');
@@ -705,8 +717,8 @@ function displayTeacherFiels() {
     row.innerHTML = `
         <label for="1">Nauczyciel:</label>
         <input id="1" type="text" placeholder="Podaj nauczyciela" onchange ="setTeacher(this.id, this.value)">
-        <label for="1">Ilość godzin:</label>
-        <input id="1" type="number" placeholder="Ilość godzin przedmiotu:" onchange ="setHours(this.id, this.value)">
+        <label for="1">Ilość godzin w tygodniu:</label>
+        <input id="1" type="number" placeholder="1" onchange ="setHours(this.id, this.value)">
         `;
     container.appendChild(row);
     const bt = document.querySelector(".btnNext");
@@ -792,6 +804,7 @@ function initializeAddClass() {
         console.log(studentsList);
 
         UI.addStudentToList(student);
+        UI.clearStudentForm();
     });
 
     var addNewClass = document.querySelector('#addNewClass');
@@ -840,13 +853,12 @@ function initializeAddClass() {
         element.style.visibility = "hidden";
         element.style.padding = "0 0";
         element.style.height = "0";
-
-        var targetDiv = document.getElementById("name")
-        targetDiv.value = '';
         studentsList = [];
 
         const row = document.querySelector('#studentList');
         row.innerHTML = '';
+
+        UI.clearClassForm();
     });
 }
 
@@ -954,6 +966,7 @@ function initializeAddTeachers() {
 
         UI.addNauczycielToList(nauczyciel);
         localStorage.setItem('MyTeachers', JSON.stringify(nauczycieleList));
+        UI.clearTeacherForm();
     });
 }
 
@@ -973,6 +986,7 @@ function initializeAddClassrooms() {
         UI.addClassRoomToList(klasa);
 
         localStorage.setItem('MyClassrooms', JSON.stringify(clasroomsList));
+        UI.clearClassRoomForm();
     });
 }
 
@@ -1024,8 +1038,10 @@ function initializeSubjects() {
 
         const ch = document.querySelector('#division')
         if (ch.checked) {
-            displayStudents()
             addGroupSubjectFields();
+            displayStudents()
+            var r = document.querySelector("#groupSubjectList").style.height;
+            console.log(r);
             s.style.height = "auto";
             s.style.maxHeight = "min-content";
             s.style.padding = "2rem";

@@ -31,12 +31,13 @@
         background-color: #67a38034;
     }
 
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-style: normal;
-    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900;
 }
 
 .green-shadow {
@@ -436,7 +437,7 @@ a {
 }
 
 #add-class #add .card-container .all-seperate .item {
-    grid-template-columns: 3fr 4fr;
+    grid-template-columns: 3fr 4fr 1fr;
 }
 
 #add-class #add .card-container .ul-add {
@@ -751,7 +752,7 @@ input:focus {
     transform: translateY(-0.075em);
     display: grid;
     place-content: center;
-    background-color: rgba(2, 0, 0, 0.37);
+    background-color: #095f45;
 }
 
     #add-teachers input[type="checkbox"]::before {
@@ -858,10 +859,10 @@ input:focus {
         align-items: center;
     }
 
-        #add-subject .ul-add li p {
-            padding: 0.3rem;
-            color: var(--secondary-color);
-        }
+.ul-add li p {
+    padding: 10px;
+    color: var(--secondary-color);
+}
 
 #add-subject .divisionStudent {
     max-height: 0;
@@ -883,7 +884,13 @@ input:focus {
         padding: 1rem;
         overflow-y: auto;
         width: max-content;
+        min-width: 250px;
         height: 500px;
+    }
+
+    #add-subject .divisionStudent .studentList {
+        align-self: flex-start;
+        justify-content: flex-start;
     }
 
         #add-subject .divisionStudent .studentList ul {
@@ -904,8 +911,12 @@ input:focus {
                 }
 
     #add-subject .divisionStudent #groupSubjectList {
-        display: flex;
+        display: grid;
+        grid-gap: 15px;
         width: 100%;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        justify-content: center;
+        align-items: center;
         height: min-content;
     }
 
