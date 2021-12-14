@@ -7,7 +7,7 @@ using UI.Services.Exceptions;
 namespace UI.Components
 {
     public static class ComponentRequestHandler
-    {             
+    {
         public static async Task HandleRequest<T>
             (Func<T, Task> action, T value, string errorMessage, string[] errors, IToastService toastService)
         {

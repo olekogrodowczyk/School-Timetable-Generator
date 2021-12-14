@@ -8,7 +8,7 @@ using UI.Services.Interfaces;
 
 namespace UI.Components.AddSubjects
 {
-    public partial class AddSubjectsComponent
+    public partial class ChooseClassComponent
     {
         private IEnumerable<string> classessNames;
         private bool isBusy = false;

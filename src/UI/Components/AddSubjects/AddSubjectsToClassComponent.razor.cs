@@ -7,13 +7,21 @@ using UI.Services.Interfaces;
 using System.Collections.Generic;
 using Shared.ViewModels;
 using System.Linq;
+using System;
+using UI.Services.Models;
+using Newtonsoft.Json;
+using UI.Services.Exceptions;
 
 namespace UI.Components.AddSubjects
 {
     public partial class AddSubjectsToClassComponent
     {
-        private bool isDataLoaded = false;
+        protected string value = String.Empty;
+        protected string _errorMessage = String.Empty;
+        protected string[] _errors;
+        private List<SubjectModel> deserializedValue = new List<SubjectModel>();
         private IEnumerable<StudentVm> students;
+        private int currentTimetable = 1;
 
         [Parameter]
         public string ClassName { get; set; }
@@ -28,10 +36,27 @@ namespace UI.Components.AddSubjects
         public IClassHttpService ClassHttpService { get; set; }
 
         [Inject]
+        public ISubjectHttpService SubjectHttpService { get; set; }
+
+        [Inject]
         public NavigationManager NavigationManager { get; set; }
 
         [Inject]
         public IToastService ToastService { get; set; }
+
+        protected async Task HandleJson()
+        {
+            value = await LocalStorageService.GetItemAsync<string>("MySubjects");
+            Console.WriteLine(value);
+            try
+            {
+                deserializedValue = JsonConvert.DeserializeObject<List<SubjectModel>>(value);
+            }
+            catch (Exception ex)
+            {
+                ToastService.ShowError("Nastąpił problem z serializacją danych");
+            }
+        }
 
         protected override async Task OnInitializedAsync()
         {
@@ -45,6 +70,35 @@ namespace UI.Components.AddSubjects
             }
             await LocalStorageService.SetItemAsync("MyStudents", students);
             await JSRuntime.InvokeVoidAsync("initializeSubjects");
+        }
+
+        protected async Task HandleAddSubjectsWithGroups()
+        {
+            await HandleJson();
+
+            try
+            {
+                await SubjectHttpService.AddSubjectsWithGroups(deserializedValue, currentTimetable, ClassName);
+            }
+            catch (ApiException e)
+            {
+                _errorMessage = e.ErrorResult.Message;
+                _errors = e.ErrorResult.Errors;
+            }
+            catch (Exception e)
+            {
+                _errorMessage = e.Message;
+            }
+            if (_errorMessage != String.Empty) { ToastService.ShowError(String.Empty, _errorMessage); }
+            if (_errors != null)
+            {
+                foreach (string error in _errors)
+                {
+                    ToastService.ShowError(error);
+                }
+            }
+
+            if (_errorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
         }
     }
 }
