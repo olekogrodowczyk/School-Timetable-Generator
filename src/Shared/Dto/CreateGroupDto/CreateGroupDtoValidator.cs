@@ -15,14 +15,16 @@ namespace Shared.Dto.CreateGroupDto
         private readonly IStudentRepository _studentRepository;
         private readonly ITeacherRepository _teacherRepository;
         private readonly ISubjectRepository _subjectRepository;
+        private readonly ITimetableRepository _timetableRepository;
 
         public CreateGroupDtoValidator(IClassRepository classRepository, IStudentRepository studentRepository
-            , ITeacherRepository teacherRepository, ISubjectRepository subjectRepository)
+            , ITeacherRepository teacherRepository, ISubjectRepository subjectRepository, ITimetableRepository timetableRepository)
         {
             _classRepository = classRepository;
             _studentRepository = studentRepository;
             _teacherRepository = teacherRepository;
             _subjectRepository = subjectRepository;
+            _timetableRepository = timetableRepository;
 
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Nazwa grupy nie może być pusta")
@@ -47,6 +49,10 @@ namespace Shared.Dto.CreateGroupDto
 
             RuleFor(x => x.NumberOfLessonsInWeek)
                 .GreaterThan(0).WithMessage("Ilość dostępnych godzin musi być większa od 0");
+
+            RuleFor(x => x.TimetableId)
+                .GreaterThan(0).WithMessage("Podano nie poprawny plan lekcji")
+                .MustAsync(TimetableExists).WithMessage("Podany plan lekcji nie istnieje");
         }
 
         private async Task<bool> classExists(string value, CancellationToken cancellationToken)
@@ -72,6 +78,11 @@ namespace Shared.Dto.CreateGroupDto
         private async Task<bool> subjectExists(string value, CancellationToken cancellationToken)
         {
             return await _subjectRepository.AnyAsync(s => s.Name == value);
+        }
+
+        private async Task<bool> TimetableExists(int value, CancellationToken cancellationToken)
+        {
+            return await _timetableRepository.AnyAsync(x => x.Id == value);
         }
     }
 }

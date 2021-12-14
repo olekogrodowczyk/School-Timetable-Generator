@@ -38,7 +38,7 @@ namespace Application.Services
         {
             var names = model.TeacherName.Split(" ");
             var subject = await _subjectRepository.SingleOrDefaultAsync(s => s.Name == model.SubjectName);
-            var teacher = await _teacherRepository.SingleOrDefaultAsync(t => t.FirstName == names[0] && t.LastName == names[1]);
+            var teacher = await _teacherRepository.SingleOrDefaultAsync(t => t.FirstName == names[0] && t.LastName == names[1] && t.TimetableId == model.TimetableId);
             var classEntity = await _classRepository.SingleOrDefaultAsync(c => c.Name == model.ClassName);
             var students = await getStudentEntities(model.StudentIds);
 
