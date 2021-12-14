@@ -93,5 +93,13 @@ namespace Infrastructure.Repositories
             var result = await _context.Set<T>().SingleOrDefaultAsync(predicate);
             return result;
         }
+
+        public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
+        {
+            includeProperties?.ToList().ForEach(property => _context.Set<T>().Include(property));
+
+            var result = await _context.Set<T>().FirstOrDefaultAsync(predicate);
+            return result;
+        }
     }
 }
