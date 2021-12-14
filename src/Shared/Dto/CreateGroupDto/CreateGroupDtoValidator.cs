@@ -56,6 +56,7 @@ namespace Shared.Dto.CreateGroupDto
 
         private async Task<bool> studentsExist(IEnumerable<int> values, CancellationToken cancellationToken)
         {
+            if (values is null) { return false; }
             foreach (int id in values)
             {
                 if (!await _studentRepository.AnyAsync(s => s.Id == id)) { return false; }

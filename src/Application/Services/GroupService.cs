@@ -36,9 +36,10 @@ namespace Application.Services
 
         public async Task<int> CreateGroup(CreateGroupDto model)
         {
-            var subject = await _subjectRepository.SingleOrDefaultAsync(s => s.Name == model.Name);
-            var teacher = await _teacherRepository.SingleOrDefaultAsync(t => t.FirstName + " " + t.LastName == model.TeacherName);
-            var classEntity = await _classRepository.SingleOrDefaultAsync(c => c.Name == model.Name);
+            var names = model.TeacherName.Split(" ");
+            var subject = await _subjectRepository.SingleOrDefaultAsync(s => s.Name == model.SubjectName);
+            var teacher = await _teacherRepository.SingleOrDefaultAsync(t => t.FirstName == names[0] && t.LastName == names[1]);
+            var classEntity = await _classRepository.SingleOrDefaultAsync(c => c.Name == model.ClassName);
             var students = await getStudentEntities(model.StudentIds);
 
             var group = new Group
@@ -70,11 +71,11 @@ namespace Application.Services
 
         private async Task<IEnumerable<Student>> getStudentEntities(IEnumerable<int> StudentIds)
         {
-            IEnumerable<Student> students = new List<Student>();
+            List<Student> students = new List<Student>();
             foreach (int studentId in StudentIds)
             {
                 var student = await _studentRepository.GetByIdAsync(studentId);
-                students.Append(student);
+                students.Add(student);
             }
             return students;
         }
