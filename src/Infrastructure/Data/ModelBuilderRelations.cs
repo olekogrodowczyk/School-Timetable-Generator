@@ -110,6 +110,12 @@ namespace Infrastructure.Data
                 .WithMany(x => x.Subjects)
                 .HasForeignKey(x => x.TimetableId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Group>()
+                .HasOne<Subject>(x => x.Subject)
+                .WithMany(x => x.Groups)
+                .HasForeignKey(x => x.SubjectId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
