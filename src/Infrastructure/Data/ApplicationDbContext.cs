@@ -42,7 +42,7 @@ namespace Infrastructure.Data
                 .HasAlternateKey(x => new { x.TimetableId, x.Name });
 
             modelBuilder.Entity<Teacher>()
-                .HasAlternateKey(x => new { x.FirstName, x.LastName });
+                .HasAlternateKey(x => new { x.TimetableId, x.FirstName, x.LastName });
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
