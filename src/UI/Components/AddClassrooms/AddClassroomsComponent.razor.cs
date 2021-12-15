@@ -30,12 +30,15 @@ namespace UI.Components.AddClassrooms
         [Inject]
         public IToastService ToastService { get; set; }
 
-        protected async override Task OnInitializedAsync()
+        [Inject]
+        public ITimetableStateHttpService TimetableStateHttpService { get; set; }
+
+        protected override async Task OnInitializedAsync()
         {
             await LocalStorageService.RemoveItemAsync("MyClassrooms");
         }
 
-        protected async override Task OnAfterRenderAsync(bool firstRender)
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {

@@ -33,5 +33,12 @@ namespace WebAPI.Controllers
             await _timetableService.ChangePhaseNumber(timetableId, phaseNumber.PhaseNumber);
             return Ok(new Shared.Responses.OkResult("Pomyślnie zmieniono numer etapu"));
         }
+
+        [HttpGet("getcurrentphase/{timetableId}")]
+        public async Task<IActionResult> GetCurrentPhase([FromRoute] int timetableId)
+        {
+            int result = await _timetableService.GetCurrentPhase(timetableId);
+            return Ok(new Shared.Responses.OkResult<int>(result, "Pomyślnie zwrócono obecny etap"));
+        }
     }
 }

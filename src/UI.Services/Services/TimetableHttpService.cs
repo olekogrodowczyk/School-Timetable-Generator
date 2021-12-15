@@ -20,14 +20,15 @@ namespace UI.Services.Services
             _httpService = httpService;
         }
 
-        public async Task CreateTimetable(CreateTimetableDto model)
+        public async Task<int> CreateTimetable(CreateTimetableDto model)
         {
-            await _httpService.Post<OkResult<int>>("api/timetable", model);
+            var result = await _httpService.Post<OkResult<int>>("api/timetable", model);
+            return result.Value;
         }
 
         public async Task ChangeCurrentPhase(int phaseNumber)
         {
-            string query = $"api/timetable/changephase/{TimetableState.CurrentTimetableId}";
+            string query = $"api/timetable/changephase/1";
             await _httpService.Patch<OkResult>(query, new ChangePhaseDto { PhaseNumber = phaseNumber });
         }
     }
