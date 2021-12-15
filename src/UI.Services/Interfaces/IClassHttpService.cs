@@ -12,7 +12,7 @@ namespace UI.Services.Interfaces
     {
         Task CreateClasses(List<ClassModel> model);
 
-        Task<IEnumerable<string>> GetAllClassessNames(int timetableId);
+        Task<IEnumerable<string>> GetAllClassessNames();
 
         Task<IEnumerable<StudentVm>> GetAllStudentsFromClass(string className);
     }

@@ -28,7 +28,7 @@ namespace UI.Components.AddSubjects
         protected override async Task OnInitializedAsync()
         {
             isBusy = true;
-            classessNames = await ClassHttpService.GetAllClassessNames(1);
+            classessNames = await ClassHttpService.GetAllClassessNames();
             isBusy = false;
         }
     }

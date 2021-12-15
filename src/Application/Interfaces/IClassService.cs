@@ -15,7 +15,7 @@ namespace Application.Interfaces
 
         Task<int> CreateStudent(CreateStudentDto model);
 
-        Task<IEnumerable<string>> GetAllClassessNames(int timetableId);
+        Task<IEnumerable<string>> GetAllClassessNames();
 
         Task<ClassVm> GetClassByName(string name);
 

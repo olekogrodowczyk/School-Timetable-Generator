@@ -31,9 +31,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getallnames")]
-        public async Task<IActionResult> GetAllClassessNames([FromQuery] int timetableId)
+        public async Task<IActionResult> GetAllClassessNames()
         {
-            var result = await _classService.GetAllClassessNames(timetableId);
+            var result = await _classService.GetAllClassessNames();
             return Ok(new OkResult<IEnumerable<string>>(result, "Pomyślnie zwrócono nazwy klas"));
         }
 

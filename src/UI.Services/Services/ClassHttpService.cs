@@ -36,9 +36,9 @@ namespace UI.Services.Services
             }
         }
 
-        public async Task<IEnumerable<string>> GetAllClassessNames(int timetableId)
+        public async Task<IEnumerable<string>> GetAllClassessNames()
         {
-            var result = await _httpService.Get<OkResult<IEnumerable<string>>>("api/class/getallnames?timetableid=1");
+            var result = await _httpService.Get<OkResult<IEnumerable<string>>>("api/class/getallnames");
             return result.Value;
         }
 
