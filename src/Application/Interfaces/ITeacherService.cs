@@ -14,6 +14,6 @@ namespace Application.Interfaces
 
         Task<IEnumerable<TeacherVm>> GetAllTeachersFromTimetable(int timetableId);
 
-        Task<int> GetSubjectsCount(int timetableId);
+        Task<int> GetTeachersCount(int timetableId);
     }
 }

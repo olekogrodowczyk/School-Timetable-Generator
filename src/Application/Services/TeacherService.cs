@@ -17,11 +17,13 @@ namespace Application.Services
     {
         private readonly ITeacherRepository _teacherRepository;
         private readonly IMapper _mapper;
+        private readonly IUserRepository _userRepository;
 
-        public TeacherService(ITeacherRepository teacherRepository, IMapper mapper)
+        public TeacherService(ITeacherRepository teacherRepository, IMapper mapper, IUserRepository userRepository)
         {
             _teacherRepository = teacherRepository;
             _mapper = mapper;
+            _userRepository = userRepository;
         }
 
         public async Task<int> CreateTeacher(CreateTeacherDto model)
@@ -38,9 +40,10 @@ namespace Application.Services
             return _mapper.Map<IEnumerable<TeacherVm>>(teachers);
         }
 
-        public async Task<int> GetSubjectsCount(int timetableId)
+        public async Task<int> GetTeachersCount(int timetableId)
         {
-            int count = await _teacherRepository.GetCount(t => t.TimetableId == timetableId);
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            int count = await _teacherRepository.GetCount(t => t.TimetableId == activeTimetableId);
             return count;
         }
     }

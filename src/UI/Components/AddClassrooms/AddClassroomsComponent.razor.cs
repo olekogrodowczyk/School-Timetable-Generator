@@ -36,6 +36,7 @@ namespace UI.Components.AddClassrooms
         protected override async Task OnInitializedAsync()
         {
             await LocalStorageService.RemoveItemAsync("MyClassrooms");
+            await ClassroomHttpService.GetClassroomsCount();
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)

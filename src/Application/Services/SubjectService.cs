@@ -15,11 +15,13 @@ namespace Application.Services
     {
         private readonly IMapper _mapper;
         private readonly ISubjectRepository _subjectRepository;
+        private readonly IUserRepository _userRepository;
 
-        public SubjectService(IMapper mapper, ISubjectRepository subjectRepository)
+        public SubjectService(IMapper mapper, ISubjectRepository subjectRepository, IUserRepository userRepository)
         {
             _mapper = mapper;
             _subjectRepository = subjectRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<int> CreateSubject(CreateSubjectDto createSubjectDto)
@@ -31,7 +33,8 @@ namespace Application.Services
 
         public async Task<int> GetTeachersCount(int timetableId)
         {
-            int count = await _subjectRepository.GetCount(t => t.TimetableId == timetableId);
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            int count = await _subjectRepository.GetCount(s => s.TimetableId == activeTimetableId);
             return count;
         }
     }

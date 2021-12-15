@@ -21,15 +21,18 @@ namespace Application.Services
         private readonly ITimetableRepository _timetableRepository;
         private readonly IMapper _mapper;
         private readonly ITeacherRepository _teacherRepository;
+        private readonly IUserRepository _userRepository;
 
         public ClassService(IClassRepository classRepository, IStudentRepository studentRepository
-            , ITimetableRepository timetableRepository, IMapper mapper, ITeacherRepository teacherRepository)
+            , ITimetableRepository timetableRepository, IMapper mapper, ITeacherRepository teacherRepository
+            , IUserRepository userRepository)
         {
             _classRepository = classRepository;
             _studentRepository = studentRepository;
             _timetableRepository = timetableRepository;
             _mapper = mapper;
             _teacherRepository = teacherRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<int> CreateClass(CreateClassDto model)
@@ -67,6 +70,13 @@ namespace Application.Services
             if (classFound == null) { throw new NotFoundException("Class name couldn't be found"); }
             var result = _mapper.Map<IEnumerable<StudentVm>>(classFound.Students);
             return result;
+        }
+
+        public async Task<int> GetClassessCount()
+        {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            int count = await _classRepository.GetCount(c => c.TimetableId == activeTimetableId);
+            return count;
         }
     }
 }

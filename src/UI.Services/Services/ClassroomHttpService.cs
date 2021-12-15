@@ -23,10 +23,16 @@ namespace UI.Services.Services
         {
             foreach (var model in models)
             {
-                var dto = new CreateClassroomDto 
+                var dto = new CreateClassroomDto
                 { Code = model.kod, Name = model.nazwa, NumberOfSeats = int.Parse(model.ilosc_miejsc) };
                 var result = await _httpService.Post<OkResult<int>>("api/classroom", dto);
             }
+        }
+
+        public async Task<int> GetClassroomsCount()
+        {
+            var result = await _httpService.Get<OkResult<int>>("api/classroom/getcount");
+            return result.Value;
         }
     }
 }

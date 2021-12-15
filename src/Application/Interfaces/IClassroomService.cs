@@ -10,5 +10,7 @@ namespace Application.Interfaces
     public interface IClassroomService
     {
         Task<int> CreateClassroom(CreateClassroomDto createClassroomDto);
+
+        Task<int> GetClassroomsCount();
     }
 }

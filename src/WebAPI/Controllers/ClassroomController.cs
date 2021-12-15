@@ -26,5 +26,12 @@ namespace WebAPI.Controllers
             int result = await _classroomService.CreateClassroom(model);
             return Ok(new OkResult<int>(result, "Pomyślnie dodano nową salę"));
         }
+
+        [HttpGet("getcount")]
+        public async Task<IActionResult> GetCount()
+        {
+            int result = await _classroomService.GetClassroomsCount();
+            return Ok(new OkResult<int>(result, "Pomyślnie zwrócono ilość sal"));
+        }
     }
 }

@@ -15,13 +15,15 @@ namespace Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IClassroomRepository _classroomRepository;
+        private readonly IUserRepository _userRepository;
 
-        public ClassroomService(IMapper mapper, IClassroomRepository classroomRepository)
+        public ClassroomService(IMapper mapper, IClassroomRepository classroomRepository, IUserRepository userRepository)
         {
             _mapper = mapper;
             _classroomRepository = classroomRepository;
+            _userRepository = userRepository;
         }
-        
+
         public async Task<int> CreateClassroom(CreateClassroomDto createClassroomDto)
         {
             var classroom = _mapper.Map<Classroom>(createClassroomDto);
@@ -29,5 +31,11 @@ namespace Application.Services
             return classroom.Id;
         }
 
+        public async Task<int> GetClassroomsCount()
+        {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            int count = await _classroomRepository.GetCount(c => c.TimetableId == activeTimetableId);
+            return count;
+        }
     }
 }

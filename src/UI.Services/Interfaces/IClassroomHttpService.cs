@@ -10,5 +10,7 @@ namespace UI.Services.Interfaces
     public interface IClassroomHttpService
     {
         Task CreateClassrooms(List<ClassroomModel> models);
+
+        Task<int> GetClassroomsCount();
     }
 }

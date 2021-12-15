@@ -25,10 +25,7 @@ namespace Application.Services
 
         public async Task<int> GetCurrentActiveTimetable()
         {
-            int loggedUserId = _userContextService.GetUserId ?? 0;
-            if (loggedUserId == 0) { throw new BadRequestException("Unexpected error handled"); }
-            var loggedUser = await _userRepository.GetByIdAsync(loggedUserId);
-            int currentActiveTimetableId = loggedUser.CurrentTimetableId ?? 0;
+            int currentActiveTimetableId = await _userRepository.GetCurrentActiveTimetable();
             if (currentActiveTimetableId == 0) { throw new BadRequestException("User doesn't have an active timetable"); }
             return currentActiveTimetableId;
         }

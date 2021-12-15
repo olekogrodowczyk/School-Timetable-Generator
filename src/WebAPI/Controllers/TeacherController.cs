@@ -39,7 +39,7 @@ namespace WebAPI.Controllers
         [HttpGet("getcount")]
         public async Task<IActionResult> GetTeachersCount([FromQuery] int timetableId)
         {
-            int result = await _teacherService.GetSubjectsCount(timetableId);
+            int result = await _teacherService.GetTeachersCount(timetableId);
             return Ok(new OkResult<int>(result, "Pomyślnie zwrócono liczbę nauczycieli"));
         }
     }
