@@ -20,12 +20,12 @@ namespace UI.Services.Services
             _httpService = httpService;
         }
 
-        public async Task AddSubjectsWithGroups(List<SubjectModel> subjectsWithGroups, int timetableId, string className)
+        public async Task AddSubjectsWithGroups(List<SubjectModel> subjectsWithGroups, string className)
         {
             foreach (var subjectModel in subjectsWithGroups)
             {
                 var subjectResult = await _httpService.Post<OkResult<int>>("api/subject",
-                    new CreateSubjectDto { Name = subjectModel.name, TimetableId = timetableId });
+                    new CreateSubjectDto { Name = subjectModel.name });
                 foreach (var group in subjectModel.groupSubjectList)
                 {
                     CreateGroupDto createGroupDto = new CreateGroupDto
@@ -36,7 +36,6 @@ namespace UI.Services.Services
                         NumberOfLessonsInWeek = int.Parse(group.hours),
                         TeacherName = group.teacher,
                         StudentIds = group.studentsIdArr.ToList(),
-                        TimetableId = timetableId
                     };
                     var groupResult = await _httpService.Post<OkResult<int>>("api/group", createGroupDto);
                 }

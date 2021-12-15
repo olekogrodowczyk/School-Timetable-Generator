@@ -20,15 +20,6 @@ namespace Shared.Dto.CreateSubjectDto
             RuleFor(s => s.Name)
                 .NotEmpty().WithMessage("Nazwa przedmiotu nie może być pusta")
                 .MinimumLength(1).WithMessage("Minimalna długość przedmiotu to 1");
-
-            RuleFor(x => x.TimetableId)
-                .GreaterThan(0).WithMessage("Podano nie poprawny plan lekcji")
-                .MustAsync(TimetableExists).WithMessage("Podany plan lekcji nie istnieje");
-        }
-
-        private async Task<bool> TimetableExists(int value, CancellationToken cancellationToken)
-        {
-            return await _timetableRepository.AnyAsync(x => x.Id == value);
         }
     }
 }

@@ -36,10 +36,10 @@ namespace UI.Services.Services
             }
         }
 
-        public async Task<IEnumerable<TeacherVm>> GetAllTeachersFromTimetable(int timetableId)
+        public async Task<IEnumerable<TeacherVm>> GetAllTeachersFromTimetable()
         {
             var result = await _httpService.Get<OkResult<IEnumerable<TeacherVm>>>
-                ($"api/teacher/getallfromtimetable?timetableid={timetableId}");
+                ($"api/teacher/getall");
             return result.Value;
         }
 

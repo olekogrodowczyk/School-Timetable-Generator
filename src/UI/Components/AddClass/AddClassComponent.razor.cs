@@ -19,7 +19,6 @@ namespace UI.Components.AddClass
         protected string value = String.Empty;
         protected string _errorMessage = String.Empty;
         protected string[] _errors;
-        private int currentTimetable = 1;
         private List<ClassModel> deserializedValue = new List<ClassModel>();
         private IEnumerable<TeacherVm> teachers;
         private bool isBusy = false;
@@ -45,7 +44,7 @@ namespace UI.Components.AddClass
         protected override async Task OnInitializedAsync()
         {
             isBusy = true;
-            teachers = await TeacherHttpService.GetAllTeachersFromTimetable(currentTimetable);
+            teachers = await TeacherHttpService.GetAllTeachersFromTimetable();
             if (teachers.Count() == 0)
             {
                 ToastService.ShowError("Brak nauczycieli do wyboru");

@@ -30,16 +30,16 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getallfromtimetable")]
-        public async Task<IActionResult> GetAllFromTimetable(int timetableId)
+        public async Task<IActionResult> GetAllFromTimetable()
         {
-            var result = await _teacherService.GetAllTeachersFromTimetable(timetableId);
+            var result = await _teacherService.GetAllTeachersFromTimetable();
             return Ok(new OkResult<IEnumerable<TeacherVm>>(result, "Pomyślnie zwrócono nauczycieli"));
         }
 
         [HttpGet("getcount")]
-        public async Task<IActionResult> GetTeachersCount([FromQuery] int timetableId)
+        public async Task<IActionResult> GetTeachersCount()
         {
-            int result = await _teacherService.GetTeachersCount(timetableId);
+            int result = await _teacherService.GetTeachersCount();
             return Ok(new OkResult<int>(result, "Pomyślnie zwrócono liczbę nauczycieli"));
         }
     }

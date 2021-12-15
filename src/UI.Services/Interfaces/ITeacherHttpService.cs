@@ -13,6 +13,6 @@ namespace UI.Services.Interfaces
     {
         Task CreateTeachersWithStudents(List<TeacherModel> models);
 
-        Task<IEnumerable<TeacherVm>> GetAllTeachersFromTimetable(int timetableId);
+        Task<IEnumerable<TeacherVm>> GetAllTeachersFromTimetable();
     }
 }

@@ -20,10 +20,11 @@ namespace Application.Services
         private readonly IStudentRepository _studentRepository;
         private readonly IAssignmentRepository _assignmentRepository;
         private readonly IGroupRepository _groupRepository;
+        private readonly IUserRepository _userRepository;
 
         public GroupService(IMapper mapper, ISubjectRepository subjectRepository, ITeacherRepository teacherRepository
             , IClassRepository classRepository, IStudentRepository studentRepository, IAssignmentRepository assignmentRepository
-            , IGroupRepository groupRepository)
+            , IGroupRepository groupRepository, IUserRepository userRepository)
         {
             _mapper = mapper;
             _subjectRepository = subjectRepository;
@@ -32,13 +33,15 @@ namespace Application.Services
             _studentRepository = studentRepository;
             _assignmentRepository = assignmentRepository;
             _groupRepository = groupRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<int> CreateGroup(CreateGroupDto model)
         {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
             var names = model.TeacherName.Split(" ");
             var subject = await _subjectRepository.SingleOrDefaultAsync(s => s.Name == model.SubjectName);
-            var teacher = await _teacherRepository.SingleOrDefaultAsync(t => t.FirstName == names[0] && t.LastName == names[1] && t.TimetableId == model.TimetableId);
+            var teacher = await _teacherRepository.SingleOrDefaultAsync(t => t.FirstName == names[0] && t.LastName == names[1] && t.TimetableId == activeTimetableId);
             var classEntity = await _classRepository.SingleOrDefaultAsync(c => c.Name == model.ClassName);
             var students = await getStudentEntities(model.StudentIds);
 

@@ -14,7 +14,6 @@ namespace Shared.Dto.CreateClassroomDto
         public string Code { get; set; }
         public string Name { get; set; }
         public int NumberOfSeats { get; set; }
-        public int TimetableId { get; set; }
 
         public void Mapping(Profile profile)
         {

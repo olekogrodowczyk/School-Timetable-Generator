@@ -9,6 +9,6 @@ namespace UI.Services.Interfaces
 {
     public interface ISubjectHttpService
     {
-        Task AddSubjectsWithGroups(List<SubjectModel> subjectsWithGroups, int timetableId, string className);
+        Task AddSubjectsWithGroups(List<SubjectModel> subjectsWithGroups, string className);
     }
 }

@@ -21,7 +21,6 @@ namespace UI.Components.AddSubjects
         protected string[] _errors;
         private List<SubjectModel> deserializedValue = new List<SubjectModel>();
         private IEnumerable<StudentVm> students;
-        private int currentTimetable = 1;
 
         [Parameter]
         public string ClassName { get; set; }
@@ -78,7 +77,7 @@ namespace UI.Components.AddSubjects
 
             try
             {
-                await SubjectHttpService.AddSubjectsWithGroups(deserializedValue, currentTimetable, ClassName);
+                await SubjectHttpService.AddSubjectsWithGroups(deserializedValue, ClassName);
             }
             catch (ApiException e)
             {

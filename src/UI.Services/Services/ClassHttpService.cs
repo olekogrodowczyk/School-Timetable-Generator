@@ -25,7 +25,7 @@ namespace UI.Services.Services
         {
             foreach (ClassModel model in models)
             {
-                CreateClassDto createClassDto = new CreateClassDto { Name = model.name, TimetableId = 1, TeacherId = 1 };
+                CreateClassDto createClassDto = new CreateClassDto { Name = model.name, TeacherId = 1 };
                 var result = await _httpService.Post<OkResult<int>>("api/class", createClassDto);
                 foreach (StudentModel student in model.studentsArr)
                 {

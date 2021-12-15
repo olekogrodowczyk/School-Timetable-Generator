@@ -12,7 +12,6 @@ namespace Shared.Dto.CreateSubjectDto
     public class CreateSubjectDto : IMap
     {
         public string Name { get; set; }
-        public int TimetableId { get; set; }
 
         public void Mapping(Profile profile)
         {

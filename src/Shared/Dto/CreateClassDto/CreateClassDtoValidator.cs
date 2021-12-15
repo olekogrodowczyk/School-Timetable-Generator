@@ -22,15 +22,6 @@ namespace Shared.Dto.CreateClassDto
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Nie podano nazwy klasy")
                 .MinimumLength(1).WithMessage("Minimalna długość nazwy klasy to 1");
-
-            RuleFor(x => x.TimetableId)
-                .GreaterThan(0).WithMessage("Podano nie poprawny plan lekcji")
-                .MustAsync(TimetableExists).WithMessage("Podany plan lekcji nie istnieje");
-        }
-
-        private async Task<bool> TimetableExists(int value, CancellationToken cancellationToken)
-        {
-            return await _timetableRepository.AnyAsync(x => x.Id == value);
         }
     }
 }

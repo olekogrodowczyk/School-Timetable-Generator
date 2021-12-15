@@ -23,9 +23,6 @@ namespace Shared.Dto.CreateTeacherDto
                 .NotEmpty().WithMessage("Nazwisko nauczyciela nie może być puste");
             RuleFor(x => x.HoursAvailability)
                 .GreaterThan(0).WithMessage("Podano nieprawidłową dostępność");
-            RuleFor(x => x.TimetableId)
-                .NotEmpty().WithMessage("Nie podano planu lekcji")
-                .MustAsync(TimetableExists).WithMessage("Podany plan lekcji nie istnieje");
         }
 
         private async Task<bool> TimetableExists(int value, CancellationToken cancellationToken)

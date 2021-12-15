@@ -12,8 +12,8 @@ namespace Application.Interfaces
     {
         Task<int> CreateTeacher(CreateTeacherDto model);
 
-        Task<IEnumerable<TeacherVm>> GetAllTeachersFromTimetable(int timetableId);
+        Task<IEnumerable<TeacherVm>> GetAllTeachersFromTimetable();
 
-        Task<int> GetTeachersCount(int timetableId);
+        Task<int> GetTeachersCount();
     }
 }
