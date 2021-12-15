@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
@@ -18,7 +19,7 @@ namespace Application.Services
         private readonly IUserContextService _userContextService;
 
         public TimetableService(ITimetableRepository timetableRepository, IMapper mapper
-            ,IUserContextService userContextService)
+            , IUserContextService userContextService)
         {
             _timetableRepository = timetableRepository;
             _mapper = mapper;
@@ -32,6 +33,15 @@ namespace Application.Services
             timetable.CreatorId = loggedUserId;
             await _timetableRepository.AddAsync(timetable);
             return timetable.Id;
+        }
+
+        public async Task ChangePhaseNumber(int timetableId, int phaseNumber)
+        {
+            var timetable = await _timetableRepository.GetByIdAsync(timetableId);
+            if (timetable == null) { throw new NotFoundException($"Timetable with id: {timetableId} hasn't been found"); }
+            int currentPhaseNumber = timetable.Id;
+            timetable.Id = phaseNumber;
+            await _timetableRepository.UpdateAsync(timetable);
         }
     }
 }

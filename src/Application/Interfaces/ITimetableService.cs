@@ -9,6 +9,7 @@ namespace Application.Interfaces
 {
     public interface ITimetableService
     {
+        Task ChangePhaseNumber(int timetableId, int phaseNumber);
         Task<int> CreateTimetable(CreateTimetableDto model);
     }
 }
