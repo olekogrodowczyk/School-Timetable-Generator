@@ -19,6 +19,7 @@ namespace UI.Components.AddClass
         protected string value = String.Empty;
         protected string _errorMessage = String.Empty;
         protected string[] _errors;
+        private bool error;
         private List<ClassModel> deserializedValue = new List<ClassModel>();
         private int teachersCount;
         private bool isBusy = false;
@@ -72,6 +73,7 @@ namespace UI.Components.AddClass
             }
             catch (Exception ex)
             {
+                error = true;
                 ToastService.ShowError("Nastąpił problem z serializacją danych");
             }
         }
@@ -79,9 +81,10 @@ namespace UI.Components.AddClass
         protected async Task HandleAddClass()
         {
             await HandleJson();
-            await ComponentRequestHandler.HandleRequest<List<ClassModel>>
+            if (error) { return; }
+            error = await ComponentRequestHandler.HandleRequest<List<ClassModel>>
                 (ClassHttpService.CreateClasses, deserializedValue, _errorMessage, _errors, ToastService);
-            if (_errorMessage != String.Empty) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
+            if (!error) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
         }
     }
 }
