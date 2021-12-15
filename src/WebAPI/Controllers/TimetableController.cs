@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TimetableController : ControllerBase
@@ -19,7 +20,6 @@ namespace WebAPI.Controllers
             _timetableService = timetableService;
         }
 
-        [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateTimetableDto model)
         {
             var result = await _timetableService.CreateTimetable(model);
