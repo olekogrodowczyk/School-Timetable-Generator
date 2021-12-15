@@ -14,6 +14,7 @@ namespace Shared.Dto.CreateStudentDto
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int ClassId { get; set; }
+        public int TimetableId { get; set; }
 
         public void Mapping(Profile profile)
         {

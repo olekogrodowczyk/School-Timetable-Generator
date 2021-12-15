@@ -21,7 +21,8 @@ namespace Shared.Dto.CreateSubjectDto
                 .NotEmpty().WithMessage("Nazwa przedmiotu nie może być pusta")
                 .MinimumLength(1).WithMessage("Minimalna długość przedmiotu to 1");
 
-            RuleFor(s => s.TimetableId)
+            RuleFor(x => x.TimetableId)
+                .GreaterThan(0).WithMessage("Podano nie poprawny plan lekcji")
                 .MustAsync(TimetableExists).WithMessage("Podany plan lekcji nie istnieje");
         }
 

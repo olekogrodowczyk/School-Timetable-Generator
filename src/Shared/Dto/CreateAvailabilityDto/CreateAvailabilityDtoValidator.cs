@@ -12,10 +12,13 @@ namespace Shared.Dto.CreateAvailabilityDto
     public class CreateAvailabilityDtoValidator : AbstractValidator<CreateAvailabilityDto>
     {
         private readonly ITeacherRepository _teacherRepository;
+        private readonly ITimetableRepository _timetableRepository;
         private string[] daysOfWeek = { "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela" };
-        public CreateAvailabilityDtoValidator(ITeacherRepository teacherRepository)
+
+        public CreateAvailabilityDtoValidator(ITeacherRepository teacherRepository, ITimetableRepository timetableRepository)
         {
             _teacherRepository = teacherRepository;
+            _timetableRepository = timetableRepository;
 
             RuleFor(x => x.DayOfWeek)
                 .NotEmpty().WithMessage("Podany dzień tygodnia jest pusty")
@@ -29,6 +32,10 @@ namespace Shared.Dto.CreateAvailabilityDto
 
             RuleFor(x => x.TeacherId)
                 .MustAsync(TeacherExists).WithMessage("Podany nauczyciel nie istnieje");
+
+            RuleFor(x => x.TimetableId)
+                .GreaterThan(0).WithMessage("Podano nie poprawny plan lekcji")
+                .MustAsync(TimetableExists).WithMessage("Podany plan lekcji nie istnieje");
         }
 
         public Task<bool> DefinedDayOfWeekValid(string value, CancellationToken cancellationToken)
@@ -38,7 +45,12 @@ namespace Shared.Dto.CreateAvailabilityDto
 
         public async Task<bool> TeacherExists(int value, CancellationToken cancellationToken)
         {
-            return await _teacherRepository.AnyAsync(x=>x.Id == value);
+            return await _teacherRepository.AnyAsync(x => x.Id == value);
+        }
+
+        private async Task<bool> TimetableExists(int value, CancellationToken cancellationToken)
+        {
+            return await _timetableRepository.AnyAsync(x => x.Id == value);
         }
     }
 }

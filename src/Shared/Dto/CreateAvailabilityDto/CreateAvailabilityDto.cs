@@ -15,6 +15,7 @@ namespace Shared.Dto.CreateAvailabilityDto
         public int StartsAt { get; set; }
         public int EndsAt { get; set; }
         public int TeacherId { get; set; }
+        public int TimetableId { get; set; }
 
         public void Mapping(Profile profile)
         {
