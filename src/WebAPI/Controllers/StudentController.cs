@@ -14,10 +14,12 @@ namespace WebAPI.Controllers
     public class StudentController : ControllerBase
     {
         private readonly IClassService _classService;
+        private readonly IStudentService _studentService;
 
-        public StudentController(IClassService classService)
+        public StudentController(IClassService classService, IStudentService studentService)
         {
             _classService = classService;
+            _studentService = studentService;
         }
 
         [HttpPost]
@@ -25,6 +27,13 @@ namespace WebAPI.Controllers
         {
             int result = await _classService.CreateStudent(model);
             return Ok(new OkResult<int>(result, "Pomyślnie utworzono nowego ucznia"));
+        }
+
+        [HttpGet("getcount")]
+        public async Task<IActionResult> GetStudentsCount()
+        {
+            int result = await _studentService.GetStudentsCount();
+            return Ok(new OkResult<int>(result, "Pomyślnie zwrócono liczbę uczniów"));
         }
     }
 }

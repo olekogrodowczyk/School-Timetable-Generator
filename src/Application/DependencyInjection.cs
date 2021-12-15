@@ -27,6 +27,7 @@ namespace Application
             services.AddScoped<ISubjectService, SubjectService>();
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IStudentService, StudentService>();
 
             return services;
         }
