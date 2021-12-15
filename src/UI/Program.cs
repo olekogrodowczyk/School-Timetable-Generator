@@ -31,10 +31,10 @@ namespace UI
             builder.Services.AddTransient<AuthorizationMessageHandler>();
             builder.Services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>();
             builder.Services.AddScoped(sp => sp.GetService<IHttpClientFactory>().CreateClient("TimeTable.Api"));
-            
-            builder.Services.AddOptions();      
+
+            builder.Services.AddOptions();
             builder.Services.AddBlazoredToast();
-            
+            builder.Services.AddSingleton<TimetableState>();
 
             await builder.Build().RunAsync();
         }
