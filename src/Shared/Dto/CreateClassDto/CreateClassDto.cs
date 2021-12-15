@@ -12,7 +12,7 @@ namespace Shared.Dto.CreateClassDto
     public class CreateClassDto : IMap
     {
         public string Name { get; set; }
-        public int TeacherId { get; set; }
+        public string TeacherName { get; set; }
 
         public void Mapping(Profile profile)
         {

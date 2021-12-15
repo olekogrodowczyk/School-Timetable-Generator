@@ -2,13 +2,9 @@
         <div class="container">
 
             <div class="card-container">
-                <div class="card-tittle">
-                    <ul>
-                        <li>KOD</li>
-                    </ul>
-                </div>
                 <ul class="ul-add green-shadow">
-                    <li> <input type="text" id="name" name="name" placeholder="Kod"></li>
+                    <li> <p>Podaj nazwę klasy: </p> <input type="text" id="name" name="name" placeholder="Nazwa" disabled="@isBusy"></li>
+                    <li> <p>Podaj wychowawcę klasy: </p> <input type="text" id="teacherSelect" name="name" placeholder="Nauczyciel" disabled="@isBusy"></li>
                     <li>
                         <div class="btn-container">
                             <button class="btn btn-dark" id="addNewClass" type="submit" value="DODAJ"

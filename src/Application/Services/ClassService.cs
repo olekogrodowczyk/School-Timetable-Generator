@@ -37,8 +37,11 @@ namespace Application.Services
 
         public async Task<int> CreateClass(CreateClassDto model)
         {
+            var names = model.TeacherName.Split(" ");
             int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            var teacher = await _teacherRepository.SingleOrDefaultAsync(t => t.FirstName == names[0] && t.LastName == names[1] && t.TimetableId == activeTimetableId);
             var classToAdd = _mapper.Map<Class>(model);
+            classToAdd.TeacherId = teacher.Id;
             classToAdd.TimetableId = activeTimetableId;
             await _classRepository.AddAsync(classToAdd);
             return classToAdd.Id;

@@ -31,9 +31,10 @@ var classID = 0;
 let classesList = [];
 
 class Class {
-    constructor(name) {
+    constructor(name, teacher) {
         this.id = classID++;
         this.name = name;
+        this.teacher = teacher;
         this.studentsArr = [];
     }
     newStudent(imie, nazwisko) {
@@ -390,7 +391,7 @@ class UI {
                             <p>${klasa.name}</p>
                             </li>
                             <li>
-                            <p>${klasa.te}</p>
+                            <p>${klasa.teacher}</p>
                             </li>
                             <li>
                                 <div class="btn-container">
@@ -826,9 +827,10 @@ function initializeAddClass() {
         e.preventDefault();
 
         const name = document.querySelector('#name').value;
+        const teacher = document.querySelector('#teacherSelect').value;
         // const studentsArr = document.querySelector('#nazwisko').value;
 
-        let newclass = new Class(name);
+        let newclass = new Class(name, teacher);
 
         console.log(studentsList[0].imie);
 

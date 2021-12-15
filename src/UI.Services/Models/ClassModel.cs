@@ -12,6 +12,7 @@ namespace UI.Services.Models
     {
         public string id { get; set; }
         public string name { get; set; }
-        public List<StudentModel> studentsArr  { get; set; }
+        public string teacher { get; set; }
+        public List<StudentModel> studentsArr { get; set; }
     }
 }
