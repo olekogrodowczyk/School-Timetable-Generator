@@ -14,5 +14,7 @@ namespace UI.Services.Interfaces
         Task CreateTeachersWithStudents(List<TeacherModel> models);
 
         Task<IEnumerable<TeacherVm>> GetAllTeachersFromTimetable();
+
+        Task<int> GetTeachersCount();
     }
 }

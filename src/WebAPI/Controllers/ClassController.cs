@@ -50,5 +50,12 @@ namespace WebAPI.Controllers
             var result = await _classService.GetStudentsFromClass(name);
             return Ok(new OkResult<IEnumerable<StudentVm>>(result, "Pomyślnie zwrócono uczniów"));
         }
+
+        [HttpGet("getcount")]
+        public async Task<IActionResult> GetClassessCount()
+        {
+            int result = await _classService.GetClassessCount();
+            return Ok(new OkResult<int>(result, "Pomyslnie zwrócono liczbę klasy"));
+        }
     }
 }

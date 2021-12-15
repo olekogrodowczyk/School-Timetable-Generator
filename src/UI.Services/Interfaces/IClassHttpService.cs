@@ -15,5 +15,7 @@ namespace UI.Services.Interfaces
         Task<IEnumerable<string>> GetAllClassessNames();
 
         Task<IEnumerable<StudentVm>> GetAllStudentsFromClass(string className);
+
+        Task<int> GetClassessCount();
     }
 }

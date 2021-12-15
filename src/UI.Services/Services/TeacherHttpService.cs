@@ -43,6 +43,12 @@ namespace UI.Services.Services
             return result.Value;
         }
 
+        public async Task<int> GetTeachersCount()
+        {
+            var result = await _httpService.Get<OkResult<int>>("api/teacher/getcount");
+            return result.Value;
+        }
+
         private Task<List<CreateAvailabilityDto>> HandleAvailabilities(char[][] values, int teacherId)
         {
             const int startsAtInit = 8;

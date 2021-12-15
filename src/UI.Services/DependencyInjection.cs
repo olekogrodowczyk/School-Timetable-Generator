@@ -21,7 +21,8 @@ namespace UI.Services
                 .AddScoped<ITeacherHttpService, TeacherHttpService>()
                 .AddScoped<IClassroomHttpService, ClassroomHttpService>()
                 .AddScoped<ISubjectHttpService, SubjectHttpService>()
-                .AddScoped<ITimetableStateHttpService, TimetableStateHttpService>();
+                .AddScoped<ITimetableStateHttpService, TimetableStateHttpService>()
+                .AddScoped<IStudentHttpService, StudentHttpService>();
         }
     }
 }

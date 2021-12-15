@@ -48,5 +48,11 @@ namespace UI.Services.Services
                 ($"api/class/getstudentsbyclassname?name={className}");
             return result.Value;
         }
+
+        public async Task<int> GetClassessCount()
+        {
+            var result = await _httpService.Get<OkResult<int>>("api/class/getcount");
+            return result.Value;
+        }
     }
 }
