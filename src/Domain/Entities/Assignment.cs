@@ -10,6 +10,8 @@ namespace Domain.Entities
     public class Assignment : AuditableEntity
     {
         public int GroupId { get; set; }
+        public int? TimetableId { get; set; }
+        public virtual TimeTable TimeTable { get; set; }
         public virtual Group Group { get; set; }
         public int StudentId { get; set; }
         public virtual Student Student { get; set; }

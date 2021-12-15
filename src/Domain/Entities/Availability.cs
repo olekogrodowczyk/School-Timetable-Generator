@@ -10,6 +10,8 @@ namespace Domain.Entities
     public class Availability : AuditableEntity
     {
         public int TeacherId { get; set; }
+        public int? TimetableId { get; set; }
+        public virtual TimeTable TimeTable { get; set; }
         public virtual Teacher Teacher { get; set; }
         public int StartsAt { get; set; }
         public int EndsAt { get; set; }

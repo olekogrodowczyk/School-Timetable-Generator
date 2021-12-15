@@ -11,6 +11,8 @@ namespace Domain.Entities
     {
         public int ClassId { get; set; }
         public virtual Class Class { get; set; }
+        public int? TimetableId { get; set; }
+        public virtual TimeTable TimeTable { get; set; }
         public string Name { get; set; }
         public int? SubjectId { get; set; }
         public int NumberOfLessonInWeek { get; set; }

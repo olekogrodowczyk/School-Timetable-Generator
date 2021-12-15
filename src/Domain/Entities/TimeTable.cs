@@ -13,9 +13,14 @@ namespace Domain.Entities
         public virtual User Creator { get; set; }
         public string Name { get; set; }
         public int CurrentPhase { get; set; }
-        public virtual ICollection<Class> Classes { get; set; }
+        public virtual ICollection<Class> Classess { get; set; }
         public virtual ICollection<Classroom> Classrooms { get; set; }
         public virtual ICollection<Teacher> Teachers { get; set; }
         public virtual ICollection<Subject> Subjects { get; set; }
+        public virtual ICollection<Assignment> Assignments { get; set; }
+        public virtual ICollection<Availability> Availabilities { get; set; }
+        public virtual ICollection<Group> Groups { get; set; }
+        public virtual ICollection<Lesson> Lessons { get; set; }
+        public virtual ICollection<Student> Students { get; set; }
     }
 }

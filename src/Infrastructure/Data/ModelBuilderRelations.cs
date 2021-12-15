@@ -24,12 +24,6 @@ namespace Infrastructure.Data
                 .HasForeignKey(x => x.CreatorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Class>()
-                .HasOne<TimeTable>(x => x.TimeTable)
-                .WithMany(x => x.Classes)
-                .HasForeignKey(x => x.TimetableId)
-                .OnDelete(DeleteBehavior.Restrict);
-
             modelBuilder.Entity<Teacher>()
                 .HasOne<Class>(x => x.Class)
                 .WithOne(x => x.Teacher)
@@ -91,24 +85,6 @@ namespace Infrastructure.Data
                 .HasOne<Classroom>(x => x.Classroom)
                 .WithMany(x => x.Lessons)
                 .HasForeignKey(x => x.ClassroomId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Classroom>()
-                .HasOne<TimeTable>(x => x.TimeTable)
-                .WithMany(x => x.Classrooms)
-                .HasForeignKey(x => x.TimetableId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Teacher>()
-                .HasOne<TimeTable>(x => x.TimeTable)
-                .WithMany(x => x.Teachers)
-                .HasForeignKey(x => x.TimetableId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Subject>()
-                .HasOne<TimeTable>(x => x.TimeTable)
-                .WithMany(x => x.Subjects)
-                .HasForeignKey(x => x.TimetableId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Group>()
