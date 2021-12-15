@@ -15,6 +15,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Infrastructure.Authentication;
 using System.IdentityModel.Tokens.Jwt;
+using Domain.Interfaces;
 
 namespace Infrastructure.Services
 {
@@ -23,12 +24,15 @@ namespace Infrastructure.Services
         private readonly ApplicationDbContext _context;
         private readonly IPasswordHasher<User> _hasher;
         private readonly AuthenticationSettings _authenticationSettings;
+        private readonly ITimetableRepository _timetableRepository;
 
-        public IdentityService(ApplicationDbContext context, IPasswordHasher<User> hasher, AuthenticationSettings authenticationSettings)
+        public IdentityService(ApplicationDbContext context, IPasswordHasher<User> hasher
+            , AuthenticationSettings authenticationSettings, ITimetableRepository timetableRepository)
         {
             _context = context;
             _hasher = hasher;
             _authenticationSettings = authenticationSettings;
+            _timetableRepository = timetableRepository;
         }
 
         public Task<bool> AuthorizeAsync(int userId, string policyName)
@@ -104,7 +108,7 @@ namespace Infrastructure.Services
         {
             string roleName = "User";
             var role = await _context.Roles.FirstOrDefaultAsync(x => x.Name == roleName);
-            if(role == null) { throw new NotFoundException($"Role with name: {roleName} "); }
+            if (role == null) { throw new NotFoundException($"Role with name: {roleName} "); }
 
             var newUser = new User()
             {
@@ -119,8 +123,16 @@ namespace Infrastructure.Services
             newUser.PasswordHash = hashedPassword;
             await _context.Users.AddAsync(newUser);
             await _context.SaveChangesAsync();
-            return newUser.Id;
 
+            var newTimetable = new TimeTable { CreatorId = newUser.Id, CurrentPhase = 1, Name = "Default" };
+            await _context.TimeTables.AddAsync(newTimetable);
+            await _context.SaveChangesAsync();
+
+            newUser.CurrentTimetableId = newTimetable.Id;
+            _context.Users.Update(newUser);
+            await _context.SaveChangesAsync();
+
+            return newUser.Id;
         }
     }
 }

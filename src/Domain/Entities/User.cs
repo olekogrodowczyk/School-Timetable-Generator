@@ -16,5 +16,7 @@ namespace Domain.Entities
         public int RoleId { get; set; }
         public virtual Role Role { get; set; }
         public virtual ICollection<TimeTable> TimeTables { get; set; }
+        public int? CurrentTimetableId { get; set; }
+        public virtual TimeTable CurrentTimeTable { get; set; }
     }
 }

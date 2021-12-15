@@ -11,5 +11,6 @@ namespace Application.Interfaces
     {
         Task ChangePhaseNumber(int timetableId, int phaseNumber);
         Task<int> CreateTimetable(CreateTimetableDto model);
+        Task<int> GetCurrentPhase(int timetableId);
     }
 }

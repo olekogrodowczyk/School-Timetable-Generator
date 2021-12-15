@@ -43,5 +43,12 @@ namespace Application.Services
             timetable.CurrentPhase = phaseNumber;
             await _timetableRepository.UpdateAsync(timetable);
         }
+
+        public async Task<int> GetCurrentPhase(int timetableId)
+        {
+            var timetable = await _timetableRepository.GetByIdAsync(timetableId);
+            if (timetable == null) { throw new NotFoundException($"Timetable with id: {timetableId} hasn't been found"); }
+            return timetable.CurrentPhase;
+        }
     }
 }

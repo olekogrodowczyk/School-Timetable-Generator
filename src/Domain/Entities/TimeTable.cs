@@ -22,5 +22,6 @@ namespace Domain.Entities
         public virtual ICollection<Group> Groups { get; set; }
         public virtual ICollection<Lesson> Lessons { get; set; }
         public virtual ICollection<Student> Students { get; set; }
+        public virtual ICollection<User> ActiveUserTimetables { get; set; }
     }
 }
