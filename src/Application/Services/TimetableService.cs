@@ -40,7 +40,7 @@ namespace Application.Services
             var timetable = await _timetableRepository.GetByIdAsync(timetableId);
             if (timetable == null) { throw new NotFoundException($"Timetable with id: {timetableId} hasn't been found"); }
             int currentPhaseNumber = timetable.Id;
-            timetable.Id = phaseNumber;
+            timetable.CurrentPhase = phaseNumber;
             await _timetableRepository.UpdateAsync(timetable);
         }
     }

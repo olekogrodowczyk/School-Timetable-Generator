@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Dto.ChangePhaseDto;
 using Shared.Dto.CreateTimetableDto;
 using Shared.Responses;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TimetableController : ControllerBase
@@ -28,9 +28,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPatch("changephase/{timetableId}")]
-        public async Task<IActionResult> ChangePhase([FromRoute] int timetableId, [FromBody] int phaseNumber)
+        public async Task<IActionResult> ChangePhase([FromRoute] int timetableId, [FromBody] ChangePhaseDto phaseNumber)
         {
-            await _timetableService.ChangePhaseNumber(timetableId, phaseNumber);
+            await _timetableService.ChangePhaseNumber(timetableId, phaseNumber.PhaseNumber);
             return Ok(new Shared.Responses.OkResult("Pomyślnie zmieniono numer etapu"));
         }
     }

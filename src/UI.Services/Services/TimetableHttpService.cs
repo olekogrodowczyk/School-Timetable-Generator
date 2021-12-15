@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UI.Services.Interfaces;
 using UI;
+using Shared.Dto.ChangePhaseDto;
 
 namespace UI.Services.Services
 {
@@ -26,6 +27,8 @@ namespace UI.Services.Services
 
         public async Task ChangeCurrentPhase(int phaseNumber)
         {
+            string query = $"api/timetable/changephase/{TimetableState.CurrentTimetableId}";
+            await _httpService.Patch<OkResult>(query, new ChangePhaseDto { PhaseNumber = phaseNumber });
         }
     }
 }
