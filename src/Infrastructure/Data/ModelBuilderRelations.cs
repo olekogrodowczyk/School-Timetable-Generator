@@ -98,6 +98,12 @@ namespace Infrastructure.Data
                 .WithMany(x => x.Groups)
                 .HasForeignKey(x => x.TeacherId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<User>()
+                .HasOne<TimeTable>(x => x.CurrentTimeTable)
+                .WithMany(x => x.ActiveUserTimetables)
+                .HasForeignKey(x => x.CurrentTimetableId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
