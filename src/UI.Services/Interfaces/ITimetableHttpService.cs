@@ -10,6 +10,7 @@ namespace UI.Services.Interfaces
 {
     public interface ITimetableHttpService
     {
+        Task ChangeCurrentPhase(int phaseNumber);
         Task CreateTimetable(CreateTimetableDto model);
     }
 }

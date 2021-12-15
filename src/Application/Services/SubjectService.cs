@@ -28,5 +28,11 @@ namespace Application.Services
             await _subjectRepository.AddAsync(subject);
             return subject.Id;
         }
+
+        public async Task<int> GetTeachersCount(int timetableId)
+        {
+            int count = await _subjectRepository.GetCount(t => t.TimetableId == timetableId);
+            return count;
+        }
     }
 }

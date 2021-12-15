@@ -37,5 +37,11 @@ namespace Application.Services
             if (teachers == null) { throw new NotFoundException($"Timetable entity with id: {timetableId} is not found"); }
             return _mapper.Map<IEnumerable<TeacherVm>>(teachers);
         }
+
+        public async Task<int> GetSubjectsCount(int timetableId)
+        {
+            int count = await _teacherRepository.GetCount(t => t.TimetableId == timetableId);
+            return count;
+        }
     }
 }

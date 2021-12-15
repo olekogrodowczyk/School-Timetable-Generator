@@ -35,5 +35,12 @@ namespace WebAPI.Controllers
             var result = await _teacherService.GetAllTeachersFromTimetable(timetableId);
             return Ok(new OkResult<IEnumerable<TeacherVm>>(result, "Pomyślnie zwrócono nauczycieli"));
         }
+
+        [HttpGet("getcount")]
+        public async Task<IActionResult> GetTeachersCount([FromQuery] int timetableId)
+        {
+            int result = await _teacherService.GetSubjectsCount(timetableId);
+            return Ok(new OkResult<int>(result, "Pomyślnie zwrócono liczbę nauczycieli"));
+        }
     }
 }

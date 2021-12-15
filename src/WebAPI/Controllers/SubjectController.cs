@@ -26,5 +26,12 @@ namespace WebAPI.Controllers
             int result = await _subjectService.CreateSubject(createSubjectDto);
             return Ok(new OkResult<int>(result, "Pomyślnie dodano nowy przedmiot"));
         }
+
+        [HttpGet("getcount")]
+        public async Task<IActionResult> GetTeachersCount([FromQuery] int timetableId)
+        {
+            int result = await _subjectService.GetTeachersCount(timetableId);
+            return Ok(new OkResult<int>(result, "Pomyślnie liczbę przedmiotów"));
+        }
     }
 }

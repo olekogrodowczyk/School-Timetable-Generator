@@ -10,5 +10,7 @@ namespace Application.Interfaces
     public interface ISubjectService
     {
         Task<int> CreateSubject(CreateSubjectDto createSubjectDto);
+
+        Task<int> GetTeachersCount(int timetableId);
     }
 }
