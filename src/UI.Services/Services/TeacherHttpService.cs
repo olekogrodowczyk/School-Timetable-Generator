@@ -58,7 +58,7 @@ namespace UI.Services.Services
             {
                 for (int j = 0; j < values[i].Length - 1; j++)
                 {
-                    if (values[i][j] == '0')
+                    if (values[i][j] == '1')
                     {
                         result.Add(new CreateAvailabilityDto
                         {

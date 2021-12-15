@@ -31,7 +31,6 @@
         int currentTimetable = await TimetableStateHttpService.GetCurrentTimetable();
         int currentPhase = await TimetableStateHttpService.GetCurrentPhase(currentTimetable);
         isBusy = false;
-        if(currentPhase==1) { NavigationManager.NavigateTo("home"); }
         if(currentPhase==2) { NavigationManager.NavigateTo("addsubjects"); }
     }
 }
