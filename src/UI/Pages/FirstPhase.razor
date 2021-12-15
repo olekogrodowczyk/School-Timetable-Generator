@@ -1,0 +1,37 @@
+﻿@page "/home"
+@using UI.Services.Interfaces
+
+<Header Title="Twoja szkoła"></Header>
+    <section id="basic-add">
+        <div class="container">
+            
+            <div class="cards-container">
+                <CardMenu Link="addteachers" Title="DODAJ NAUCZYCIELI"></CardMenu>
+                <CardMenu Link="addclassrooms" Title="DODAJ SALE"></CardMenu>
+                <CardMenu Link="addclass" Title="DODAJ UCZNIÓW"></CardMenu>                             
+            </div>
+                
+             <ChangePhase></ChangePhase>      
+            
+        </div>
+    </section>
+
+    @code{
+    private bool isBusy;
+
+    [Inject]
+    public ITimetableStateHttpService TimetableStateHttpService{ get; set; }
+
+    [Inject]
+    public NavigationManager NavigationManager{ get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        isBusy = true;
+        int currentTimetable = await TimetableStateHttpService.GetCurrentTimetable();
+        int currentPhase = await TimetableStateHttpService.GetCurrentPhase(currentTimetable);
+        isBusy = false;
+        if(currentPhase==1) { NavigationManager.NavigateTo("home"); }
+        if(currentPhase==2) { NavigationManager.NavigateTo("addsubjects"); }
+    }
+}

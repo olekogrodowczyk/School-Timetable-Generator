@@ -30,12 +30,12 @@ namespace UI.Components.AddTeachers
         [Inject]
         public IToastService ToastService { get; set; }
 
-        protected async override Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
             await LocalStorageService.RemoveItemAsync("MyTeachers");
         }
 
-        protected async override Task OnAfterRenderAsync(bool firstRender)
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
@@ -56,12 +56,13 @@ namespace UI.Components.AddTeachers
                 ToastService.ShowError("Nastąpił problem z serializacją danych");
             }
         }
+
         protected async Task HandleAddClass()
         {
             await HandleJson();
             await ComponentRequestHandler.HandleRequest<List<TeacherModel>>
                 (TeacherHttpService.CreateTeachersWithStudents, deserializedValue, _errorMessage, _errors, ToastService);
-            if (_errorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
+            if (_errorMessage != String.Empty) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
         }
     }
 }

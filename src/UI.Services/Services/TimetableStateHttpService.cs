@@ -1,4 +1,5 @@
-﻿using Shared.Responses;
+﻿using Shared.Dto.ChangePhaseDto;
+using Shared.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,12 @@ namespace UI.Services.Services
         {
             var result = await _httpService.Get<OkResult<int>>("api/account/getcurrenttimetable");
             return result.Value;
+        }
+
+        public async Task ChangeCurrentPhase(int phaseNumber)
+        {
+            string query = $"api/timetable/changephase/1";
+            await _httpService.Patch<OkResult>(query, new ChangePhaseDto { PhaseNumber = phaseNumber });
         }
     }
 }

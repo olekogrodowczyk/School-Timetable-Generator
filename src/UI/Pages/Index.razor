@@ -1,23 +1,14 @@
-﻿@using Blazored.LocalStorage;
+﻿@page "/"
 
-@page "/"
+@code {
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
 
-    <Header Title="Twoja szkoła"></Header>
-    <section id="basic-add">
-        <div class="container">
-            
-            <div class="cards-container">
-                <CardMenu Link="addteachers" Title="DODAJ NAUCZYCIELI"></CardMenu>
-                <CardMenu Link="addclassrooms" Title="DODAJ SALE"></CardMenu>
-                <CardMenu Link="addclass" Title="DODAJ UCZNIÓW"></CardMenu>                             
-            </div>
-                
-                    
-            
-        </div>
-    </section>
+    protected override void OnInitialized()
+    {
+        NavigationManager.NavigateTo("home");
+    }
+}
 
-
-    
 
 

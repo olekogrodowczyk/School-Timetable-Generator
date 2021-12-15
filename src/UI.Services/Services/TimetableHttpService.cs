@@ -25,11 +25,5 @@ namespace UI.Services.Services
             var result = await _httpService.Post<OkResult<int>>("api/timetable", model);
             return result.Value;
         }
-
-        public async Task ChangeCurrentPhase(int phaseNumber)
-        {
-            string query = $"api/timetable/changephase/1";
-            await _httpService.Patch<OkResult>(query, new ChangePhaseDto { PhaseNumber = phaseNumber });
-        }
     }
 }

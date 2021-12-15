@@ -81,7 +81,7 @@ namespace UI.Components.AddClass
             await HandleJson();
             await ComponentRequestHandler.HandleRequest<List<ClassModel>>
                 (ClassHttpService.CreateClasses, deserializedValue, _errorMessage, _errors, ToastService);
-            if (_errorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
+            if (_errorMessage != String.Empty) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
         }
     }
 }
