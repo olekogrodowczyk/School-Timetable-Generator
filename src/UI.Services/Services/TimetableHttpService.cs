@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UI.Services.Interfaces;
+using UI;
 
 namespace UI.Services.Services
 {
@@ -23,5 +24,8 @@ namespace UI.Services.Services
             await _httpService.Post<OkResult<int>>("api/timetable", model);
         }
 
+        public async Task ChangeCurrentPhase(int phaseNumber)
+        {
+        }
     }
 }

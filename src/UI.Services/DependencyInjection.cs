@@ -20,7 +20,8 @@ namespace UI.Services
                 .AddScoped<ITimetableHttpService, TimetableHttpService>()
                 .AddScoped<ITeacherHttpService, TeacherHttpService>()
                 .AddScoped<IClassroomHttpService, ClassroomHttpService>()
-                .AddScoped<ISubjectHttpService, SubjectHttpService>();
+                .AddScoped<ISubjectHttpService, SubjectHttpService>()
+                .AddSingleton<TimetableState>();
         }
     }
 }

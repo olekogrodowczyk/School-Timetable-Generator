@@ -34,7 +34,6 @@ namespace UI
 
             builder.Services.AddOptions();
             builder.Services.AddBlazoredToast();
-            builder.Services.AddSingleton<TimetableState>();
 
             await builder.Build().RunAsync();
         }
