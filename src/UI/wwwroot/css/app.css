@@ -4,7 +4,6 @@
     --dark-color: #2B6169;
     --light-color: #2B6169;
     --light-green-color: #2B6169;
-    ;
     --max-width: 1100px;
 }
 
@@ -30,7 +29,6 @@
         /* background: var(--dark-color); */
         background-color: #67a38034;
     }
-
 
 * {
     margin: 0;
@@ -163,6 +161,15 @@ input[type=number] {
     padding: 0.5rem 1rem;
     color: #021f06ef;
     /*background-color: var(--secondary-color);*/
+    border: hidden;
+    border-radius: 26px;
+    transition: 1000ms ease;
+}
+
+input[type=password ] {
+    padding: 0.5rem 1rem;
+    color: #021f06ef;
+    background-color: var(--secondary-color);
     border: hidden;
     border-radius: 26px;
     transition: 1000ms ease;
