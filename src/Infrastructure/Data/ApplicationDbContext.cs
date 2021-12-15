@@ -44,6 +44,9 @@ namespace Infrastructure.Data
 
             modelBuilder.Entity<Teacher>()
                 .HasAlternateKey(x => new { x.TimetableId, x.FirstName, x.LastName });
+
+            modelBuilder.Entity<Group>()
+                .HasAlternateKey(x => new { x.TimetableId, x.Name });
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
