@@ -28,7 +28,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPatch("changephase/{timetableId}")]
-        public async Task<IActionResult> ChangePhase([FromRoute] int timetableId, [FromQuery] int phaseNumber)
+        public async Task<IActionResult> ChangePhase([FromRoute] int timetableId, [FromBody] int phaseNumber)
         {
             await _timetableService.ChangePhaseNumber(timetableId, phaseNumber);
             return Ok(new Shared.Responses.OkResult("Pomyślnie zmieniono numer etapu"));
