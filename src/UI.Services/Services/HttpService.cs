@@ -51,6 +51,13 @@ namespace UI.Services.Services
             return await sendRequest<T>(request);
         }
 
+        public async Task<T> Patch<T>(string uri, object value)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Patch, $"{_navigationManager.BaseUri}{uri}");
+            request.Content = new StringContent(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json");
+            return await sendRequest<T>(request);
+        }
+
         private async Task<T> sendRequest<T>(HttpRequestMessage request)
         {
             var token = await _localStorageService.GetItemAsStringAsync("access_token");
