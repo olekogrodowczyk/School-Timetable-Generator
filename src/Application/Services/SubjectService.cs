@@ -26,7 +26,9 @@ namespace Application.Services
 
         public async Task<int> CreateSubject(CreateSubjectDto createSubjectDto)
         {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
             var subject = _mapper.Map<Subject>(createSubjectDto);
+            subject.TimetableId = activeTimetableId;
             await _subjectRepository.AddAsync(subject);
             return subject.Id;
         }

@@ -37,14 +37,18 @@ namespace Application.Services
 
         public async Task<int> CreateClass(CreateClassDto model)
         {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
             var classToAdd = _mapper.Map<Class>(model);
+            classToAdd.TimetableId = activeTimetableId;
             await _classRepository.AddAsync(classToAdd);
             return classToAdd.Id;
         }
 
         public async Task<int> CreateStudent(CreateStudentDto model)
         {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
             var student = _mapper.Map<Student>(model);
+            student.TimetableId = activeTimetableId;
             await _studentRepository.AddAsync(student);
             return student.Id;
         }

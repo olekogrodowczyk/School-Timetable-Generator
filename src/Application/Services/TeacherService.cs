@@ -28,7 +28,9 @@ namespace Application.Services
 
         public async Task<int> CreateTeacher(CreateTeacherDto model)
         {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
             var teacher = _mapper.Map<Teacher>(model);
+            teacher.TimetableId = activeTimetableId;
             await _teacherRepository.AddAsync(teacher);
             return teacher.Id;
         }

@@ -51,7 +51,8 @@ namespace Application.Services
                 TeacherId = teacher.Id,
                 ClassId = classEntity.Id,
                 Name = model.Name,
-                NumberOfLessonInWeek = model.NumberOfLessonsInWeek
+                NumberOfLessonInWeek = model.NumberOfLessonsInWeek,
+                TimetableId = activeTimetableId
             };
             await _groupRepository.AddAsync(group);
             await HandleAssignmentsCreating(students, group.Id);
