@@ -21,6 +21,8 @@ namespace Domain.Interfaces
 
         Task<T> GetByIdAsync(int id, params Expression<Func<T, object>>[] includeProperties);
 
+        Task<int> GetCount(Expression<Func<T, bool>> predicate);
+
         Task<IEnumerable<T>> GetWhereAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
 
         Task<T> SingleAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);

@@ -101,5 +101,11 @@ namespace Infrastructure.Repositories
             var result = await _context.Set<T>().FirstOrDefaultAsync(predicate);
             return result;
         }
+
+        public async Task<int> GetCount(Expression<Func<T, bool>> predicate)
+        {
+            int result = await _context.Set<T>().Where(predicate).CountAsync();
+            return result;
+        }
     }
 }
