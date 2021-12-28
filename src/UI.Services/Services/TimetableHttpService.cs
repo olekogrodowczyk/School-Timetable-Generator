@@ -25,5 +25,10 @@ namespace UI.Services.Services
             var result = await _httpService.Post<OkResult<int>>("api/timetable", model);
             return result.Value;
         }
+
+        public async Task Generate()
+        {
+            var result = await _httpService.Post<OkResult>("api/timetable/generate", null);
+        }
     }
 }

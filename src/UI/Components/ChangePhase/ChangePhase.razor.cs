@@ -43,7 +43,8 @@ namespace UI.Components.ChangePhase
                 return;
             }
             int destinationPhase = 2;
-            await TimetableStateHttpService.ChangeCurrentPhase(destinationPhase);
+            int currentTimetable = await TimetableStateHttpService.GetCurrentTimetable();
+            await TimetableStateHttpService.ChangeCurrentPhase(destinationPhase, currentTimetable);
             NavigationManager.NavigateTo("addsubjects");
         }
     }

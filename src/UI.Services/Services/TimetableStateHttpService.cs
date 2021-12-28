@@ -30,9 +30,9 @@ namespace UI.Services.Services
             return result.Value;
         }
 
-        public async Task ChangeCurrentPhase(int phaseNumber)
+        public async Task ChangeCurrentPhase(int phaseNumber, int timetableId)
         {
-            string query = $"api/timetable/changephase/1";
+            string query = $"api/timetable/changephase/" + timetableId;
             await _httpService.Patch<OkResult>(query, new ChangePhaseDto { PhaseNumber = phaseNumber });
         }
     }

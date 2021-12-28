@@ -8,7 +8,7 @@ namespace UI.Services.Interfaces
 {
     public interface ITimetableStateHttpService
     {
-        Task ChangeCurrentPhase(int phaseNumber);
+        Task ChangeCurrentPhase(int phaseNumber, int timetableId);
 
         Task<int> GetCurrentPhase(int timetableId);
 

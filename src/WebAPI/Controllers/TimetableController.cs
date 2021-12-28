@@ -14,10 +14,12 @@ namespace WebAPI.Controllers
     public class TimetableController : ControllerBase
     {
         private readonly ITimetableService _timetableService;
+        private readonly IAlgorithmService _algorithmService;
 
-        public TimetableController(ITimetableService timetableService)
+        public TimetableController(ITimetableService timetableService, IAlgorithmService algorithmService)
         {
             _timetableService = timetableService;
+            _algorithmService = algorithmService;
         }
 
         [HttpPost]
@@ -39,6 +41,13 @@ namespace WebAPI.Controllers
         {
             int result = await _timetableService.GetCurrentPhase(timetableId);
             return Ok(new Shared.Responses.OkResult<int>(result, "Pomyślnie zwrócono obecny etap"));
+        }
+
+        [HttpPost("generate")]
+        public async Task<IActionResult> Generate()
+        {
+            await _algorithmService.Init();
+            return Ok(new Shared.Responses.OkResult("Udało się"));
         }
     }
 }

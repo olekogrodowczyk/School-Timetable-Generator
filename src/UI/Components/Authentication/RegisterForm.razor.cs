@@ -32,6 +32,7 @@ namespace UI.Components.Authentication
 
         public async Task RegisterUser()
         {
+            _errorMessage = String.Empty;
             try
             {
                 await authenticationHttpService.RegisterUser(_model);
@@ -41,20 +42,19 @@ namespace UI.Components.Authentication
                 _errorMessage = e.ErrorResult.Message;
                 _errors = e.ErrorResult.Errors;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _errorMessage = e.Message;
             }
-            if(_errorMessage != String.Empty) { ToastService.ShowError("", _errorMessage); }
-            if(_errors != null)
+            if (_errorMessage != String.Empty) { ToastService.ShowError(_errorMessage, "Błąd"); }
+            if (_errors != null)
             {
                 foreach (string error in _errors)
                 {
                     ToastService.ShowError(error);
                 }
             }
-            if(_errorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zarejestrowano");}
-            Navigation.NavigateTo("/login");
+            if (_errorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zarejestrowano"); Navigation.NavigateTo("/login"); }
         }
     }
 }

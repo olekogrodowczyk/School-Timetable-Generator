@@ -11,5 +11,7 @@ namespace UI.Services.Interfaces
     public interface ITimetableHttpService
     {
         Task<int> CreateTimetable(CreateTimetableDto model);
+
+        Task Generate();
     }
 }

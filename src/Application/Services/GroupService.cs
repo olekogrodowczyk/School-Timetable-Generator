@@ -40,9 +40,9 @@ namespace Application.Services
         {
             int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
             var names = model.TeacherName.Split(" ");
-            var subject = await _subjectRepository.SingleOrDefaultAsync(s => s.Name == model.SubjectName);
+            var subject = await _subjectRepository.SingleOrDefaultAsync(s => s.Name == model.SubjectName && s.TimetableId == activeTimetableId);
             var teacher = await _teacherRepository.SingleOrDefaultAsync(t => t.FirstName == names[0] && t.LastName == names[1] && t.TimetableId == activeTimetableId);
-            var classEntity = await _classRepository.SingleOrDefaultAsync(c => c.Name == model.ClassName);
+            var classEntity = await _classRepository.SingleOrDefaultAsync(c => c.Name == model.ClassName && c.TimetableId == activeTimetableId);
             var students = await getStudentEntities(model.StudentIds);
 
             var group = new Group
@@ -62,12 +62,14 @@ namespace Application.Services
 
         private async Task HandleAssignmentsCreating(IEnumerable<Student> students, int groupId)
         {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
             foreach (Student student in students)
             {
                 Assignment assignment = new Assignment
                 {
                     StudentId = student.Id,
-                    GroupId = groupId
+                    GroupId = groupId,
+                    TimetableId = activeTimetableId
                 };
                 await _assignmentRepository.AddAsync(assignment);
             }
