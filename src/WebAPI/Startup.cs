@@ -33,7 +33,7 @@ namespace WebAPI
         {
             services.AddInfrastructure(Configuration);
             services.AddApplication();
-            
+            services.AddScoped<Seeder>();
             services.AddControllers(options =>
             {
                 options.Filters.Add(typeof(CustomValidationAttribute));
@@ -76,8 +76,9 @@ namespace WebAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Seeder seeder)
         {
+            seeder.Seed();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
