@@ -1,6 +1,7 @@
 ﻿using Domain.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,9 @@ namespace Domain.Entities
         public virtual Teacher Teacher { get; set; }
         public int ClassroomId { get; set; }
         public virtual Classroom Classroom { get; set; }
-        public DateTime StartsAt { get; set; }
-        public DateTime EndsAt { get; set; }
+        public int StartsAt { get; set; }
+        public int EndsAt { get; set; }
+        [Range(1,5)]
+        public int DayOfWeek { get; set; }
     }
 }

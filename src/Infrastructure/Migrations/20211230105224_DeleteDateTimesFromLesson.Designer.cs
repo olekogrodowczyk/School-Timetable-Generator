@@ -4,14 +4,16 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211230105224_DeleteDateTimesFromLesson")]
+    partial class DeleteDateTimesFromLesson
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -213,20 +215,11 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DayOfWeek")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EndsAt")
-                        .HasColumnType("int");
-
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("StartsAt")
-                        .HasColumnType("int");
 
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
