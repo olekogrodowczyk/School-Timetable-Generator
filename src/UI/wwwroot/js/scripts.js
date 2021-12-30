@@ -1,4 +1,9 @@
-﻿var studentId = 0;
+﻿function DodanieMyStudets() {
+    var lol = ["lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd",]
+    localStorage.setItem('MyStudents', JSON.stringify(lol));
+}
+
+var studentId = 0;
 var studentsList = [];
 class Student {
     constructor(imie, nazwisko) {
@@ -34,8 +39,8 @@ class Class {
     constructor(name, teacher) {
         this.id = classID++;
         this.name = name;
-        this.teacher = teacher;
         this.studentsArr = [];
+        this.teacher = teacher;
     }
     newStudent(imie, nazwisko) {
         let s = new Student(imie, nazwisko);
@@ -63,6 +68,7 @@ class Class {
         this.name = tmp;
         this.id = classID++;
         this.studentsArr = [];
+        this.teacher = "";
     }
 }
 
@@ -155,19 +161,24 @@ class UI {
         const list2 = document.querySelector('.all-seperate');
         const row2 = document.createElement('button');
         row2.className = "unhiden_item dark-shadow";
+        row2.id = nauczyciel.id + "item";
 
         row2.innerHTML = `
-                <ul class="item">
-                            <li> <p>${nauczyciel.imie}</p> </li>
-                            <li> <p>${nauczyciel.nazwisko}</p> </li>
-                                <li><p>${nauczyciel.ilosc_godzin}</p> </li>
-                            <li>
-                                <div class="btn-container">
-                                    <input class="btn btn-dark" type="submit" value="USUŃ">
-                                </div>
-                            </li>
-                 </ul>
-                `;
+
+    <ul class="item">
+                <li> <p>${nauczyciel.imie}</p> </li>
+                <li> <p>${nauczyciel.nazwisko}</p> </li>
+                    <li><p>${nauczyciel.ilosc_godzin}</p> </li>
+               
+                <li>
+                    <div class="btn-container">
+                        <input id=${nauczyciel.id} class="btn btn-dark delete" type="submit" value="USUŃ">
+                        <input id=${nauczyciel.id} class="btn btn-dark edit" type="submit" value="EDYTUJ">
+                    </div>
+                </li>
+     </ul>
+    `;
+
 
         row2.addEventListener("click", function () {
             this.classList.toggle("active");
@@ -178,43 +189,54 @@ class UI {
                 panel.style.maxHeight = panel.scrollHeight + "px";
             }
         });
+        //usuwanie nauczyciela i update tablicy nauczyciela, usuniecie schowanego panelu
+        row2.addEventListener('click', (e) => {
+
+            UI.deleteTeacher(e.target);
+            UI.editTeacher(e.target);
+            let s = e.target.id;
+            UI.deletePanel(e.target, s);
+
+        });
         list2.appendChild(row2);
 
         const row3 = document.createElement('div');
         row3.className = 'panel';
+        row3.id = nauczyciel.id + "panel";
+
 
         const row4 = document.createElement('table');
         row4.className = 'hidden_item';
         row4.innerHTML = `
-                <thead>
-                            <tr>
-                                <tr>
-                                    <th>Godziny</th>
-                                    <th>Poniedziałek</th>
-                                    <th>Wtorek</th>
-                                    <th>Środa</th>
-                                    <th>Czwartek</th>
-                                    <th>Piątek</th>
-                                   </tr>
-                            </tr>
-                </thead>
-                `;
+    <thead>
+                <tr>
+                    <tr>
+                        <th>Godziny</th>
+                        <th>Poniedziałek</th>
+                        <th>Wtorek</th>
+                        <th>Środa</th>
+                        <th>Czwartek</th>
+                        <th>Piątek</th>
+                       </tr>
+                </tr>
+    </thead>
+    `;
 
         const row6 = document.createElement('tbody');
         for (var i = 0; i < nauczyciel.dostepnoscArr.length; i++) {
             const row5 = document.createElement('tr');
-
+            row5.id = i + 8 + "." + nauczyciel.id + "panel";
             row5.innerHTML = `
-                    <td>${i + 8}-${i + 9}</td>
-                    `;
+        <td>${i + 8}-${i + 9}</td>
+        `;
 
             for (var j = 0; j < nauczyciel.dostepnoscArr[i].length; j++) {
                 const row7 = document.createElement('td');
                 if (nauczyciel.dostepnoscArr[i][j] == 1) {
-                    row7.innerHTML = `<td><input type="checkbox" ></td>`;
+                    row7.innerHTML = `<td><input id=${nauczyciel.id} type="checkbox" disabled ></td>`;
                 }
                 else {
-                    row7.innerHTML = `<td><input type="checkbox" checked ></td>`;
+                    row7.innerHTML = `<td><input id=${nauczyciel.id} type="checkbox"checked  disabled></td>`;
                 }
 
                 row5.appendChild(row7);
@@ -223,9 +245,11 @@ class UI {
             row6.appendChild(row5);
         }
 
+
         row4.appendChild(row6);
         row3.appendChild(row4);
         list2.appendChild(row3);
+
     }
 
     static clearStudentForm() {
@@ -273,10 +297,20 @@ class UI {
              <li> <p>${klasa.nazwa}</p></li>
              <li> <p>${klasa.ilosc_miejsc}</p> </li>
              <li> <div class="btn-container">
-              <input class="btn btn-dark" type="submit" value="USUŃ">
+              <input id=${klasa.id} class="btn btn-dark delete" type="submit" value="USUŃ">
+              <input id=${klasa.id} class="btn btn-dark edit" type="submit" value="EDYTUJ">
                    </div>
             </li>
         `;
+
+        row2.addEventListener('click', (e) => {
+
+            UI.deleteClassroom(e.target);
+            UI.editClassroom(e.target);
+            /*let s= e.target.id;
+            UI.deletePanel(e.target,s);*/
+
+        });
 
         list2.appendChild(row2);
     }
@@ -314,6 +348,50 @@ class UI {
         if (element.classList.contains('delete'))
             element.parentElement.parentElement.parentElement.remove();
     }
+    static deleteStudentFromMemory(element) {
+        if (element.classList.contains('delete')) {
+            element.parentElement.parentElement.parentElement.remove();
+            // console.log(element.parentElement.id)
+            const classId = element.parentElement.id;
+            const StudentId = element.id;
+            const retrievedData = localStorage.getItem("MyClasses");
+            const classes = JSON.parse(retrievedData);
+            var thisClass = [];
+            var classData = [];
+            for (var i = 0; i < classes.length; i++) {
+                if (classes[i].id == classId) {
+                    thisClass = classes[i].studentsArr;
+                    classData = classes[i];
+                }
+            }
+
+            //usuniecie studenta z listy Studentow
+            for (var i = 0; i < thisClass.length; i++) {
+                if (thisClass[i].id == StudentId) {
+                    console.log(thisClass[i].id)
+                    thisClass.splice(i, 1);
+                }
+            }
+
+            //Stworzenie kopii klasy 
+
+            const copyClass = new Class(classData.name, classData.teacher);
+            copyClass.id = classData.id;
+            copyClass.studentsArr = thisClass;
+            console.log(copyClass);
+
+            //USUNIECIE TEJ KLASY
+            for (var i = 0; i < classesList.length; i++) {
+                if (classesList[i].id == classId) { classesList.splice(i, 1); }
+            }
+
+            classesList.push(copyClass);
+
+            localStorage.setItem('MyClasses', JSON.stringify(classesList));
+
+        }
+
+    }
 
     static deleteClass(element) {
         if (element.classList.contains('delete')) {
@@ -333,6 +411,445 @@ class UI {
             var e = document.getElementById(id + "item");
             e.remove();
         }
+    }
+
+    static deletePanel(element, id) {
+        if (element.classList.contains('delete')) {
+            var el = document.getElementById(id + "panel");
+            el.remove();
+            var e = document.getElementById(id + "item");
+            e.remove();
+        }
+
+    }
+
+    static deletePanelAfterEdit(element, id) {
+        var el = document.getElementById(id + "panel");
+        el.remove();
+        var e = document.getElementById(id + "item");
+        e.remove();
+
+
+    }
+
+    static deleteClassroom(element) {
+
+        if (element.classList.contains('delete')) {
+            element.parentElement.parentElement.parentElement.remove();
+            let s = element.id;
+            for (var i = 0; i < clasroomsList.length; i++) {
+                if (clasroomsList[i].id == s) { clasroomsList.splice(i, 1); }
+            }
+
+            localStorage.setItem('MyClassrooms', JSON.stringify(clasroomsList));
+        }
+
+    }
+
+
+    static deleteTeacher(element) {
+
+        if (element.classList.contains('delete')) {
+            element.parentElement.parentElement.parentElement.remove();
+            let s = element.id;
+            for (var i = 0; i < nauczycieleList.length; i++) {
+                if (nauczycieleList[i].id == s) { nauczycieleList.splice(i, 1); }
+            }
+
+            localStorage.setItem('MyTeachers', JSON.stringify(nauczycieleList));
+        }
+
+    }
+    static getDostepnosc(panelId) {
+        var panel = document.getElementById(panelId);
+        let array8 = [], array9 = [], array10 = [], array11 = [], array12 = [], array13 = [], array14 = [], array15 = [], array16 = [];
+        var grid = document.getElementById('8.' + panelId);
+        console.log(grid)
+
+        var checkBoxes = grid.getElementsByTagName("INPUT");
+        var dostepnosc = [];
+
+        for (var i = 0; i < checkBoxes.length; i++) {
+            if (checkBoxes[i].checked)
+                array8[i] = "0";
+            else array8[i] = "1";
+        }
+        dostepnosc.push(array8);
+
+        grid = document.getElementById("9." + panelId);
+        checkBoxes = grid.getElementsByTagName("INPUT");
+
+        for (var i = 0; i < checkBoxes.length; i++) {
+            if (checkBoxes[i].checked)
+                array9[i] = "0";
+            else array9[i] = "1";
+        }
+        dostepnosc.push(array9);
+
+        grid = document.getElementById("10." + panelId);
+        checkBoxes = grid.getElementsByTagName("INPUT");
+
+        for (var i = 0; i < checkBoxes.length; i++) {
+            if (checkBoxes[i].checked)
+                array10[i] = "0";
+            else array10[i] = "1";
+        }
+        dostepnosc.push(array10);
+
+        grid = document.getElementById("11." + panelId);
+        checkBoxes = grid.getElementsByTagName("INPUT");
+
+        for (var i = 0; i < checkBoxes.length; i++) {
+            if (checkBoxes[i].checked)
+                array11[i] = "0";
+            else array11[i] = "1";
+        }
+        dostepnosc.push(array11);
+
+        grid = document.getElementById("12." + panelId);
+        checkBoxes = grid.getElementsByTagName("INPUT");
+        for (var i = 0; i < checkBoxes.length; i++) {
+            if (checkBoxes[i].checked)
+                array12[i] = "0";
+            else array12[i] = "1";
+        }
+        dostepnosc.push(array12);
+
+        grid = document.getElementById("13." + panelId);
+        checkBoxes = grid.getElementsByTagName("INPUT");
+        for (var i = 0; i < checkBoxes.length; i++) {
+            if (checkBoxes[i].checked)
+                array13[i] = "0";
+            else array13[i] = "1";
+        }
+        dostepnosc.push(array13);
+
+        grid = document.getElementById("14." + panelId);
+        checkBoxes = grid.getElementsByTagName("INPUT");
+        for (var i = 0; i < checkBoxes.length; i++) {
+            if (checkBoxes[i].checked)
+                array14[i] = "0";
+            else array14[i] = "1";
+        }
+        dostepnosc.push(array14);
+
+        grid = document.getElementById("15." + panelId);
+        checkBoxes = grid.getElementsByTagName("INPUT");
+        for (var i = 0; i < checkBoxes.length; i++) {
+            if (checkBoxes[i].checked)
+                array15[i] = "0";
+            else array15[i] = "1";
+        }
+        dostepnosc.push(array15);
+
+        grid = document.getElementById("16." + panelId);
+        checkBoxes = grid.getElementsByTagName("INPUT");
+        for (var i = 0; i < checkBoxes.length; i++) {
+            if (checkBoxes[i].checked)
+                array16[i] = "0";
+            else array16[i] = "1";
+        }
+        dostepnosc.push(array16);
+
+        //console.log(dostepnosc);
+        return dostepnosc;
+    }
+
+    static editClassroom(element) {
+        const u = element.parentElement.parentElement.parentElement;
+        //   console.log(element.parentElement.parentElement.parentElement)
+        if (element.value == 'EDYTUJ') {
+
+            const classroomK = u.firstElementChild.firstElementChild;
+            const classroomKInput = document.createElement('input');
+            classroomKInput.type = 'text';
+            classroomKInput.value = classroomK.textContent;
+            classroomKInput.addEventListener('click', (e) => {
+                u.parentElement.click();
+            })
+            u.insertBefore(classroomKInput, u.firstElementChild)
+            console.log(classroomK.parentElement);
+            u.removeChild(classroomK.parentElement);
+
+            const classroomName = u.children[1];
+            const classroomNameInput = document.createElement('input');
+            classroomNameInput.addEventListener('click', (e) => {
+                u.parentElement.click();
+            })
+
+            classroomNameInput.type = 'text';
+            classroomNameInput.value = classroomName.textContent;
+            u.insertBefore(classroomNameInput, u.children[1])
+            u.removeChild(classroomName);
+
+
+
+
+            const classroomC = u.children[2];
+            const classroomCInput = document.createElement('input');
+            classroomCInput.addEventListener('click', (e) => {
+                u.parentElement.click();
+            })
+
+            classroomCInput.type = 'number';
+            classroomCInput.value = classroomC.textContent;
+            u.insertBefore(classroomCInput, u.children[2])
+            u.removeChild(classroomC);
+
+
+            element.value = 'ZAPISZ';
+
+
+            // document.getElementById('pa').style.pointerEvents = 'none';
+        }
+        else if (element.value === 'ZAPISZ') {
+
+            const classroomKInput = u.children[0]  //input
+            const classroomK = document.createElement('span');
+            classroomK.textContent = classroomKInput.value;
+            const li = document.createElement('li')
+            li.appendChild(classroomK);
+            u.insertBefore(li, u.firstElementChild)
+            console.log(classroomKInput)
+            u.removeChild(classroomKInput);
+            element.value = 'EDYTUJ';
+
+            const classroomNameInput = u.children[1];
+            const classroomName = document.createElement('span');
+            classroomName.textContent = classroomNameInput.value;
+            const l = document.createElement('li')
+            l.appendChild(classroomName);
+            u.insertBefore(l, u.children[1])
+            u.removeChild(classroomNameInput);
+
+
+            const classroomCInput = u.children[2];
+            const classroomC = document.createElement('span');
+            classroomC.textContent = classroomCInput.value;
+            const lis = document.createElement('li')
+            lis.appendChild(classroomC);
+            u.insertBefore(lis, u.children[2])
+            u.removeChild(classroomCInput);
+
+
+            const classId = element.id;
+
+            const retrievedData = localStorage.getItem("MyClassrooms");
+            const classes = JSON.parse(retrievedData);
+            var classData = [];
+            for (var i = 0; i < classes.length; i++) {
+                if (classes[i].id == classId) {
+                    classData = classes[i];
+                    console.log(classData);
+                }
+            }
+            //USUNIECIE TEJ KLASY
+            for (var i = 0; i < clasroomsList.length; i++) {
+                if (clasroomsList[i].id == classId) {
+                    clasroomsList.splice(i, 1);
+                }
+            }
+
+            const copyClass = new Classroom(classroomK.textContent, classroomName.textContent, classroomC.textContent)
+            console.log(copyClass)
+            clasroomsList.push(copyClass);
+
+            localStorage.setItem('MyClassrooms', JSON.stringify(clasroomsList));
+        }
+    }
+
+
+    static editClass(element) {
+        const u = element.parentElement.parentElement.parentElement;
+        // console.log(element.parentElement.parentElement.parentElement)
+        if (element.value == 'EDYTUJ') {
+
+            const className = u.firstElementChild.firstElementChild;
+            const classNameInput = document.createElement('input');
+            classNameInput.type = 'text';
+            classNameInput.value = className.textContent;
+            classNameInput.addEventListener('click', (e) => {
+                u.parentElement.click();
+            })
+            u.insertBefore(classNameInput, u.firstElementChild)
+            console.log(className.parentElement);
+            u.removeChild(className.parentElement);
+
+            const teacherName = u.children[1];
+            const teacherNameInput = document.createElement('input');
+            teacherNameInput.addEventListener('click', (e) => {
+                u.parentElement.click();
+            })
+
+            teacherNameInput.type = 'text';
+            teacherNameInput.value = teacherName.textContent;
+            u.insertBefore(teacherNameInput, u.children[1])
+            u.removeChild(teacherName);
+
+
+            element.value = 'ZAPISZ';
+
+
+            // document.getElementById('pa').style.pointerEvents = 'none';
+        }
+        else if (element.value === 'ZAPISZ') {
+            const classNameInput = u.children[0]  //input
+            const className = document.createElement('span');
+            className.textContent = classNameInput.value;
+            const li = document.createElement('li')
+            li.appendChild(className);
+            u.insertBefore(li, u.firstElementChild)
+            console.log(classNameInput)
+            u.removeChild(classNameInput);
+            element.value = 'EDYTUJ';
+
+            const teacherNameInput = u.children[1];
+            const teacherName = document.createElement('span');
+            teacherName.textContent = teacherNameInput.value;
+            const l = document.createElement('li')
+            l.appendChild(teacherName);
+            u.insertBefore(l, u.children[1])
+            u.removeChild(teacherNameInput);
+
+
+            const classId = element.id;
+
+            const retrievedData = localStorage.getItem("MyClasses");
+            const classes = JSON.parse(retrievedData);
+            var classData = [];
+            for (var i = 0; i < classes.length; i++) {
+                if (classes[i].id == classId) {
+                    classData = classes[i];
+                    console.log(classData);
+                }
+            }
+
+            //Stworzenie kopii klasy 
+
+            const copyClass = new Class(className.textContent, teacherName.textContent);
+            copyClass.id = classData.id;
+            copyClass.studentsArr = classData.studentsArr;
+            console.log(copyClass);
+
+            //USUNIECIE TEJ KLASY
+            for (var i = 0; i < classesList.length; i++) {
+                if (classesList[i].id == classId) {
+                    classesList.splice(i, 1);
+                }
+            }
+
+            classesList.push(copyClass);
+
+            localStorage.setItem('MyClasses', JSON.stringify(classesList));
+        }
+    }
+
+
+    static editTeacher(element) {
+        const u = element.parentElement.parentElement.parentElement;
+
+        if (element.value == 'EDYTUJ') {
+
+            const teacherName = u.firstElementChild.firstElementChild;
+            const teacherNameInput = document.createElement('input');
+            teacherNameInput.type = 'text';
+            teacherNameInput.value = teacherName.textContent;
+            teacherNameInput.addEventListener('click', (e) => {
+                u.parentElement.click();
+            })
+            u.insertBefore(teacherNameInput, u.firstElementChild)
+            console.log(teacherName.parentElement);
+            u.removeChild(teacherName.parentElement);
+
+            const teacherSName = u.children[1];
+            const teacherSNameInput = document.createElement('input');
+            teacherSNameInput.addEventListener('click', (e) => {
+                u.parentElement.click();
+            })
+
+            teacherSNameInput.type = 'text';
+            teacherSNameInput.value = teacherSName.textContent;
+            u.insertBefore(teacherSNameInput, u.children[1])
+            u.removeChild(teacherSName);
+
+            const teacherCount = u.children[2];
+            const teacherCountInput = document.createElement('input');
+            teacherCountInput.addEventListener('click', (e) => {
+                u.parentElement.click();
+            })
+
+            teacherCountInput.type = 'number';
+            teacherCountInput.value = teacherCount.textContent;
+            u.insertBefore(teacherCountInput, u.children[2])
+            u.removeChild(teacherCount);
+
+            element.value = 'ZAPISZ';
+
+            var panel = element.parentElement.parentElement.parentElement.parentElement.nextElementSibling;
+            console.log(element.parentElement.parentElement.parentElement.parentElement.nextElementSibling);
+            var chceckboxes = panel.querySelectorAll('input');
+
+            for (var i = 0; i < chceckboxes.length; i++) {
+                chceckboxes[i].removeAttribute("disabled");
+            }
+
+
+            // document.getElementById('pa').style.pointerEvents = 'none';
+        }
+        else if (element.value === 'ZAPISZ') {
+            const teacherNameInput = u.children[0]  //input
+            const teacherName = document.createElement('span');
+            teacherName.textContent = teacherNameInput.value;
+            const li = document.createElement('li')
+            li.appendChild(teacherName);
+            u.insertBefore(li, u.firstElementChild)
+            console.log(teacherNameInput)
+            u.removeChild(teacherNameInput);
+            element.value = 'EDYTUJ';
+
+            const teacherSNameInput = u.children[1];
+            const teacherSName = document.createElement('span');
+            teacherSName.textContent = teacherSNameInput.value;
+            const l = document.createElement('li')
+            l.appendChild(teacherSName);
+            u.insertBefore(l, u.children[1])
+            u.removeChild(teacherSNameInput);
+
+            const teacherCountInput = u.children[2];
+            const teacherCount = document.createElement('span');
+            teacherCount.textContent = teacherCountInput.value;
+            const lis = document.createElement('li')
+            lis.appendChild(teacherCount);
+            u.insertBefore(lis, u.children[2])
+            u.removeChild(teacherCountInput);
+
+            var panel = element.parentElement.parentElement.parentElement.parentElement.nextElementSibling;
+            console.log(element.parentElement.parentElement.parentElement.parentElement.nextElementSibling);
+            var chceckboxes = panel.querySelectorAll('input');
+            for (var i = 0; i < chceckboxes.length; i++) {
+                chceckboxes[i].disabled = "true";
+            }
+
+            var dostepnosc = [];
+            dostepnosc = UI.getDostepnosc(panel.id);
+
+            var nauczyciel = new Nauczyciel(teacherName.textContent, teacherSName.textContent, teacherCount.textContent, dostepnosc);
+            nauczycieleList.push(nauczyciel);
+            let s = element.id;
+            UI.deletePanelAfterEdit(element, s)
+            element.parentElement.parentElement.parentElement.remove();
+
+            for (var i = 0; i < nauczycieleList.length; i++) {
+                if (nauczycieleList[i].id == s) { nauczycieleList.splice(i, 1); }
+            }
+
+
+            UI.addNauczycielToList(nauczyciel);
+            // UI.deleteTeacher(element);
+            localStorage.setItem('MyTeachers', JSON.stringify(nauczycieleList));
+        }
+
+
     }
 
     static addStudentToList(student) {
@@ -396,6 +913,7 @@ class UI {
                             <li>
                                 <div class="btn-container">
                                  <input id=${klasa.id} class="btn btn-dark delete" type="submit" value="USUŃ">
+                                 <input id=${klasa.id} class="btn btn-dark edit" type="submit" value="EDYTUJ">
                                 </div>
                             </li>
                  </ul>
@@ -415,13 +933,14 @@ class UI {
         row2.addEventListener('click', (e) => {
             UI.deleteClass(e.target);
             let s = e.target.id;
+            UI.editClass(e.target);
 
             UI.deletePanelClass(e.target, s);
-            for (var i = 0; i < classesList.length; i++) {
-                if (classesList[i].id == s) { classesList.splice(i, 1); }
-            }
-
-            localStorage.setItem('MyClasses', JSON.stringify(classesList));
+            /*   for (var i = 0; i < classesList.length; i++) {
+                   if (classesList[i].id == s) { classesList.splice(i, 1); }
+               }
+   
+               localStorage.setItem('MyClasses', JSON.stringify(classesList));*/
         });
 
         list2.appendChild(row2);
@@ -439,17 +958,21 @@ class UI {
             row5.innerHTML = `
                     <li>${klasa.studentsArr[i].Imie} ${klasa.studentsArr[i].Nazwisko}</li>
                     <li>
-                    <div class="btn-container">
+                    <div id=${klasa.id}  class="btn-container">
                     <input id=${klasa.studentsArr[i].id} class="btn btn-dark  delete" type="submit" value="USUŃ">
-                     </div>
+                    </div>
                      </li>
                     `;
 
             row5.addEventListener('click', (e) => {
-                UI.deleteStudent(e.target);
+                UI.deleteStudentFromMemory(e.target);
                 let I = e.target.id;
+
                 for (var i = 0; i < klasa.studentsArr.length; i++) {
-                    if (klasa.studentsArr[i].Id == I) { klasa.studentsArr.splice(i, 1); }
+                    if (klasa.studentsArr[i].Id == I) {
+                        console.log(klasa.studentsArr[i].Id)
+                        klasa.studentsArr.splice(i, 1);
+                    }
                 }
 
                 localStorage.setItem('MyClasses', JSON.stringify(classesList));
@@ -786,26 +1309,29 @@ function initializeAddClass() {
     var addNew = document.querySelector('#addNew');
     addNew.addEventListener('click', (e) => {
         e.preventDefault();
-        //const t = document.querySelector("#liczba");
-        //t.style.visibility = "visible";
-        const element = document.querySelector("#submitNewClass");
-        element.style.visibility = "visible";
+        if (validateFormStudent() != false) {
 
-        const k = document.querySelector(".studentListContainer");
-        k.style.visibility = "visible";
-        k.style.height = "min-content";
 
-        const imie = document.querySelector('#imie').value;
-        const nazwisko = document.querySelector('#nazwisko').value;
+            //const t = document.querySelector("#liczba");
+            //t.style.visibility = "visible";
+            const element = document.querySelector("#submitNewClass");
+            element.style.visibility = "visible";
 
-        student = new Student(imie, nazwisko);
+            const k = document.querySelector(".studentListContainer");
+            k.style.visibility = "visible";
+            k.style.height = "min-content";
 
-        studentsList.push(student);
+            const imie = document.querySelector('#imie').value;
+            const nazwisko = document.querySelector('#nazwisko').value;
 
-        console.log(studentsList);
+            student = new Student(imie, nazwisko);
 
-        UI.addStudentToList(student);
-        UI.clearStudentForm();
+            studentsList.push(student);
+
+
+            UI.addStudentToList(student);
+            UI.clearStudentForm();
+        }
     });
 
     var addNewClass = document.querySelector('#addNewClass');
@@ -825,42 +1351,45 @@ function initializeAddClass() {
     var addNewClassSubmit = document.querySelector('#submitNewClass');
     submitNewClass.addEventListener('click', (e) => {
         e.preventDefault();
+        if (validateFormClass() != false) {
 
-        const name = document.querySelector('#name').value;
-        const teacher = document.querySelector('#teacherSelect').value;
-        // const studentsArr = document.querySelector('#nazwisko').value;
 
-        let newclass = new Class(name, teacher);
+            const name = document.querySelector('#name').value;
+            const teacher = document.querySelector('#teacherSelect').value
+            // const studentsArr = document.querySelector('#nazwisko').value;
 
-        console.log(studentsList[0].imie);
+            let newclass = new Class(name, teacher);
 
-        studentsList.forEach(student => {
-            newclass.newStudent(student.Imie, student.Nazwisko);
+            console.log(studentsList[0].imie);
 
-            const s = document.querySelector("#submitNewClass");
-            s.style.visibility = "hidden";
-        });
+            studentsList.forEach(student => {
+                newclass.newStudent(student.Imie, student.Nazwisko);
 
-        classesList.push(newclass);
-        localStorage.setItem('MyClasses', JSON.stringify(classesList));
+                const s = document.querySelector("#submitNewClass");
+                s.style.visibility = "hidden";
+            });
 
-        UI.addClassToList(newclass);
+            classesList.push(newclass);
+            localStorage.setItem('MyClasses', JSON.stringify(classesList));
 
-        const k = document.querySelector(".studentListContainer");
-        k.style.visibility = "hiddem";
-        k.style.height = 0;
-        const s = document.querySelector("#addNewClass");
-        s.style.visibility = "visible";
-        const element = document.querySelector(".addStudent");
-        element.style.visibility = "hidden";
-        element.style.padding = "0 0";
-        element.style.height = "0";
-        studentsList = [];
+            UI.addClassToList(newclass);
 
-        const row = document.querySelector('#studentList');
-        row.innerHTML = '';
+            const k = document.querySelector(".studentListContainer");
+            k.style.visibility = "hiddem";
+            k.style.height = 0;
+            const s = document.querySelector("#addNewClass");
+            s.style.visibility = "visible";
+            const element = document.querySelector(".addStudent");
+            element.style.visibility = "hidden";
+            element.style.padding = "0 0";
+            element.style.height = "0";
+            studentsList = [];
 
-        UI.clearClassForm();
+            const row = document.querySelector('#studentList');
+            row.innerHTML = '';
+
+            UI.clearClassForm();
+        }
     });
 }
 
@@ -868,127 +1397,134 @@ function initializeAddTeachers() {
     var addNew = document.querySelector('#addNew');
     addNew.addEventListener('click', (e) => {
         e.preventDefault();
+        if (validateFormTeacher() != false) {
 
-        const imie = document.querySelector('#imie').value;
-        const nazwisko = document.querySelector('#nazwisko').value;
-        const ilosc = document.querySelector('#count').value;
+            const imie = document.querySelector('#imie').value;
+            const nazwisko = document.querySelector('#nazwisko').value;
+            const ilosc = document.querySelector('#count').value;
 
-        let dostepnosc = [];
-        let array8 = [], array9 = [], array10 = [], array11 = [], array12 = [], array13 = [], array14 = [], array15 = [], array16 = [], array17 = [];
-        var grid = document.getElementById("8");
-        var checkBoxes = grid.getElementsByTagName("INPUT");
+            let dostepnosc = [];
+            let array8 = [], array9 = [], array10 = [], array11 = [], array12 = [], array13 = [], array14 = [], array15 = [], array16 = [], array17 = [];
+            var grid = document.getElementById("8");
+            var checkBoxes = grid.getElementsByTagName("INPUT");
 
-        for (var i = 0; i < checkBoxes.length; i++) {
-            if (checkBoxes[i].checked)
-                array8[i] = "0";
-            else array8[i] = "1";
+            for (var i = 0; i < checkBoxes.length; i++) {
+                if (checkBoxes[i].checked)
+                    array8[i] = "0";
+                else array8[i] = "1";
+            }
+            dostepnosc.push(array8);
+
+            grid = document.getElementById("9");
+            checkBoxes = grid.getElementsByTagName("INPUT");
+
+            for (var i = 0; i < checkBoxes.length; i++) {
+                if (checkBoxes[i].checked)
+                    array9[i] = "0";
+                else array9[i] = "1";
+            }
+            dostepnosc.push(array9);
+
+            grid = document.getElementById("10");
+            checkBoxes = grid.getElementsByTagName("INPUT");
+
+            for (var i = 0; i < checkBoxes.length; i++) {
+                if (checkBoxes[i].checked)
+                    array10[i] = "0";
+                else array10[i] = "1";
+            }
+            dostepnosc.push(array10);
+
+            grid = document.getElementById("11");
+            checkBoxes = grid.getElementsByTagName("INPUT");
+
+            for (var i = 0; i < checkBoxes.length; i++) {
+                if (checkBoxes[i].checked)
+                    array11[i] = "0";
+                else array11[i] = "1";
+            }
+            dostepnosc.push(array11);
+
+            grid = document.getElementById("12");
+            checkBoxes = grid.getElementsByTagName("INPUT");
+            for (var i = 0; i < checkBoxes.length; i++) {
+                if (checkBoxes[i].checked)
+                    array12[i] = "0";
+                else array12[i] = "1";
+            }
+            dostepnosc.push(array12);
+
+            grid = document.getElementById("13");
+            checkBoxes = grid.getElementsByTagName("INPUT");
+            for (var i = 0; i < checkBoxes.length; i++) {
+                if (checkBoxes[i].checked)
+                    array13[i] = "0";
+                else array13[i] = "1";
+            }
+            dostepnosc.push(array13);
+
+            grid = document.getElementById("14");
+            checkBoxes = grid.getElementsByTagName("INPUT");
+            for (var i = 0; i < checkBoxes.length; i++) {
+                if (checkBoxes[i].checked)
+                    array14[i] = "0";
+                else array14[i] = "1";
+            }
+            dostepnosc.push(array14);
+
+            grid = document.getElementById("15");
+            checkBoxes = grid.getElementsByTagName("INPUT");
+            for (var i = 0; i < checkBoxes.length; i++) {
+                if (checkBoxes[i].checked)
+                    array15[i] = "0";
+                else array15[i] = "1";
+            }
+            dostepnosc.push(array15);
+
+            grid = document.getElementById("16");
+            checkBoxes = grid.getElementsByTagName("INPUT");
+            for (var i = 0; i < checkBoxes.length; i++) {
+                if (checkBoxes[i].checked)
+                    array16[i] = "0";
+                else array16[i] = "1";
+            }
+            dostepnosc.push(array16);
+
+            console.log(dostepnosc);
+
+            var nauczyciel = new Nauczyciel(imie, nazwisko, ilosc, dostepnosc);
+
+            nauczycieleList.push(nauczyciel);
+
+            UI.addNauczycielToList(nauczyciel);
+            localStorage.setItem('MyTeachers', JSON.stringify(nauczycieleList));
+            UI.clearTeacherForm();
+
         }
-        dostepnosc.push(array8);
-
-        grid = document.getElementById("9");
-        checkBoxes = grid.getElementsByTagName("INPUT");
-
-        for (var i = 0; i < checkBoxes.length; i++) {
-            if (checkBoxes[i].checked)
-                array9[i] = "0";
-            else array9[i] = "1";
-        }
-        dostepnosc.push(array9);
-
-        grid = document.getElementById("10");
-        checkBoxes = grid.getElementsByTagName("INPUT");
-
-        for (var i = 0; i < checkBoxes.length; i++) {
-            if (checkBoxes[i].checked)
-                array10[i] = "0";
-            else array10[i] = "1";
-        }
-        dostepnosc.push(array10);
-
-        grid = document.getElementById("11");
-        checkBoxes = grid.getElementsByTagName("INPUT");
-
-        for (var i = 0; i < checkBoxes.length; i++) {
-            if (checkBoxes[i].checked)
-                array11[i] = "0";
-            else array11[i] = "1";
-        }
-        dostepnosc.push(array11);
-
-        grid = document.getElementById("12");
-        checkBoxes = grid.getElementsByTagName("INPUT");
-        for (var i = 0; i < checkBoxes.length; i++) {
-            if (checkBoxes[i].checked)
-                array12[i] = "0";
-            else array12[i] = "1";
-        }
-        dostepnosc.push(array12);
-
-        grid = document.getElementById("13");
-        checkBoxes = grid.getElementsByTagName("INPUT");
-        for (var i = 0; i < checkBoxes.length; i++) {
-            if (checkBoxes[i].checked)
-                array13[i] = "0";
-            else array13[i] = "1";
-        }
-        dostepnosc.push(array13);
-
-        grid = document.getElementById("14");
-        checkBoxes = grid.getElementsByTagName("INPUT");
-        for (var i = 0; i < checkBoxes.length; i++) {
-            if (checkBoxes[i].checked)
-                array14[i] = "0";
-            else array14[i] = "1";
-        }
-        dostepnosc.push(array14);
-
-        grid = document.getElementById("15");
-        checkBoxes = grid.getElementsByTagName("INPUT");
-        for (var i = 0; i < checkBoxes.length; i++) {
-            if (checkBoxes[i].checked)
-                array15[i] = "0";
-            else array15[i] = "1";
-        }
-        dostepnosc.push(array15);
-
-        grid = document.getElementById("16");
-        checkBoxes = grid.getElementsByTagName("INPUT");
-        for (var i = 0; i < checkBoxes.length; i++) {
-            if (checkBoxes[i].checked)
-                array16[i] = "0";
-            else array16[i] = "1";
-        }
-        dostepnosc.push(array16);
-
-        console.log(dostepnosc);
-
-        var nauczyciel = new Nauczyciel(imie, nazwisko, ilosc, dostepnosc);
-
-        nauczycieleList.push(nauczyciel);
-
-        UI.addNauczycielToList(nauczyciel);
-        localStorage.setItem('MyTeachers', JSON.stringify(nauczycieleList));
-        UI.clearTeacherForm();
     });
 }
 
 function initializeAddClassrooms() {
+
     var addNew = document.querySelector('#submitNewClassroom');
     addNew.addEventListener('click', (e) => {
         e.preventDefault();
+        if (validateFormClassRoom() != false) {
+            const kod = document.querySelector('#kod').value;
+            const nazwa = document.querySelector('#name').value;
+            const ilosc_miejsc = document.querySelector('#count').value;
+            klasa = new Classroom(kod, nazwa, ilosc_miejsc);
+            localStorage.setItem('ClassroomToAdd', JSON.stringify(klasa));
+            
 
-        const kod = document.querySelector('#kod').value;
-        const nazwa = document.querySelector('#name').value;
-        const ilosc_miejsc = document.querySelector('#count').value;
+            clasroomsList.push(klasa);
 
-        klasa = new Classroom(kod, nazwa, ilosc_miejsc);
+            UI.addClassRoomToList(klasa);
 
-        clasroomsList.push(klasa);
+            localStorage.setItem('MyClassrooms', JSON.stringify(clasroomsList));
+            UI.clearClassRoomForm();
+        }
 
-        UI.addClassRoomToList(klasa);
-
-        localStorage.setItem('MyClassrooms', JSON.stringify(clasroomsList));
-        UI.clearClassRoomForm();
     });
 }
 
@@ -1086,4 +1622,66 @@ function initializeSubjects() {
         container.style.maxHeight = null;
         container.style.display = "none";
     });
+}
+
+function validateFormClassRoom() {
+    const kod = document.querySelector('#kod').value;
+    const nazwa = document.querySelector('#name').value;
+    const ilosc_miejsc = document.querySelector('#count').value;
+    if (kod == null || kod == "") {
+        alert("Podaj kod sali");
+        return false;
+    }
+    else if (nazwa == null || nazwa == "") {
+        alert("Podaj nazwę sali ");
+        return false;
+    }
+    else if (ilosc_miejsc == null || ilosc_miejsc == "") {
+        alert("Podaj ilość miejsc w sali");
+        return false;
+    }
+}
+
+function validateFormTeacher() {
+    const imie = document.querySelector('#imie').value;
+    const nazwisko = document.querySelector('#nazwisko').value;
+    const ilosc = document.querySelector('#count').value;
+    if (imie == null || imie == "") {
+        alert("Podaj imię nauczyciela");
+        return false;
+    }
+    else if (nazwisko == null || nazwisko == "") {
+        alert("Podaj nazwisko nauczyciela");
+        return false;
+    }
+    else if (ilosc == null || ilosc == "") {
+        alert("Podaj ilość godzin pracujących nauczyciela w miesiącu");
+        return false;
+    }
+}
+
+function validateFormClass() {
+    const name = document.querySelector('#name').value;
+    const teacher = document.querySelector('#teacherSelect').value
+    if (name == null || name == "") {
+        alert("Podaj kod klasy");
+        return false;
+    }
+    else if (teacher == null || teacher == "") {
+        alert("Wybierz nauczyciela");
+        return false;
+    }
+}
+
+function validateFormStudent() {
+    const imie = document.querySelector('#imie').value;
+    const nazwisko = document.querySelector('#nazwisko').value;
+    if (imie == null || imie == "") {
+        alert("Podaj imię ucznia");
+        return false;
+    }
+    else if (nazwisko == null || nazwisko == "") {
+        alert("Podaj nazwisko ucznia");
+        return false;
+    }
 }
