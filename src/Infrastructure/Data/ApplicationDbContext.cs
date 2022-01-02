@@ -1,6 +1,7 @@
 ﻿using Domain.Common;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,20 +34,23 @@ namespace Infrastructure.Data
         {
             ModelBuilderRelations.InitializeRelations(modelBuilder);
 
+            
             modelBuilder.Entity<Classroom>()
-                .HasAlternateKey(x => new { x.TimetableId, x.Code });
+                .HasIndex(x => new { x.TimetableId, x.Code });
 
             modelBuilder.Entity<Class>()
-                .HasAlternateKey(x => new { x.TimetableId, x.Name });
+                .HasIndex(x => new { x.TimetableId, x.Name });
 
             modelBuilder.Entity<Subject>()
-                .HasAlternateKey(x => new { x.TimetableId, x.Name });
+                .HasIndex(x => new { x.TimetableId, x.Name });
 
             modelBuilder.Entity<Teacher>()
-                .HasAlternateKey(x => new { x.TimetableId, x.FirstName, x.LastName });
+                .HasIndex(x => new { x.TimetableId, x.FirstName, x.LastName });
 
             modelBuilder.Entity<Group>()
-                .HasAlternateKey(x => new { x.TimetableId, x.Name });
+                .HasIndex(x => new { x.TimetableId, x.Name });
+            
+
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
