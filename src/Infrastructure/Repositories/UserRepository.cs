@@ -27,6 +27,7 @@ namespace Infrastructure.Repositories
             if (loggedUserId == 0) { throw new BadRequestException("Unexpected error handled"); }
             var loggedUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == loggedUserId);
             if (loggedUser == null) { throw new BadRequestException("Unexpected error handled"); }
+
             int currentActiveTimetableId = loggedUser.CurrentTimetableId ?? 0;
             return currentActiveTimetableId;
         }

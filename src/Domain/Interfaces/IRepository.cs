@@ -13,8 +13,7 @@ namespace Domain.Interfaces
 
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
 
-        Task<T> DeleteAsync(int id, params Expression<Func<T, object>>[] includeProperties);
-
+        Task DeleteAsync(int id, params Expression<Func<T, object>>[] includeProperties);
         Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
 
         Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties);
