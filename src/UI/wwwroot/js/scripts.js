@@ -75,8 +75,8 @@ class Class {
 var classroomId = 0;
 var clasroomsList = [];
 class Classroom {
-    constructor(kod, nazwa, ilosc_miejsc) {
-        this.id = classroomId++;
+    constructor(classroomId, kod, nazwa, ilosc_miejsc) {
+        this.id = classroomId;
         this.kod = kod;
         this.nazwa = nazwa;
         this.ilosc_miejsc = ilosc_miejsc;
@@ -287,33 +287,7 @@ class UI {
         UI.addClassRoomToList(tmp);
     }
 
-    static addClassRoomToList(klasa) {
-        const list2 = document.querySelector('.all');
-        const row2 = document.createElement('ul');
-        row2.className = "item";
-
-        row2.innerHTML = `
-             <li> <p>${klasa.kod}</p></li>
-             <li> <p>${klasa.nazwa}</p></li>
-             <li> <p>${klasa.ilosc_miejsc}</p> </li>
-             <li> <div class="btn-container">
-              <input id=${klasa.id} class="btn btn-dark delete" type="submit" value="USUŃ">
-              <input id=${klasa.id} class="btn btn-dark edit" type="submit" value="EDYTUJ">
-                   </div>
-            </li>
-        `;
-
-        row2.addEventListener('click', (e) => {
-
-            UI.deleteClassroom(e.target);
-            UI.editClassroom(e.target);
-            /*let s= e.target.id;
-            UI.deletePanel(e.target,s);*/
-
-        });
-
-        list2.appendChild(row2);
-    }
+   
     static clearFields() {
         document.querySelector('#kod').placeholder = 'kod';
         document.querySelector('#name').placeholder = 'nazwa';
@@ -631,30 +605,11 @@ class UI {
             u.insertBefore(lis, u.children[2])
             u.removeChild(classroomCInput);
 
-
-            const classId = element.id;
-
-            const retrievedData = localStorage.getItem("MyClassrooms");
-            const classes = JSON.parse(retrievedData);
-            var classData = [];
-            for (var i = 0; i < classes.length; i++) {
-                if (classes[i].id == classId) {
-                    classData = classes[i];
-                    console.log(classData);
-                }
-            }
-            //USUNIECIE TEJ KLASY
-            for (var i = 0; i < clasroomsList.length; i++) {
-                if (clasroomsList[i].id == classId) {
-                    clasroomsList.splice(i, 1);
-                }
-            }
-
-            const copyClass = new Classroom(classroomK.textContent, classroomName.textContent, classroomC.textContent)
+            const classroomId = element.id;
+        
+            const copyClass = new Classroom(classroomId, classroomK.textContent, classroomName.textContent, classroomC.textContent)
             console.log(copyClass)
-            clasroomsList.push(copyClass);
-
-            localStorage.setItem('MyClassrooms', JSON.stringify(clasroomsList));
+            localStorage.setItem('ClassroomToEdit', JSON.stringify(copyClass));
         }
     }
 
@@ -1513,13 +1468,8 @@ function initializeAddClassrooms() {
             const kod = document.querySelector('#kod').value;
             const nazwa = document.querySelector('#name').value;
             const ilosc_miejsc = document.querySelector('#count').value;
-            klasa = new Classroom(kod, nazwa, ilosc_miejsc);
-            localStorage.setItem('ClassroomToAdd', JSON.stringify(klasa));
-            
-
-            clasroomsList.push(klasa);
-
-            UI.addClassRoomToList(klasa);
+            klasa = new Classroom(0,kod, nazwa, ilosc_miejsc);
+            localStorage.setItem('ClassroomToAdd', JSON.stringify(klasa));                       
 
             localStorage.setItem('MyClassrooms', JSON.stringify(clasroomsList));
             UI.clearClassRoomForm();

@@ -1,5 +1,7 @@
 ﻿using Shared.Dto.CreateClassroomDto;
+using Shared.Dto.UpdateClassroom;
 using Shared.Responses;
+using Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,10 +31,34 @@ namespace UI.Services.Services
             }
         }
 
+        public async Task CreateClassroom(ClassroomModel model)
+        {
+            var dto = new CreateClassroomDto
+            { Code = model.kod, Name = model.nazwa, NumberOfSeats = int.Parse(model.ilosc_miejsc) };
+            var result = await _httpService.Post<OkResult<int>>("api/classroom", dto);
+        }
+
         public async Task<int> GetClassroomsCount()
         {
             var result = await _httpService.Get<OkResult<int>>("api/classroom/getcount");
             return result.Value;
+        }
+
+        public async Task<IEnumerable<ClassroomVm>> GetAllClassroomsCreated()
+        {
+            var result = await _httpService.Get<OkResult<IEnumerable<ClassroomVm>>>("api/classroom/getallcreated");
+            return result.Value;
+        }
+
+        public async Task DeleteClassroom(int classroomId)
+        {
+            await _httpService.Delete<OkResult>($"api/classroom?classroomId={classroomId}", null);
+        }
+
+        public async Task UpdateClassroom(ClassroomModel model)
+        {
+            var UpdateClassroomDto = new UpdateClassroomDto { Id = model.id, Code = model.kod, Name = model.nazwa, NumberOfSeats = int.Parse(model.ilosc_miejsc) };
+            await _httpService.Put<OkResult>($"api/classroom", UpdateClassroomDto);
         }
     }
 }

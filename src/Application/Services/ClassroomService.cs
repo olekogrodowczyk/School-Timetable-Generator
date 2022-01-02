@@ -2,7 +2,10 @@
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
+using Shared.Dto;
 using Shared.Dto.CreateClassroomDto;
+using Shared.Dto.UpdateClassroom;
+using Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +41,26 @@ namespace Application.Services
             int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
             int count = await _classroomRepository.GetCount(c => c.TimetableId == activeTimetableId);
             return count;
+        }
+
+        public async Task<IEnumerable<ClassroomVm>> GetAllCreatedClassrooms()
+        {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            var classrooms = await _classroomRepository.GetWhereAsync(x=>x.TimetableId == activeTimetableId);
+            return _mapper.Map<IEnumerable<ClassroomVm>>(classrooms);
+        }
+
+        public async Task DeleteClassroom(int classroomId)
+        {
+            await _classroomRepository.DeleteAsync(classroomId);
+        }
+
+        public async Task UpdateClassroom(UpdateClassroomDto model)
+        {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            var classroom = _mapper.Map<Classroom>(model);
+            classroom.TimetableId=activeTimetableId;
+            await _classroomRepository.UpdateAsync(classroom);
         }
     }
 }
