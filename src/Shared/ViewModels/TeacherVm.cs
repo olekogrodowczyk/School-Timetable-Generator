@@ -11,9 +11,12 @@ namespace Shared.ViewModels
 {
     public class TeacherVm : IMap
     {
+        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
+        public IEnumerable<Availability> Availabilities{ get; set; }
+        public int HoursAvailability { get; set; }
+        
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Teacher, TeacherVm>();
