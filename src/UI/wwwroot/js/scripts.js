@@ -1144,6 +1144,11 @@ function dragStart() {
     removeStudent(this.parentElement.id, this.children[0].id, name); //id_div,id_ucznia
 }
 
+function clearAllSeparate() {
+    const element = document.querySelector('.all-seperate');
+    element.innerHTML = '';
+}
+
 function addNauczycielToList(nauczyciel) {
     console.log(nauczyciel);
     const list2 = document.querySelector('.all-seperate');
@@ -1461,14 +1466,9 @@ function initializeAddTeachers() {
 
             console.log(dostepnosc);
 
-            var nauczyciel = new Nauczyciel(id, imie, nazwisko, ilosc, dostepnosc);
-
-            nauczycieleList.push(nauczyciel);
-
-            UI.addNauczycielToList(nauczyciel);
-            localStorage.setItem('MyTeachers', JSON.stringify(nauczycieleList));
+            var nauczyciel = new Nauczyciel(0, imie, nazwisko, ilosc, dostepnosc);
+            localStorage.setItem("TeacherToAdd", JSON.stringify(nauczyciel));
             UI.clearTeacherForm();
-
         }
     });
 }

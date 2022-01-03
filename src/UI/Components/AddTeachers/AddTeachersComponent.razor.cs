@@ -44,21 +44,51 @@ namespace UI.Components.AddTeachers
             if (firstRender)
             {
                 await JSRuntime.InvokeVoidAsync("initializeAddTeachers");
-                teachersCreated = await TeacherHttpService.GetAllTeachersFromTimetable();
-                StateHasChanged();
-
-                foreach (var item in teachersCreated)
-                {
-                    var newItem = new
-                    {
-                        firstName = item.FirstName,
-                        lastName = item.LastName,
-                        hoursAvailability = item.HoursAvailability,
-                        availabilities = transformAvailabilitiesIntoMatrix(item.Availabilities)
-                    };
-                    await JSRuntime.InvokeAsync<Task>("addNauczycielToList", newItem);
-                }
+                await GetTeachersCreated();
             }          
+        }
+
+        protected async Task GetTeachersCreated()
+        {
+            teachersCreated = await TeacherHttpService.GetAllTeachersFromTimetable();
+            await JSRuntime.InvokeVoidAsync("clearAllSeparate");            
+
+            foreach (var item in teachersCreated)
+            {
+                var newItem = new
+                {
+                    firstName = item.FirstName,
+                    lastName = item.LastName,
+                    hoursAvailability = item.HoursAvailability,
+                    availabilities = transformAvailabilitiesIntoMatrix(item.Availabilities)
+                };
+                await JSRuntime.InvokeAsync<Task>("addNauczycielToList", newItem);
+            }
+            StateHasChanged();
+        }
+
+        protected async Task AddTeacher()
+        {
+            string teacherToAddString = await LocalStorageService.GetItemAsync<string>("TeacherToAdd");
+            TeacherModel teacherToAdd = null;
+            try
+            {
+                teacherToAdd = JsonConvert.DeserializeObject<TeacherModel>(teacherToAddString);
+            }
+            catch (Exception ex)
+            {
+                error = true;
+                ToastService.ShowError("Nastąpił problem z serializacją danych");
+            }
+            if (error) { return; }
+            error = await ComponentRequestHandler.HandleRequest<TeacherModel>(TeacherHttpService.CreateTeacherWithAvailabilities
+                , teacherToAdd, _errorMessage, _errors, ToastService);
+            if (!error)
+            {
+                ToastService.ShowSuccess("Pomyślnie dodano nowego nauczyciela");
+                await GetTeachersCreated();
+            }
+            
         }
 
         private char[][] transformAvailabilitiesIntoMatrix(IEnumerable<AvailabilityVm> availabilities)
@@ -94,28 +124,6 @@ namespace UI.Components.AddTeachers
             _ => -1
         };
 
-        protected async Task HandleJson()
-        {
-            value = await LocalStorageService.GetItemAsync<string>("MyTeachers");
-            Console.WriteLine(value);
-            try
-            {
-                deserializedValue = JsonConvert.DeserializeObject<List<TeacherModel>>(value);
-            }
-            catch (Exception ex)
-            {
-                error = true;
-                ToastService.ShowError("Nastąpił problem z serializacją danych");
-            }
-        }
-
-        protected async Task HandleAddClass()
-        {
-            await HandleJson();
-            if (error) { return; }
-            error = await ComponentRequestHandler.HandleRequest<List<TeacherModel>>
-                (TeacherHttpService.CreateTeachersWithStudents, deserializedValue, _errorMessage, _errors, ToastService);
-            if (!error) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
-        }
+        
     }
 }
