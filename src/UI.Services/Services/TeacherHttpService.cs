@@ -21,18 +21,17 @@ namespace UI.Services.Services
             _httpService = httpService;
         }
 
-        public async Task CreateTeachersWithStudents(List<TeacherModel> models)
+       
+
+        public async Task CreateTeacherWithAvailabilities(TeacherModel model)
         {
-            foreach (TeacherModel teacher in models)
+            var createTeacherDto = new CreateTeacherDto
+            { FirstName = model.imie, LastName = model.nazwisko, HoursAvailability = model.ilosc_godzin };
+            var teacherResult = await _httpService.Post<OkResult<int>>("api/teacher", createTeacherDto);
+            var availabilities = await HandleAvailabilities(model.dostepnoscArr, teacherResult.Value);
+            foreach (var availabilityDto in availabilities)
             {
-                var createTeacherDto = new CreateTeacherDto
-                { FirstName = teacher.imie, LastName = teacher.nazwisko, HoursAvailability = teacher.ilosc_godzin };
-                var teacherResult = await _httpService.Post<OkResult<int>>("api/teacher", createTeacherDto);
-                var availabilities = await HandleAvailabilities(teacher.dostepnoscArr, teacherResult.Value);
-                foreach (var availabilityDto in availabilities)
-                {
-                    var availabilityResult = await _httpService.Post<OkResult<int>>("api/availability", availabilityDto);
-                }
+                var availabilityResult = await _httpService.Post<OkResult<int>>("api/availability", availabilityDto);
             }
         }
 
@@ -54,9 +53,9 @@ namespace UI.Services.Services
             const int startsAtInit = 8;
             List<CreateAvailabilityDto> result = new List<CreateAvailabilityDto>();
 
-            for (int i = 0; i < values.Length - 1; i++)
+            for (int i = 0; i < values.Length; i++)
             {
-                for (int j = 0; j < values[i].Length - 1; j++)
+                for (int j = 0; j < values[i].Length; j++)
                 {
                     if (values[i][j] == '1')
                     {
