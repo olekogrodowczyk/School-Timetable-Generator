@@ -39,7 +39,7 @@ namespace UI.Services.Services
         public async Task<IEnumerable<TeacherVm>> GetAllTeachersFromTimetable()
         {
             var result = await _httpService.Get<OkResult<IEnumerable<TeacherVm>>>
-                ($"api/teacher/getall");
+                ($"api/teacher/getallfromtimetable");
             return result.Value;
         }
 

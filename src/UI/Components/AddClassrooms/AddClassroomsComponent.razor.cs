@@ -21,7 +21,6 @@ namespace UI.Components.AddClassrooms
         private bool error;
         private List<ClassroomModel> deserializedValue = new List<ClassroomModel>();
         private IEnumerable<ClassroomVm> ClassroomsCreated = new List<ClassroomVm>();
-        private bool isBusy=false;
 
         [Inject]
         public IJSRuntime JSRuntime { get; set; }

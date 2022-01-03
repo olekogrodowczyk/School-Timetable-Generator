@@ -42,5 +42,7 @@ namespace WebAPI.Controllers
             int result = await _teacherService.GetTeachersCount();
             return Ok(new OkResult<int>(result, "Pomyślnie zwrócono liczbę nauczycieli"));
         }
+
+        
     }
 }

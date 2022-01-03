@@ -23,8 +23,8 @@ class Student {
 var nauczycieleId = 0;
 let nauczycieleList = [];
 class Nauczyciel {
-    constructor(imie, nazwisko, ilosc_godzin, tablica) {
-        this.id = nauczycieleId++;
+    constructor(id, imie, nazwisko, ilosc_godzin, tablica) {
+        this.id = id;
         this.imie = imie;
         this.nazwisko = nazwisko;
         this.ilosc_godzin = ilosc_godzin;
@@ -157,100 +157,18 @@ class Subject {
 }
 
 class UI {
-    static addNauczycielToList(nauczyciel) {
-        const list2 = document.querySelector('.all-seperate');
-        const row2 = document.createElement('button');
-        row2.className = "unhiden_item dark-shadow";
-        row2.id = nauczyciel.id + "item";
 
-        row2.innerHTML = `
-
-    <ul class="item">
-                <li> <p>${nauczyciel.imie}</p> </li>
-                <li> <p>${nauczyciel.nazwisko}</p> </li>
-                    <li><p>${nauczyciel.ilosc_godzin}</p> </li>
-               
-                <li>
-                    <div class="btn-container">
-                        <input id=${nauczyciel.id} class="btn btn-dark delete" type="submit" value="USUŃ">
-                        <input id=${nauczyciel.id} class="btn btn-dark edit" type="submit" value="EDYTUJ">
-                    </div>
-                </li>
-     </ul>
-    `;
-
-
-        row2.addEventListener("click", function () {
-            this.classList.toggle("active");
-            var panel = this.nextElementSibling;
-            if (panel.style.maxHeight) {
-                panel.style.maxHeight = null;
-            } else {
-                panel.style.maxHeight = panel.scrollHeight + "px";
-            }
-        });
-        //usuwanie nauczyciela i update tablicy nauczyciela, usuniecie schowanego panelu
-        row2.addEventListener('click', (e) => {
-
-            UI.deleteTeacher(e.target);
-            UI.editTeacher(e.target);
-            let s = e.target.id;
-            UI.deletePanel(e.target, s);
-
-        });
-        list2.appendChild(row2);
-
-        const row3 = document.createElement('div');
-        row3.className = 'panel';
-        row3.id = nauczyciel.id + "panel";
-
-
-        const row4 = document.createElement('table');
-        row4.className = 'hidden_item';
-        row4.innerHTML = `
-    <thead>
-                <tr>
-                    <tr>
-                        <th>Godziny</th>
-                        <th>Poniedziałek</th>
-                        <th>Wtorek</th>
-                        <th>Środa</th>
-                        <th>Czwartek</th>
-                        <th>Piątek</th>
-                       </tr>
-                </tr>
-    </thead>
-    `;
-
-        const row6 = document.createElement('tbody');
-        for (var i = 0; i < nauczyciel.dostepnoscArr.length; i++) {
-            const row5 = document.createElement('tr');
-            row5.id = i + 8 + "." + nauczyciel.id + "panel";
-            row5.innerHTML = `
-        <td>${i + 8}-${i + 9}</td>
-        `;
-
-            for (var j = 0; j < nauczyciel.dostepnoscArr[i].length; j++) {
-                const row7 = document.createElement('td');
-                if (nauczyciel.dostepnoscArr[i][j] == 1) {
-                    row7.innerHTML = `<td><input id=${nauczyciel.id} type="checkbox" disabled ></td>`;
-                }
-                else {
-                    row7.innerHTML = `<td><input id=${nauczyciel.id} type="checkbox"checked  disabled></td>`;
-                }
-
-                row5.appendChild(row7);
-            }
-
-            row6.appendChild(row5);
+    static toggleTeacher(element) {
+        element.classList.toggle("active");
+        var panel = element.nextElementSibling;
+        if (panel.style.maxHeight) {
+            panel.style.maxHeight = null;
+        } else {
+            panel.style.maxHeight = panel.scrollHeight + "px";
         }
-
-
-        row4.appendChild(row6);
-        row3.appendChild(row4);
-        list2.appendChild(row3);
-
     }
+
+    
 
     static clearStudentForm() {
         document.querySelector('#imie').value = '';
@@ -1226,6 +1144,102 @@ function dragStart() {
     removeStudent(this.parentElement.id, this.children[0].id, name); //id_div,id_ucznia
 }
 
+function addNauczycielToList(nauczyciel) {
+    console.log(nauczyciel);
+    const list2 = document.querySelector('.all-seperate');
+    const row2 = document.createElement('button');
+    row2.className = "unhiden_item dark-shadow";
+    row2.id = nauczyciel.id + "item";
+
+    row2.innerHTML = `
+
+    <ul class="item">
+                <li> <p>${nauczyciel.firstName}</p> </li>
+                <li> <p>${nauczyciel.lastName}</p> </li>
+                    <li><p>${nauczyciel.hoursAvailability}</p> </li>
+               
+                <li>
+                    <div class="btn-container">
+                        <input id=${nauczyciel.id} class="btn btn-dark delete" type="submit" value="USUŃ">
+                        <input id=${nauczyciel.id} class="btn btn-dark edit" type="submit" value="EDYTUJ">
+                    </div>
+                </li>
+     </ul>
+    `;
+
+
+    row2.addEventListener("click", function () {
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.maxHeight) {
+            panel.style.maxHeight = null;
+        } else {
+            panel.style.maxHeight = panel.scrollHeight + "px";
+        }
+    });
+    //usuwanie nauczyciela i update tablicy nauczyciela, usuniecie schowanego panelu
+    row2.addEventListener('click', (e) => {
+
+        UI.deleteTeacher(e.target);
+        UI.editTeacher(e.target);
+        let s = e.target.id;
+        UI.deletePanel(e.target, s);
+
+    });
+    list2.appendChild(row2);
+
+    const row3 = document.createElement('div');
+    row3.className = 'panel';
+    row3.id = nauczyciel.id + "panel";
+
+
+    const row4 = document.createElement('table');
+    row4.className = 'hidden_item';
+    row4.innerHTML = `
+    <thead>
+                <tr>
+                    <tr>
+                        <th>Godziny</th>
+                        <th>Poniedziałek</th>
+                        <th>Wtorek</th>
+                        <th>Środa</th>
+                        <th>Czwartek</th>
+                        <th>Piątek</th>
+                       </tr>
+                </tr>
+    </thead>
+    `;
+
+    const row6 = document.createElement('tbody');
+    for (var i = 0; i < nauczyciel.availabilities.length; i++) {
+        const row5 = document.createElement('tr');
+        row5.id = i + 8 + "." + nauczyciel.id + "panel";
+        row5.innerHTML = `
+        <td>${i + 8}-${i + 9}</td>
+        `;
+
+        for (var j = 0; j < nauczyciel.availabilities[i].length; j++) {
+            const row7 = document.createElement('td');
+            if (nauczyciel.availabilities[i][j] == 1) {
+                row7.innerHTML = `<td><input id=${nauczyciel.id} type="checkbox" disabled ></td>`;
+            }
+            else {
+                row7.innerHTML = `<td><input id=${nauczyciel.id} type="checkbox"checked  disabled></td>`;
+            }
+
+            row5.appendChild(row7);
+        }
+
+        row6.appendChild(row5);
+    }
+
+
+    row4.appendChild(row6);
+    row3.appendChild(row4);
+    list2.appendChild(row3);
+
+}
+
 function dragEnd() {
     draggableStudent = null;
     //console.log(this.parentElement.id);
@@ -1447,7 +1461,7 @@ function initializeAddTeachers() {
 
             console.log(dostepnosc);
 
-            var nauczyciel = new Nauczyciel(imie, nazwisko, ilosc, dostepnosc);
+            var nauczyciel = new Nauczyciel(id, imie, nazwisko, ilosc, dostepnosc);
 
             nauczycieleList.push(nauczyciel);
 
