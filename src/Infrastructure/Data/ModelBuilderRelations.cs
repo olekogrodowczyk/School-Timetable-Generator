@@ -73,7 +73,7 @@ namespace Infrastructure.Data
                 .HasOne<Teacher>(x => x.Teacher)
                 .WithMany(x => x.Availabilities)
                 .HasForeignKey(x => x.TeacherId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Student>()
                 .HasOne<Class>(x => x.Class)
