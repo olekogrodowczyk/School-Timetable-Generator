@@ -37,7 +37,12 @@ namespace WebAPI
             services.AddControllers(options =>
             {
                 options.Filters.Add(typeof(CustomValidationAttribute));
-            }).AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<Shared.Responses.OkResult>());
+            }).AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            })
+             .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<Shared.Responses.OkResult>());
+            
 
             services.Configure<ApiBehaviorOptions>(options =>
             {
