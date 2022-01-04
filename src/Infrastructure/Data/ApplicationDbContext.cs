@@ -36,19 +36,19 @@ namespace Infrastructure.Data
 
             
             modelBuilder.Entity<Classroom>()
-                .HasIndex(x => new { x.TimetableId, x.Code });
+                .HasIndex(x => new { x.TimetableId, x.Code }).IsUnique();
 
             modelBuilder.Entity<Class>()
-                .HasIndex(x => new { x.TimetableId, x.Name });
+                .HasIndex(x => new { x.TimetableId, x.Name }).IsUnique();
 
             modelBuilder.Entity<Subject>()
-                .HasIndex(x => new { x.TimetableId, x.Name });
+                .HasIndex(x => new { x.TimetableId, x.Name }).IsUnique();
 
             modelBuilder.Entity<Teacher>()
-                .HasIndex(x => new { x.TimetableId, x.FirstName, x.LastName });
+                .HasIndex(x => new { x.TimetableId, x.FirstName, x.LastName }).IsUnique();
 
             modelBuilder.Entity<Group>()
-                .HasIndex(x => new { x.TimetableId, x.Name });
+                .HasIndex(x => new { x.TimetableId, x.Name }).IsUnique();
             
 
         }
