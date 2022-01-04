@@ -12,6 +12,7 @@ namespace UI.Services.Interfaces
     public interface ITeacherHttpService
     {
         Task CreateTeacherWithAvailabilities(TeacherModel model);
+        Task DeleteTeacher(int teacherId);
         Task<IEnumerable<TeacherVm>> GetAllTeachersFromTimetable();
 
         Task<int> GetTeachersCount();

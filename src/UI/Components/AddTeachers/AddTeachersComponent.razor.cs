@@ -19,8 +19,8 @@ namespace UI.Components.AddTeachers
         protected string _errorMessage = String.Empty;
         protected string[] _errors;
         private bool error;
-        private List<TeacherModel> deserializedValue = new List<TeacherModel>();
         private IEnumerable<TeacherVm> teachersCreated = new List<TeacherVm>();
+        private Dictionary<int, string> styles = new Dictionary<int, string>();
 
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
@@ -44,27 +44,29 @@ namespace UI.Components.AddTeachers
             if (firstRender)
             {
                 await JSRuntime.InvokeVoidAsync("initializeAddTeachers");
-                await GetTeachersCreated();
+                await Refresh();
             }          
         }
 
-        protected async Task GetTeachersCreated()
+        private async Task Refresh()
         {
             teachersCreated = await TeacherHttpService.GetAllTeachersFromTimetable();
-            await JSRuntime.InvokeVoidAsync("clearAllSeparate");            
-
-            foreach (var item in teachersCreated)
-            {
-                var newItem = new
-                {
-                    firstName = item.FirstName,
-                    lastName = item.LastName,
-                    hoursAvailability = item.HoursAvailability,
-                    availabilities = transformAvailabilitiesIntoMatrix(item.Availabilities)
-                };
-                await JSRuntime.InvokeAsync<Task>("addNauczycielToList", newItem);
-            }
+            await InitializeStyles();
             StateHasChanged();
+        }
+
+        private Task InitializeStyles()
+        {
+            foreach(var teacher in teachersCreated)
+            {
+                styles.Add(teacher.Id, String.Empty);
+            }
+            return Task.CompletedTask;
+        }
+
+        protected void ChangeStyle(int teacherId)
+        {            
+            styles[teacherId] = styles[teacherId] == String.Empty ? "max-height: 378px;" :  String.Empty;
         }
 
         protected async Task AddTeacher()
@@ -86,9 +88,20 @@ namespace UI.Components.AddTeachers
             if (!error)
             {
                 ToastService.ShowSuccess("Pomyślnie dodano nowego nauczyciela");
-                await GetTeachersCreated();
+                await Refresh();
             }
             
+        }
+
+        public async Task DeleteTeacher(int teacherId)
+        {
+            error = await ComponentRequestHandler.HandleRequest<int>(TeacherHttpService.DeleteTeacher
+                , teacherId, _errorMessage, _errors, ToastService);
+            if (!error)
+            {
+                ToastService.ShowSuccess("Pomyślnie usunięto wybraną salę");
+                await Refresh();
+            }
         }
 
         private char[][] transformAvailabilitiesIntoMatrix(IEnumerable<AvailabilityVm> availabilities)

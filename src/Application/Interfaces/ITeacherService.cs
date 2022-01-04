@@ -11,7 +11,7 @@ namespace Application.Interfaces
     public interface ITeacherService
     {
         Task<int> CreateTeacher(CreateTeacherDto model);
-
+        Task DeleteTeacher(int teacherId);
         Task<IEnumerable<TeacherVm>> GetAllTeachersFromTimetable();
 
         Task<int> GetTeachersCount();

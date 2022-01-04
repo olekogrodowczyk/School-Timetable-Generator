@@ -618,112 +618,7 @@ class UI {
     }
 
 
-    static editTeacher(element) {
-        const u = element.parentElement.parentElement.parentElement;
-
-        if (element.value == 'EDYTUJ') {
-
-            const teacherName = u.firstElementChild.firstElementChild;
-            const teacherNameInput = document.createElement('input');
-            teacherNameInput.type = 'text';
-            teacherNameInput.value = teacherName.textContent;
-            teacherNameInput.addEventListener('click', (e) => {
-                u.parentElement.click();
-            })
-            u.insertBefore(teacherNameInput, u.firstElementChild)
-            console.log(teacherName.parentElement);
-            u.removeChild(teacherName.parentElement);
-
-            const teacherSName = u.children[1];
-            const teacherSNameInput = document.createElement('input');
-            teacherSNameInput.addEventListener('click', (e) => {
-                u.parentElement.click();
-            })
-
-            teacherSNameInput.type = 'text';
-            teacherSNameInput.value = teacherSName.textContent;
-            u.insertBefore(teacherSNameInput, u.children[1])
-            u.removeChild(teacherSName);
-
-            const teacherCount = u.children[2];
-            const teacherCountInput = document.createElement('input');
-            teacherCountInput.addEventListener('click', (e) => {
-                u.parentElement.click();
-            })
-
-            teacherCountInput.type = 'number';
-            teacherCountInput.value = teacherCount.textContent;
-            u.insertBefore(teacherCountInput, u.children[2])
-            u.removeChild(teacherCount);
-
-            element.value = 'ZAPISZ';
-
-            var panel = element.parentElement.parentElement.parentElement.parentElement.nextElementSibling;
-            console.log(element.parentElement.parentElement.parentElement.parentElement.nextElementSibling);
-            var chceckboxes = panel.querySelectorAll('input');
-
-            for (var i = 0; i < chceckboxes.length; i++) {
-                chceckboxes[i].removeAttribute("disabled");
-            }
-
-
-            // document.getElementById('pa').style.pointerEvents = 'none';
-        }
-        else if (element.value === 'ZAPISZ') {
-            const teacherNameInput = u.children[0]  //input
-            const teacherName = document.createElement('span');
-            teacherName.textContent = teacherNameInput.value;
-            const li = document.createElement('li')
-            li.appendChild(teacherName);
-            u.insertBefore(li, u.firstElementChild)
-            console.log(teacherNameInput)
-            u.removeChild(teacherNameInput);
-            element.value = 'EDYTUJ';
-
-            const teacherSNameInput = u.children[1];
-            const teacherSName = document.createElement('span');
-            teacherSName.textContent = teacherSNameInput.value;
-            const l = document.createElement('li')
-            l.appendChild(teacherSName);
-            u.insertBefore(l, u.children[1])
-            u.removeChild(teacherSNameInput);
-
-            const teacherCountInput = u.children[2];
-            const teacherCount = document.createElement('span');
-            teacherCount.textContent = teacherCountInput.value;
-            const lis = document.createElement('li')
-            lis.appendChild(teacherCount);
-            u.insertBefore(lis, u.children[2])
-            u.removeChild(teacherCountInput);
-
-            var panel = element.parentElement.parentElement.parentElement.parentElement.nextElementSibling;
-            console.log(element.parentElement.parentElement.parentElement.parentElement.nextElementSibling);
-            var chceckboxes = panel.querySelectorAll('input');
-            for (var i = 0; i < chceckboxes.length; i++) {
-                chceckboxes[i].disabled = "true";
-            }
-
-            var dostepnosc = [];
-            dostepnosc = UI.getDostepnosc(panel.id);
-
-            var nauczyciel = new Nauczyciel(teacherName.textContent, teacherSName.textContent, teacherCount.textContent, dostepnosc);
-            nauczycieleList.push(nauczyciel);
-            let s = element.id;
-            UI.deletePanelAfterEdit(element, s)
-            element.parentElement.parentElement.parentElement.remove();
-
-            for (var i = 0; i < nauczycieleList.length; i++) {
-                if (nauczycieleList[i].id == s) { nauczycieleList.splice(i, 1); }
-            }
-
-
-            UI.addNauczycielToList(nauczyciel);
-            // UI.deleteTeacher(element);
-            localStorage.setItem('MyTeachers', JSON.stringify(nauczycieleList));
-        }
-
-
-    }
+    1
 
     static addStudentToList(student) {
         const list = document.querySelector('#studentList');
@@ -791,15 +686,7 @@ class UI {
                             </li>
                  </ul>
                 `;
-        row2.addEventListener("click", function () {
-            this.classList.toggle("active");
-            var panel = this.nextElementSibling;
-            if (panel.style.maxHeight) {
-                panel.style.maxHeight = null;
-            } else {
-                panel.style.maxHeight = panel.scrollHeight + "px";
-            }
-        });
+        
 
         //usuwanie nauczyciela i update tablicy nauczyciela, usuniecie schowanego panelu
 
@@ -1149,7 +1036,7 @@ function clearAllSeparate() {
     element.innerHTML = '';
 }
 
-function addNauczycielToList(nauczyciel) {
+function addNauczycielToList(nauczyciel, dotNetHelper) {
     console.log(nauczyciel);
     const list2 = document.querySelector('.all-seperate');
     const row2 = document.createElement('button');
@@ -1165,8 +1052,8 @@ function addNauczycielToList(nauczyciel) {
                
                 <li>
                     <div class="btn-container">
-                        <input id=${nauczyciel.id} class="btn btn-dark delete" type="submit" value="USUŃ">
-                        <input id=${nauczyciel.id} class="btn btn-dark edit" type="submit" value="EDYTUJ">
+                        <input id="${nauczyciel.id}" class="btn btn-dark delete" type="submit" value="USUŃ">
+                        <input id="${nauczyciel.id}" class="btn btn-dark edit" type="submit" value="EDYTUJ">
                     </div>
                 </li>
      </ul>
@@ -1189,7 +1076,6 @@ function addNauczycielToList(nauczyciel) {
         UI.editTeacher(e.target);
         let s = e.target.id;
         UI.deletePanel(e.target, s);
-
     });
     list2.appendChild(row2);
 
@@ -1490,6 +1376,116 @@ function initializeAddClassrooms() {
         }
 
     });
+}
+
+function editTeacher(element) {
+    const u = element.parentElement.parentElement.parentElement;
+
+    if (element.value == 'EDYTUJ') {
+
+        let teacherName = u.firstElementChild.firstElementChild;
+        let teacherNameInput = document.createElement('input');
+        teacherName = u.children[0];
+        teacherNameInput.type = 'text';
+        console.log(teacherName);
+        console.log(u);
+        teacherNameInput.value = teacherName.textContent;
+        teacherNameInput.addEventListener('click', (e) => {
+            u.parentElement.click();
+        })
+        u.insertBefore(teacherNameInput, u.firstElementChild)
+        console.log(teacherName.parentElement);
+        u.removeChild(teacherName);
+
+        const teacherSName = u.children[1];
+        const teacherSNameInput = document.createElement('input');
+        teacherSNameInput.addEventListener('click', (e) => {
+            u.parentElement.click();
+        })
+
+        teacherSNameInput.type = 'text';
+        teacherSNameInput.value = teacherSName.textContent;
+        u.insertBefore(teacherSNameInput, u.children[1])
+        u.removeChild(teacherSName);
+
+        const teacherCount = u.children[2];
+        const teacherCountInput = document.createElement('input');
+        teacherCountInput.addEventListener('click', (e) => {
+            u.parentElement.click();
+        })
+
+        teacherCountInput.type = 'number';
+        teacherCountInput.value = teacherCount.textContent;
+        u.insertBefore(teacherCountInput, u.children[2])
+        u.removeChild(teacherCount);
+
+        element.value = 'ZAPISZ';
+
+        var panel = element.parentElement.parentElement.parentElement.parentElement.nextElementSibling;
+        console.log(element.parentElement.parentElement.parentElement.parentElement.nextElementSibling);
+        var chceckboxes = panel.querySelectorAll('input');
+
+        for (var i = 0; i < chceckboxes.length; i++) {
+            chceckboxes[i].removeAttribute("disabled");
+        }
+
+
+        // document.getElementById('pa').style.pointerEvents = 'none';
+    }
+    else if (element.value === 'ZAPISZ') {
+        const teacherNameInput = u.children[0]  //input
+        const teacherName = document.createElement('span');
+        teacherName.textContent = teacherNameInput.value;
+        const li = document.createElement('li')
+        li.appendChild(teacherName);
+        u.insertBefore(li, u.firstElementChild)
+        console.log(teacherNameInput)
+        u.removeChild(teacherNameInput);
+        element.value = 'EDYTUJ';
+
+        const teacherSNameInput = u.children[1];
+        const teacherSName = document.createElement('span');
+        teacherSName.textContent = teacherSNameInput.value;
+        const l = document.createElement('li')
+        l.appendChild(teacherSName);
+        u.insertBefore(l, u.children[1])
+        u.removeChild(teacherSNameInput);
+
+        const teacherCountInput = u.children[2];
+        const teacherCount = document.createElement('span');
+        teacherCount.textContent = teacherCountInput.value;
+        const lis = document.createElement('li')
+        lis.appendChild(teacherCount);
+        u.insertBefore(lis, u.children[2])
+        u.removeChild(teacherCountInput);
+
+        var panel = element.parentElement.parentElement.parentElement.parentElement.nextElementSibling;
+        console.log(element.parentElement.parentElement.parentElement.parentElement.nextElementSibling);
+        var chceckboxes = panel.querySelectorAll('input');
+        for (var i = 0; i < chceckboxes.length; i++) {
+            chceckboxes[i].disabled = "true";
+        }
+
+        var dostepnosc = [];
+        dostepnosc = UI.getDostepnosc(panel.id);
+
+        var nauczyciel = new Nauczyciel(teacherName.textContent, teacherSName.textContent, teacherCount.textContent, dostepnosc);
+        nauczycieleList.push(nauczyciel);
+        let s = element.id;
+        UI.deletePanelAfterEdit(element, s)
+        element.parentElement.parentElement.parentElement.remove();
+
+        for (var i = 0; i < nauczycieleList.length; i++) {
+            if (nauczycieleList[i].id == s) { nauczycieleList.splice(i, 1); }
+        }
+
+
+        UI.addNauczycielToList(nauczyciel);
+        // UI.deleteTeacher(element);
+        localStorage.setItem('MyTeachers', JSON.stringify(nauczycieleList));
+    }
+
+
 }
 
 function initializeSubjects() {

@@ -35,6 +35,11 @@ namespace UI.Services.Services
             }
         }
 
+        public async Task DeleteTeacher(int teacherId)
+        {
+            await _httpService.Delete<OkResult>($"api/teacher?teacherId={teacherId}", null);
+        }
+
         public async Task<IEnumerable<TeacherVm>> GetAllTeachersFromTimetable()
         {
             var result = await _httpService.Get<OkResult<IEnumerable<TeacherVm>>>

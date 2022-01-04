@@ -43,12 +43,13 @@ namespace WebAPI.Controllers
             return Ok(new OkResult<int>(result, "Pomyślnie zwrócono liczbę nauczycieli"));
         }
 
-        //[HttpDelete]
-        //public async Task<IActionResult> DeleteTeacher()
-        //{
+        [HttpDelete]
+        public async Task<IActionResult> DeleteTeacher([FromQuery] int teacherId)
+        {
+            await _teacherService.DeleteTeacher(teacherId);
+            return Ok(new Shared.Responses.OkResult("Pomyślnie usunięto wybranego nauczyciela"));
+        }
 
-        //}
 
-        
     }
 }

@@ -112,8 +112,7 @@ namespace UI.Components.AddClassrooms
                 ToastService.ShowSuccess("Pomyślnie usunięto wybraną salę");
                 ClassroomsCreated = await ClassroomHttpService.GetAllClassroomsCreated();
                 StateHasChanged();
-            }
-            
+            }           
         }
     }
 }

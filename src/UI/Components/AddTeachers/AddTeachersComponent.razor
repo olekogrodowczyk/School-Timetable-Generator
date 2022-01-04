@@ -128,12 +128,52 @@
                 <h6>Dodani nauczyciele</h6>
             </div>
             <div class="all-seperate">
-                
+                   @foreach(var teacher in teachersCreated)
+                {
+                    <button class="unhiden_item dark-shadow" id="@teacher.Id item" @onclick="() => ChangeStyle(teacher.Id)">
+                        <ul class="item">
+                            <li>@teacher.FirstName</li>
+                            <li>@teacher.LastName</li>
+                            <li>@teacher.HoursAvailability</li>
+                            <li>
+                                <div class="btn-container">
+                                    <input id="@teacher.Id" class="btn btn-dark delete" type="submit" @onclick="(async ()=> await DeleteTeacher(teacher.Id))" value="USUŃ" />
+                                    <input id="@teacher.Id" class="btn btn-dark edit" type="submit" value="EDYTUJ" onclick="editTeacher(this)" />
+                                </div>
+                            </li>
+                        </ul>
+                    </button>
+                    <div class="panel" id="@teacher.Id panel" style="@styles[teacher.Id]" >
+                        <table class="hidden_item">
+                            <thead>
+                                <tr></tr>
+                                <tr>
+                                    <th>Godziny</th>
+                                    <th>Poniedziałek</th>
+                                    <th>Wtorek</th>
+                                    <th>Środa</th>
+                                    <th>Czwartek</th>
+                                    <th>Piątek</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var row in transformAvailabilitiesIntoMatrix(teacher.Availabilities))
+                                {
+                                    <tr id="@teacher.Id panel">
+                                    <td>8-9</td>                                     
+                                    @foreach(var column in row)
+                                    {
+                                        <td>
+                                            <input id="@column" type="checkbox" checked="@(column=='0' ? true : false)" disabled />
+                                        </td>
+                                    }   
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }   
             </div>
-
-            
-           
-        </div>
-
+      </div>
     </div>
 </section>

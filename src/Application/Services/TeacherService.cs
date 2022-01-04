@@ -53,5 +53,10 @@ namespace Application.Services
             int count = await _teacherRepository.GetCount(t => t.TimetableId == activeTimetableId);
             return count;
         }
+
+        public async Task DeleteTeacher(int teacherId)
+        {
+            await _teacherRepository.DeleteAsync(teacherId);
+        }
     }
 }
