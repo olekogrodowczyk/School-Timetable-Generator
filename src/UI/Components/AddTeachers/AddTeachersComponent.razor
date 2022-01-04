@@ -130,7 +130,7 @@
             <div class="all-seperate">
                    @foreach(var teacher in teachersCreated)
                 {
-                    <button class="unhiden_item dark-shadow" id="@teacher.Id item" @onclick="() => ChangeStyle(teacher.Id)">
+                    <button class="unhiden_item dark-shadow" id="@String.Format("{0}item",teacher.Id)" @onclick="() => ChangeStyle(teacher.Id)">
                         <ul class="item" id="@teacher.Id">
                             <li>@teacher.FirstName</li>
                             <li>@teacher.LastName</li>
@@ -139,6 +139,7 @@
                                 <div class="btn-container">
                                     <input id="@teacher.Id" class="btn btn-dark delete" type="submit" @onclick="(async ()=> await DeleteTeacher(teacher.Id))" value="USUŃ" />
                                     <input id="@teacher.Id" class="btn btn-dark edit" type="submit" value="EDYTUJ" onclick="editTeacher(this)" />
+                                    <input class="btn btn-dark edit" type="submit" value="ZAPISZ" @onclick="UpdateTeacher" />                                        
                                 </div>
                             </li>
                         </ul>

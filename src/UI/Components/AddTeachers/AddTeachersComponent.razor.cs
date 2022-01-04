@@ -52,7 +52,29 @@ namespace UI.Components.AddTeachers
         {
             teachersCreated = await TeacherHttpService.GetAllTeachersFromTimetable();
             await InitializeStyles();
-            StateHasChanged();
+            StateHasChanged();           
+        }
+
+        private async Task UpdateTeacher()
+        {
+            string teacherToEditString = await LocalStorageService.GetItemAsync<string>("TeacherToEdit");
+            TeacherModel teacherToEdit = null;
+            try
+            {
+                teacherToEdit = JsonConvert.DeserializeObject<TeacherModel>(teacherToEditString);
+            }
+            catch (Exception ex)
+            {
+                error = true;
+                ToastService.ShowError("Nastąpił problem z serializacją danych");
+            }
+            error = await ComponentRequestHandler.HandleRequest<TeacherModel>(TeacherHttpService.UpdateTeacherWithAvailabilities
+                , teacherToEdit, _errorMessage, _errors, ToastService);
+            if (!error)
+            {
+                ToastService.ShowSuccess("Pomyślnie zaktualizowano wybranego nauczyciela");
+                await Refresh();
+            }
         }
 
         private Task InitializeStyles()

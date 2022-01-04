@@ -1,5 +1,6 @@
 ﻿using Shared.Dto.CreateAvailabilityDto;
 using Shared.Dto.CreateTeacherDto;
+using Shared.Dto.UpdateTeacherDto;
 using Shared.Responses;
 using Shared.ViewModels;
 using System;
@@ -33,6 +34,16 @@ namespace UI.Services.Services
             {
                 var availabilityResult = await _httpService.Post<OkResult<int>>("api/availability", availabilityDto);
             }
+        }
+
+        public async Task UpdateTeacherWithAvailabilities(TeacherModel model)
+        {
+            var availabilities = await HandleAvailabilities(model.dostepnoscArr, model.id);
+            var updateTeacherDto = new UpdateTeacherDto
+            { Id = model.id, FirstName = model.imie, LastName = model.nazwisko, HoursAvailability = model.ilosc_godzin
+            , Availabilities = availabilities};
+            
+            await _httpService.Put<OkResult>("api/teacher", updateTeacherDto);
         }
 
         public async Task DeleteTeacher(int teacherId)

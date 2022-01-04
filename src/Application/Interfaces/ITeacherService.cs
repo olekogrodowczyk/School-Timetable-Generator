@@ -1,4 +1,5 @@
 ﻿using Shared.Dto.CreateTeacherDto;
+using Shared.Dto.UpdateTeacherDto;
 using Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,6 @@ namespace Application.Interfaces
         Task<IEnumerable<TeacherVm>> GetAllTeachersFromTimetable();
 
         Task<int> GetTeachersCount();
+        Task UpdateTeacher(UpdateTeacherDto model);
     }
 }

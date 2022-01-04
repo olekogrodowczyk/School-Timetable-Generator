@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Dto.CreateTeacherDto;
+using Shared.Dto.UpdateTeacherDto;
 using Shared.Responses;
 using Shared.ViewModels;
 using System.Collections.Generic;
@@ -48,6 +49,13 @@ namespace WebAPI.Controllers
         {
             await _teacherService.DeleteTeacher(teacherId);
             return Ok(new Shared.Responses.OkResult("Pomyślnie usunięto wybranego nauczyciela"));
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateTeacher([FromBody] UpdateTeacherDto model)
+        {
+            await _teacherService.UpdateTeacher(model);
+            return Ok(new Shared.Responses.OkResult("Pomyślnie zaktualizowano wybranego nauczyciela"));
         }
 
 

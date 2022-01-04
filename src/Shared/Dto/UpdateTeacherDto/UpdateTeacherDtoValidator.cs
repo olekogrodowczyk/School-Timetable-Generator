@@ -1,17 +1,15 @@
-﻿using Domain.Interfaces;
-using FluentValidation;
+﻿using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace Shared.Dto.CreateTeacherDto
+namespace Shared.Dto.UpdateTeacherDto
 {
-    public class CreateTeacherDtoValidator : AbstractValidator<CreateTeacherDto>
+    public class UpdateTeacherDtoValidator : AbstractValidator<UpdateTeacherDto>
     {
-        public CreateTeacherDtoValidator(ITimetableRepository timetableRepository)
+        public UpdateTeacherDtoValidator()
         {
             RuleFor(x => x.FirstName)
                 .NotEmpty().WithMessage("Imię nauczyciela nie może być puste");

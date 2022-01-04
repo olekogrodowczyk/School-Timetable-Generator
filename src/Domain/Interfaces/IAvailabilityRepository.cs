@@ -9,5 +9,6 @@ namespace Domain.Interfaces
 {
     public interface IAvailabilityRepository : IRepository<Availability>
     {
+        Task DeleteAllTeacherAvailabilities(int teacherId);
     }
 }

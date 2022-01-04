@@ -339,19 +339,7 @@ class UI {
     }
 
 
-    static deleteTeacher(element) {
-
-        if (element.classList.contains('delete')) {
-            element.parentElement.parentElement.parentElement.remove();
-            let s = element.id;
-            for (var i = 0; i < nauczycieleList.length; i++) {
-                if (nauczycieleList[i].id == s) { nauczycieleList.splice(i, 1); }
-            }
-
-            localStorage.setItem('MyTeachers', JSON.stringify(nauczycieleList));
-        }
-
-    }
+    
     static getDostepnosc(panelId) {
         console.log("Panel - " + panelId);
         var panel = document.getElementById(panelId);
@@ -1073,8 +1061,6 @@ function addNauczycielToList(nauczyciel, dotNetHelper) {
     });
     //usuwanie nauczyciela i update tablicy nauczyciela, usuniecie schowanego panelu
     row2.addEventListener('click', (e) => {
-
-        UI.deleteTeacher(e.target);
         UI.editTeacher(e.target);
         let s = e.target.id;
         UI.deletePanel(e.target, s);
@@ -1473,18 +1459,7 @@ function editTeacher(element) {
         var teacherId = u.getAttribute("id");
         var nauczyciel = new Nauczyciel(teacherId, teacherName.textContent, teacherSName.textContent, teacherCount.textContent, dostepnosc);
         localStorage.setItem("TeacherToEdit", JSON.stringify(nauczyciel))
-        nauczycieleList.push(nauczyciel);
-        let s = element.id;
-        UI.deletePanelAfterEdit(element, s)
-        element.parentElement.parentElement.parentElement.remove();
-        
-        for (var i = 0; i < nauczycieleList.length; i++) {
-            if (nauczycieleList[i].id == s) { nauczycieleList.splice(i, 1); }
-        }
-
     }
-
-
 }
 
 function initializeSubjects() {

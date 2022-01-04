@@ -4,6 +4,7 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
 using Shared.Dto.CreateTeacherDto;
+using Shared.Dto.UpdateTeacherDto;
 using Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -19,14 +20,16 @@ namespace Application.Services
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IAvailabilityRepository _availabilityRepository;
+        private readonly IAvailabilityService _availabilityService;
 
         public TeacherService(ITeacherRepository teacherRepository, IMapper mapper, IUserRepository userRepository
-            ,IAvailabilityRepository availabilityRepository)
+            ,IAvailabilityRepository availabilityRepository, IAvailabilityService availabilityService)
         {
             _teacherRepository = teacherRepository;
             _mapper = mapper;
             _userRepository = userRepository;
             _availabilityRepository = availabilityRepository;
+            _availabilityService = availabilityService;
         }
 
         public async Task<int> CreateTeacher(CreateTeacherDto model)
@@ -57,6 +60,21 @@ namespace Application.Services
         public async Task DeleteTeacher(int teacherId)
         {
             await _teacherRepository.DeleteAsync(teacherId);
+        }
+
+        public async Task UpdateTeacher(UpdateTeacherDto model)
+        {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            var teacher = _mapper.Map<Teacher>(model);
+            teacher.TimetableId = activeTimetableId;
+            await _teacherRepository.UpdateAsync(teacher);
+            await _availabilityRepository.DeleteAllTeacherAvailabilities(model.Id);
+
+            foreach (var availability in model.Availabilities)
+            {
+                availability.TeacherId = teacher.Id;
+                await _availabilityService.CreateAvailability(availability);
+            }
         }
     }
 }
