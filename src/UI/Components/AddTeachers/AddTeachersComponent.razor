@@ -131,7 +131,7 @@
                    @foreach(var teacher in teachersCreated)
                 {
                     <button class="unhiden_item dark-shadow" id="@teacher.Id item" @onclick="() => ChangeStyle(teacher.Id)">
-                        <ul class="item">
+                        <ul class="item" id="@teacher.Id">
                             <li>@teacher.FirstName</li>
                             <li>@teacher.LastName</li>
                             <li>@teacher.HoursAvailability</li>
@@ -143,7 +143,7 @@
                             </li>
                         </ul>
                     </button>
-                    <div class="panel" id="@teacher.Id panel" style="@styles[teacher.Id]" >
+                    <div class="panel" id="@String.Format("{0}panel",teacher.Id)" style="@styles[teacher.Id]" >
                         <table class="hidden_item">
                             <thead>
                                 <tr></tr>
@@ -157,17 +157,21 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @{
+                                    int counter = 8;
+                                }
                                 @foreach(var row in transformAvailabilitiesIntoMatrix(teacher.Availabilities))
                                 {
-                                    <tr id="@teacher.Id panel">
+                                    <tr id="@String.Format("{0}.{1}panel",counter,teacher.Id)">
                                     <td>8-9</td>                                     
                                     @foreach(var column in row)
                                     {
                                         <td>
-                                            <input id="@column" type="checkbox" checked="@(column=='0' ? true : false)" disabled />
+                                            <input id="@teacher.Id" type="checkbox" checked="@(column=='0' ? true : false)" disabled />
                                         </td>
                                     }   
                                     </tr>
+                                    counter++;
                                 }
                             </tbody>
                         </table>

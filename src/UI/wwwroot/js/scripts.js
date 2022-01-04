@@ -353,9 +353,11 @@ class UI {
 
     }
     static getDostepnosc(panelId) {
+        console.log("Panel - " + panelId);
         var panel = document.getElementById(panelId);
         let array8 = [], array9 = [], array10 = [], array11 = [], array12 = [], array13 = [], array14 = [], array15 = [], array16 = [];
         var grid = document.getElementById('8.' + panelId);
+        console.log("Grid");
         console.log(grid)
 
         var checkBoxes = grid.getElementsByTagName("INPUT");
@@ -1468,21 +1470,18 @@ function editTeacher(element) {
 
         var dostepnosc = [];
         dostepnosc = UI.getDostepnosc(panel.id);
-
-        var nauczyciel = new Nauczyciel(teacherName.textContent, teacherSName.textContent, teacherCount.textContent, dostepnosc);
+        var teacherId = u.getAttribute("id");
+        var nauczyciel = new Nauczyciel(teacherId, teacherName.textContent, teacherSName.textContent, teacherCount.textContent, dostepnosc);
+        localStorage.setItem("TeacherToEdit", JSON.stringify(nauczyciel))
         nauczycieleList.push(nauczyciel);
         let s = element.id;
         UI.deletePanelAfterEdit(element, s)
         element.parentElement.parentElement.parentElement.remove();
-
+        
         for (var i = 0; i < nauczycieleList.length; i++) {
             if (nauczycieleList[i].id == s) { nauczycieleList.splice(i, 1); }
         }
 
-
-        UI.addNauczycielToList(nauczyciel);
-        // UI.deleteTeacher(element);
-        localStorage.setItem('MyTeachers', JSON.stringify(nauczycieleList));
     }
 
 
