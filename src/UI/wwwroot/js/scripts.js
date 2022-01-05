@@ -1376,7 +1376,7 @@ function editClass(element) {
     console.log(element.parentElement.parentElement.parentElement)
     if (element.value == 'EDYTUJ') {
 
-        const className = u.firstElementChild.firstElementChild;
+        const className = u.children[0];
         const classNameInput = document.createElement('input');
         classNameInput.type = 'text';
         classNameInput.value = className.textContent;
@@ -1385,7 +1385,7 @@ function editClass(element) {
         })
         u.insertBefore(classNameInput, u.firstElementChild)
         console.log(className.parentElement);
-        u.removeChild(className.parentElement);
+        u.removeChild(className);
 
         const teacherName = u.children[1];
         const teacherNameInput = document.createElement('input');
