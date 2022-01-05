@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Mappings;
+using AutoMapper;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Shared.Dto.UpdateClassDto
 {
-    public class UpdateClassDto
+    public class UpdateClassDto : IMap
     {
         public int Id { get; set; }
         public string Name { get; set; }

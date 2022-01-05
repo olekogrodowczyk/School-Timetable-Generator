@@ -105,8 +105,12 @@ namespace Application.Services
 
         public async Task UpdateClass(UpdateClassDto model)
         {
+            var names = model.TeacherName.Split(" ");
             int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            var teacher = await _teacherRepository.SingleOrDefaultAsync(t => t.FirstName == names[0] && t.LastName == names[1] && t.TimetableId == activeTimetableId);
+
             var classToUpdate = _mapper.Map<Class>(model);
+            classToUpdate.TeacherId = teacher.Id;
             classToUpdate.TimetableId = activeTimetableId;
             await _classRepository.UpdateAsync(classToUpdate);
         }

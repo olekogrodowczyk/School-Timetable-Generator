@@ -1421,34 +1421,17 @@ function editClass(element) {
         const l = document.createElement('li')
         l.appendChild(teacherName);
         u.insertBefore(l, u.children[1])
-        u.removeChild(teacherNameInput);
+        u.removeChild(teacherNameInput);        
 
-
-        const classId = element.id;
-
-        const retrievedData = localStorage.getItem("MyClasses");
-        const classes = JSON.parse(retrievedData);
-        var classData = [];
-        for (var i = 0; i < classes.length; i++) {
-            if (classes[i].id == classId) {
-                classData = classes[i];
-                console.log(classData);
-            }
-        }
+        const classId = u.parentElement.getAttribute("id");
+        
 
         //Stworzenie kopii klasy 
 
         const copyClass = new Class(className.textContent, teacherName.textContent);
-        copyClass.id = classData.id;
-        copyClass.studentsArr = classData.studentsArr;
+        copyClass.id = classId;
         console.log(copyClass);
 
-        //USUNIECIE TEJ KLASY
-        for (var i = 0; i < classesList.length; i++) {
-            if (classesList[i].id == classId) {
-                classesList.splice(i, 1);
-            }
-        }
 
         classesList.push(copyClass);
 

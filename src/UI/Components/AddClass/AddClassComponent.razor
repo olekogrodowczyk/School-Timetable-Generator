@@ -41,7 +41,7 @@
                 <div class="all-seperate">
                    @foreach(var item in classessCreated)
                 {
-                    <button class="unhiden_item dark-shadow" id="@String.Format("{0}item",item.Id)" @onclick="() => ChangeStyle(item.Id)">
+                    <button class="unhiden_item dark-shadow" id="@item.Id" @onclick="() => ChangeStyle(item.Id)">
 						<ul class="item">
 							<li>@item.Name</li>
 							<li>@item.Teacher</li>
