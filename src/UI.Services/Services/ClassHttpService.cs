@@ -21,18 +21,16 @@ namespace UI.Services.Services
             _httpService = httpService;
         }
 
-        public async Task CreateClasses(List<ClassModel> models)
+
+        public async Task CreateClass(ClassModel model)
         {
-            foreach (ClassModel model in models)
+            CreateClassDto createClassDto = new CreateClassDto { Name = model.name, TeacherName = model.teacher };
+            var result = await _httpService.Post<OkResult<int>>("api/class", createClassDto);
+            foreach (StudentModel student in model.studentsArr)
             {
-                CreateClassDto createClassDto = new CreateClassDto { Name = model.name, TeacherName = model.teacher };
-                var result = await _httpService.Post<OkResult<int>>("api/class", createClassDto);
-                foreach (StudentModel student in model.studentsArr)
-                {
-                    CreateStudentDto createStudentDto =
-                    new CreateStudentDto { FirstName = student.imie, LastName = student.nazwisko, ClassId = result.Value };
-                    await _httpService.Post<OkResult<int>>("api/student", createStudentDto);
-                }
+                CreateStudentDto createStudentDto =
+                new CreateStudentDto { FirstName = student.imie, LastName = student.nazwisko, ClassId = result.Value };
+                await _httpService.Post<OkResult<int>>("api/student", createStudentDto);
             }
         }
 
@@ -46,6 +44,12 @@ namespace UI.Services.Services
         {
             var result = await _httpService.Get<OkResult<IEnumerable<StudentVm>>>
                 ($"api/class/getstudentsbyclassname?name={className}");
+            return result.Value;
+        }
+
+        public async Task<IEnumerable<ClassVm>> GetAllClassess()
+        {
+            var result = await _httpService.Get<OkResult<IEnumerable<ClassVm>>>($"api/class/getallclassess");
             return result.Value;
         }
 

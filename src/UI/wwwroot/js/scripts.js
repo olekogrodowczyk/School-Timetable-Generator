@@ -1219,7 +1219,7 @@ function initializeAddClass() {
 
             classesList.push(newclass);
             localStorage.setItem('MyClasses', JSON.stringify(classesList));
-
+            localStorage.setItem('ClassToAdd', JSON.stringify(newclass));
             UI.addClassToList(newclass);
 
             const k = document.querySelector(".studentListContainer");

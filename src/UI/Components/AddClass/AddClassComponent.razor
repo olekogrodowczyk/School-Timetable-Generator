@@ -26,21 +26,46 @@
                         <p>Liczba dodanych uczniów: 0</p>
                     </li>
                     <li>
-                        <div class="btn-container"><button id="submitNewClass" type="submit" class="btn btn-dark"> DODAJ KLASĘ </button></div>
+                        <div class="btn-container"><button @onclick="AddClass" id="submitNewClass" type="submit" class="btn btn-dark"> DODAJ KLASĘ </button></div>
                     </li>
                 </ul>
                 <div class="under-tittle-container">
                     <h6>Dodane klasy</h6>
                 </div>
                 <div class="all-seperate">
-                   
-                </div>
-                   
-                 <div class="btn-container-center">
-                    <button @onclick="HandleAddClass" class="btn btn-dark" disabled="@isBusy">
-                        <p>ZAPISZ</p>
+                   @foreach(var item in classessCreated)
+                {
+                    <button class="unhiden_item dark-shadow" id="@String.Format("{0}item",item.Id)" @onclick="() => ChangeStyle(item.Id)">
+                        <ul class="item">
+                            <li>@item.Name</li>
+                            <li>@item.Teacher</li>
+                            <li>
+                                <div class="btn-container">
+                                    @*<input id="@teacher.Id" class="btn btn-dark delete" type="submit" @onclick="(async ()=> await DeleteTeacher(teacher.Id))" value="USUŃ" />
+                                    <input id="@teacher.Id" class="btn btn-dark edit" type="submit" value="EDYTUJ" onclick="editTeacher(this)" />
+                                    <input class="btn btn-dark edit" type="submit" value="ZAPISZ" @onclick="UpdateTeacher" />  *@                                      
+                                </div>
+                            </li>
+                        </ul>
                     </button>
+                    <div class="panel" id="@String.Format("{0}panel",item.Id)" style="@styles[item.Id]">
+                        <div id="studentList">
+                            @foreach(var student in item.Students)
+                            {
+                          <ul class="dark-shadow">
+                              <li>@String.Format("{0} {1}", student.FirstName, student.LastName)"</li>
+                              <li>
+                                  <div id="@student.Id" class="btn-container">
+                                      <input id="5" class="btn btn-dark delete" type="submit" value="USUŃ" />
+                                  </div>
+                              </li>
+                          </ul>
+                            }
+                        </div>
+                    </div>
+                    }
                 </div>
+                   
 
             </div>
         </div>

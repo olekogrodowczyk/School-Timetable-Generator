@@ -20,7 +20,8 @@ namespace UI.Components.AddClass
         protected string _errorMessage = String.Empty;
         protected string[] _errors;
         private bool error;
-        private List<ClassModel> deserializedValue = new List<ClassModel>();
+        private IEnumerable<ClassVm> classessCreated = new List<ClassVm>();
+        private Dictionary<int, string> styles = new Dictionary<int, string>();
         private int teachersCount;
         private bool isBusy = false;
 
@@ -61,30 +62,57 @@ namespace UI.Components.AddClass
             if (firstRender)
             {
                 await JSRuntime.InvokeVoidAsync("initializeAddClass");
+                await Refresh();
             }
         }
 
-        protected async Task HandleJson()
+        private async Task Refresh()
         {
-            value = await LocalStorageService.GetItemAsync<string>("MyClasses");
+            classessCreated = await ClassHttpService.GetAllClassess();
+            await InitializeStyles();
+            await Task.Delay(50);
+            StateHasChanged();
+        }
+
+        private Task InitializeStyles()
+        {
+            styles.Clear();
+            foreach (var classModel in classessCreated)
+            {
+                styles.Add(classModel.Id, String.Empty);
+            }
+            return Task.CompletedTask;
+        }
+
+        protected void ChangeStyle(int classId)
+        {
+            int? studentCount = classessCreated.SingleOrDefault(x => x.Id == classId)?.Students.Count();
+            int level = studentCount is not null ? ((int)studentCount / 3) + 1 : 0;
+            int maxHeight = 106 * level;
+            styles[classId] = styles[classId] == String.Empty ? $"max-height: {maxHeight.ToString()}px;" : String.Empty;
+        }
+
+        protected async Task AddClass()
+        {
+            string classToAddString = await LocalStorageService.GetItemAsync<string>("ClassToAdd");
+            ClassModel classToAdd = null;
             try
             {
-                deserializedValue = JsonConvert.DeserializeObject<List<ClassModel>>(value);
+                classToAdd = JsonConvert.DeserializeObject<ClassModel>(classToAddString);
             }
             catch (Exception ex)
             {
                 error = true;
                 ToastService.ShowError("Nastąpił problem z serializacją danych");
             }
-        }
-
-        protected async Task HandleAddClass()
-        {
-            await HandleJson();
             if (error) { return; }
-            error = await ComponentRequestHandler.HandleRequest<List<ClassModel>>
-                (ClassHttpService.CreateClasses, deserializedValue, _errorMessage, _errors, ToastService);
-            if (!error) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
+            error = await ComponentRequestHandler.HandleRequest<ClassModel>(ClassHttpService.CreateClass
+                , classToAdd, _errorMessage, _errors, ToastService);
+            if (!error)
+            {
+                ToastService.ShowSuccess("Pomyślnie dodano nowego nauczyciela");
+                await Refresh();
+            }
         }
     }
 }

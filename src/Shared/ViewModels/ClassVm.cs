@@ -14,12 +14,13 @@ namespace Shared.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public int TimetableId { get; set; }
-        public TeacherVm Teacher { get; set; }
+        public string Teacher { get; set; }
+        public IEnumerable<StudentVm> Students { get; set; }
 
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Class, ClassVm>()
-                .ForMember(x => x.Teacher, opt => opt.MapFrom(y => y.Teacher));
+                .ForMember(x => x.Teacher, opt => opt.MapFrom(y => y.Teacher.FirstName + " " + y.Teacher.LastName));
         }
     }
 }

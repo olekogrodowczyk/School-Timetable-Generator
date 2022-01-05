@@ -52,6 +52,7 @@ namespace UI.Components.AddTeachers
         {
             teachersCreated = await TeacherHttpService.GetAllTeachersFromTimetable();
             await InitializeStyles();
+            await Task.Delay(50);
             StateHasChanged();           
         }
 
@@ -79,6 +80,7 @@ namespace UI.Components.AddTeachers
 
         private Task InitializeStyles()
         {
+            styles.Clear();
             foreach(var teacher in teachersCreated)
             {
                 styles.Add(teacher.Id, String.Empty);
@@ -111,8 +113,7 @@ namespace UI.Components.AddTeachers
             {
                 ToastService.ShowSuccess("Pomyślnie dodano nowego nauczyciela");
                 await Refresh();
-            }
-            
+            }           
         }
 
         public async Task DeleteTeacher(int teacherId)

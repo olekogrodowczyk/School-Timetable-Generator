@@ -30,6 +30,13 @@ namespace WebAPI.Controllers
             return Ok(new OkResult<int>(result, "Pomyślnie utworzono nową klasę"));
         }
 
+        [HttpGet("getallclassess")]
+        public async Task<IActionResult> GetAllClassess()
+        {
+            var result = await _classService.GetAllClassess();
+            return Ok(new OkResult<IEnumerable<ClassVm>>(result, "Pomyślnie zwrócono klasy"));
+        }
+
         [HttpGet("getallnames")]
         public async Task<IActionResult> GetAllClassessNames()
         {

@@ -56,6 +56,16 @@ namespace Application.Services
             return student.Id;
         }
 
+        public async Task<IEnumerable<ClassVm>> GetAllClassess()
+        {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            await _studentRepository.GetAllAsync();
+            await _teacherRepository.GetAllAsync();
+            var classess = await _classRepository.GetWhereAsync(x => x.TimetableId == activeTimetableId, x=>x.Students, x=>x.Teacher);
+            var classessVms = _mapper.Map<IEnumerable<ClassVm>>(classess);
+            return classessVms;
+        }
+
         public async Task<IEnumerable<string>> GetAllClassessNames()
         {
             int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
