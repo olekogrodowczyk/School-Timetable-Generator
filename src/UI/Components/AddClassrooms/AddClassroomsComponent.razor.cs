@@ -72,12 +72,12 @@ namespace UI.Components.AddClassrooms
             if(error) { return; }
             error = await ComponentRequestHandler.HandleRequest<ClassroomModel>(ClassroomHttpService.CreateClassroom
                 ,classroomToAdd, _errorMessage, _errors, ToastService);
-            if(!error) 
+            if (!error) 
             { 
-                ToastService.ShowSuccess("Pomyślnie dodano nową salę");
-                ClassroomsCreated = await ClassroomHttpService.GetAllClassroomsCreated();
-                StateHasChanged();                       
+                ToastService.ShowSuccess("Pomyślnie dodano nową salę");                                     
             }
+            ClassroomsCreated = await ClassroomHttpService.GetAllClassroomsCreated();
+            StateHasChanged();
         }
 
         protected async Task UpdateClassroom()
@@ -95,12 +95,13 @@ namespace UI.Components.AddClassrooms
             }
             error = await ComponentRequestHandler.HandleRequest<ClassroomModel>(ClassroomHttpService.UpdateClassroom
                 , classroomToEdit, _errorMessage, _errors, ToastService);
+            if (error) { NavigationManager.NavigateTo("addclassrooms", true); }
             if (!error)
             {
-                ToastService.ShowSuccess("Pomyślnie zaktualizowano wybraną salę");
-                ClassroomsCreated = await ClassroomHttpService.GetAllClassroomsCreated();
-                StateHasChanged();
+                ToastService.ShowSuccess("Pomyślnie zaktualizowano wybraną salę");             
             }
+            ClassroomsCreated = await ClassroomHttpService.GetAllClassroomsCreated();
+            StateHasChanged();
         }
 
         protected async Task DeleteClassroom(int classroomId)
@@ -110,9 +111,9 @@ namespace UI.Components.AddClassrooms
             if (!error)
             {
                 ToastService.ShowSuccess("Pomyślnie usunięto wybraną salę");
-                ClassroomsCreated = await ClassroomHttpService.GetAllClassroomsCreated();
-                StateHasChanged();
-            }           
+            }
+            ClassroomsCreated = await ClassroomHttpService.GetAllClassroomsCreated();
+            StateHasChanged();
         }
     }
 }

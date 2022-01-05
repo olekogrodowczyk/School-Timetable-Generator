@@ -76,9 +76,9 @@ namespace UI.Components.AddTeachers
                 , teacherToEdit, _errorMessage, _errors, ToastService);
             if (!error)
             {
-                ToastService.ShowSuccess("Pomyślnie zaktualizowano wybranego nauczyciela");
-                await Refresh();
+                ToastService.ShowSuccess("Pomyślnie zaktualizowano wybranego nauczyciela");               
             }
+            await Refresh();
         }
 
         private Task InitializeStyles()
@@ -112,11 +112,12 @@ namespace UI.Components.AddTeachers
             if (error) { return; }
             error = await ComponentRequestHandler.HandleRequest<TeacherModel>(TeacherHttpService.CreateTeacherWithAvailabilities
                 , teacherToAdd, _errorMessage, _errors, ToastService);
+            if (error) { await Refresh(); }
             if (!error)
             {
-                ToastService.ShowSuccess("Pomyślnie dodano nowego nauczyciela");
-                await Refresh();
-            }           
+                ToastService.ShowSuccess("Pomyślnie dodano nowego nauczyciela");               
+            }
+            await Refresh();
         }
 
         public async Task DeleteTeacher(int teacherId)
@@ -125,9 +126,9 @@ namespace UI.Components.AddTeachers
                 , teacherId, _errorMessage, _errors, ToastService);
             if (!error)
             {
-                ToastService.ShowSuccess("Pomyślnie usunięto wybraną salę");
-                await Refresh();
+                ToastService.ShowSuccess("Pomyślnie usunięto wybraną salę");              
             }
+            await Refresh();
         }
 
         private char[][] transformAvailabilitiesIntoMatrix(IEnumerable<AvailabilityVm> availabilities)

@@ -1088,8 +1088,6 @@ function initializeAddClass() {
 
             studentsList.push(student);
 
-
-            UI.addStudentToList(student);
             UI.clearStudentForm();
         }
     });
@@ -1132,7 +1130,6 @@ function initializeAddClass() {
             classesList.push(newclass);
             localStorage.setItem('MyClasses', JSON.stringify(classesList));
             localStorage.setItem('ClassToAdd', JSON.stringify(newclass));
-            UI.addClassToList(newclass);
 
             const k = document.querySelector(".studentListContainer");
             k.style.visibility = "hiddem";

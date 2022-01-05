@@ -87,7 +87,6 @@ namespace UI.Components.AddClass
             if (!error)
             {
                 ToastService.ShowSuccess("Pomyślnie zaktualizowano wybranegą klasę");
-                await Refresh();
             }
         }
 
@@ -124,8 +123,8 @@ namespace UI.Components.AddClass
             if (!error)
             {
                 ToastService.ShowSuccess("Pomyślnie usunięto wybranego ucznia");
-                await Refresh();
             }
+            await Refresh();
         }
 
         private async Task DeleteClass(int classId)
@@ -135,8 +134,8 @@ namespace UI.Components.AddClass
             if (!error)
             {
                 ToastService.ShowSuccess("Pomyślnie usunięto wybraną klasę");
-                await Refresh();
             }
+            await Refresh();
         }
 
         protected async Task AddClass()
@@ -157,9 +156,9 @@ namespace UI.Components.AddClass
                 , classToAdd, _errorMessage, _errors, ToastService);
             if (!error)
             {
-                ToastService.ShowSuccess("Pomyślnie dodano nowego nauczyciela");
-                await Refresh();
+                ToastService.ShowSuccess("Pomyślnie dodano nowego nauczyciela");                
             }
+            await Refresh();
         }
     }
 }
