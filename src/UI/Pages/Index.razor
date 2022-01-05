@@ -1,12 +1,35 @@
 ﻿@page "/"
 
+<AuthorizeView>
+    <Authorized>
+        @if(true) { NavigationManager.NavigateTo("home"); }
+    </Authorized>
+</AuthorizeView>
+
+<section id="glowny">
+            <div class="start">
+                <h1>Stwórzmy razem Twój plan zajęć</h1>
+                 <div class="przyciski">
+                <a href="/login" class="start btn btn-light">LOGOWANIE</a>
+                <a href="/register" class="start btn btn-border">REJESTRACJA</a>
+            </div>
+        </div>   
+        <div class="zdjecia">
+           <img src="./image/3573383.svg" alt="">
+        </div>
+      
+    </section>
+
+
 @code {
     [Inject]
     public NavigationManager NavigationManager { get; set; }
 
-    protected override void OnInitialized()
+    protected Task<AuthenticationState> AuthStat { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
-        NavigationManager.NavigateTo("home");
+        base.OnInitialized();     
     }
 }
 

@@ -1,6 +1,12 @@
 ﻿@page "/home"
 @using UI.Services.Interfaces
 
+<AuthorizeView>
+    <NotAuthorized>
+        @if(true) { NavigationManager.NavigateTo("login"); }
+    </NotAuthorized>
+</AuthorizeView>
+
 <Header Title="Twoja szkoła"></Header>
     <section id="basic-add">
         <div class="container">

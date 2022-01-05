@@ -1,4 +1,10 @@
-﻿ <section id="add">
+﻿ <AuthorizeView>
+    <NotAuthorized>
+        @if(true) { NavigationManager.NavigateTo("login"); }
+    </NotAuthorized>
+</AuthorizeView>
+
+<section id="add">
         <div class="container">
 
             <div class="card-container">

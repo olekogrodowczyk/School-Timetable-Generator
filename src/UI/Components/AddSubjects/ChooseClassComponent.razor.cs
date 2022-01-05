@@ -25,6 +25,9 @@ namespace UI.Components.AddSubjects
         [Inject]
         public IClassHttpService ClassHttpService { get; set; }
 
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
             isBusy = true;

@@ -1,4 +1,10 @@
-﻿<section>
+﻿<AuthorizeView>
+    <NotAuthorized>
+        @if(true) { NavigationManager.NavigateTo("login"); }
+    </NotAuthorized>
+</AuthorizeView>
+
+<section>
     @if (!isBusy)
     {
         <div class="all-seperate">

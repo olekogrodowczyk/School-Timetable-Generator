@@ -34,6 +34,9 @@ namespace UI.Components.AddTeachers
         [Inject]
         public IToastService ToastService { get; set; }
 
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
             await LocalStorageService.RemoveItemAsync("MyTeachers");
