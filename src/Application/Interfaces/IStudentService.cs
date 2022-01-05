@@ -8,6 +8,7 @@ namespace Application.Interfaces
 {
     public interface IStudentService
     {
+        Task DeleteStudent(int studentId);
         Task<int> GetStudentsCount();
     }
 }

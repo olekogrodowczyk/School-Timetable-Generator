@@ -41,6 +41,9 @@ namespace UI.Components.AddClass
         public IToastService ToastService { get; set; }
 
         [Inject]
+        public IStudentHttpService StudentHttpService { get; set; }
+
+        [Inject]
         public NavigationManager NavigationManager { get; set; }
 
         protected override async Task OnInitializedAsync()
@@ -90,6 +93,28 @@ namespace UI.Components.AddClass
             int level = studentCount is not null ? ((int)studentCount / 3) + 1 : 0;
             int maxHeight = 106 * level;
             styles[classId] = styles[classId] == String.Empty ? $"max-height: {maxHeight.ToString()}px;" : String.Empty;
+        }
+
+        private async Task DeleteStudent(int studentId)
+        {
+            error = await ComponentRequestHandler.HandleRequest<int>(StudentHttpService.DeleteStudent
+                , studentId, _errorMessage, _errors, ToastService);
+            if (!error)
+            {
+                ToastService.ShowSuccess("Pomyślnie usunięto wybranego ucznia");
+                await Refresh();
+            }
+        }
+
+        private async Task DeleteClass(int classId)
+        {
+            error = await ComponentRequestHandler.HandleRequest<int>(ClassHttpService.DeleteClass
+                , classId, _errorMessage, _errors, ToastService);
+            if (!error)
+            {
+                ToastService.ShowSuccess("Pomyślnie usunięto wybraną klasę");
+                await Refresh();
+            }
         }
 
         protected async Task AddClass()

@@ -11,6 +11,7 @@ namespace UI.Services.Interfaces
     public interface IClassHttpService
     {
         Task CreateClass(ClassModel model);
+        Task DeleteClass(int classId);
         Task<IEnumerable<ClassVm>> GetAllClassess();
         Task<IEnumerable<string>> GetAllClassessNames();
         Task<IEnumerable<StudentVm>> GetAllStudentsFromClass(string className);

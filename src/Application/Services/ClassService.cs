@@ -66,6 +66,11 @@ namespace Application.Services
             return classessVms;
         }
 
+        public async Task DeleteClass(int classId)
+        {
+            await _classRepository.DeleteAsync(classId);
+        }
+
         public async Task<IEnumerable<string>> GetAllClassessNames()
         {
             int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();

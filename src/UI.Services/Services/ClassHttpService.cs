@@ -58,5 +58,10 @@ namespace UI.Services.Services
             var result = await _httpService.Get<OkResult<int>>("api/class/getcount");
             return result.Value;
         }
+
+        public async Task DeleteClass(int classId)
+        {
+            await _httpService.Delete<OkResult>($"api/class?classId={classId}", null);
+        }
     }
 }

@@ -35,5 +35,12 @@ namespace WebAPI.Controllers
             int result = await _studentService.GetStudentsCount();
             return Ok(new OkResult<int>(result, "Pomyślnie zwrócono liczbę uczniów"));
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteStudent([FromQuery] int studentId)
+        {
+            await _studentService.DeleteStudent(studentId);
+            return Ok(new Shared.Responses.OkResult("Pomyślnie usunięto wybranego ucznia"));
+        }
     }
 }

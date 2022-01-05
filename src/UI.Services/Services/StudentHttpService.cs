@@ -22,5 +22,10 @@ namespace UI.Services.Services
             var result = await _httpService.Get<OkResult<int>>("api/student/getcount");
             return result.Value;
         }
+
+        public async Task DeleteStudent(int studentId)
+        {
+            await _httpService.Delete<OkResult>($"api/student?studentId={studentId}", null);
+        }
     }
 }

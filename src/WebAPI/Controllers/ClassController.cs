@@ -64,5 +64,12 @@ namespace WebAPI.Controllers
             int result = await _classService.GetClassessCount();
             return Ok(new OkResult<int>(result, "Pomyslnie zwrócono liczbę klasy"));
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteClass([FromQuery] int classId)
+        {
+            await _classService.DeleteClass(classId);
+            return Ok(new Shared.Responses.OkResult("Pomyślnie usunięto wybraną klasę"));
+        }
     }
 }

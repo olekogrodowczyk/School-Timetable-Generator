@@ -8,6 +8,7 @@ namespace UI.Services.Interfaces
 {
     public interface IStudentHttpService
     {
+        Task DeleteStudent(int studentId);
         Task<int> GetStudentsCount();
     }
 }

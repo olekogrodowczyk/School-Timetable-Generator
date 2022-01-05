@@ -28,5 +28,10 @@ namespace Application.Services
             int count = await _studentRepository.GetCount(t => t.TimetableId == activeTimetableId);
             return count;
         }
+
+        public async Task DeleteStudent(int studentId)
+        {
+            await _studentRepository.DeleteAsync(studentId);
+        }
     }
 }
