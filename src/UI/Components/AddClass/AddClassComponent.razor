@@ -42,17 +42,17 @@
                    @foreach(var item in classessCreated)
                 {
                     <button class="unhiden_item dark-shadow" id="@String.Format("{0}item",item.Id)" @onclick="() => ChangeStyle(item.Id)">
-                        <ul class="item">
-                            <li>@item.Name</li>
-                            <li>@item.Teacher</li>
-                            <li>
-                                <div class="btn-container">
-                                    <input id="@item.Id" class="btn btn-dark delete" type="submit" @onclick="(async ()=> await DeleteClass(item.Id))" value="USUŃ" />
-                                    <input id="@item.Id" class="btn btn-dark edit" type="submit" value="EDYTUJ" onclick="editClass(this)" />
-                                    <input class="btn btn-dark edit" type="submit" value="ZAPISZ" @onclick="UpdateClass" />                                        
-                                </div>
-                            </li>
-                        </ul>
+						<ul class="item">
+							<li>@item.Name</li>
+							<li>@item.Teacher</li>
+							<li>
+								<div class="btn-container">
+									<input id="@item.Id" class="btn btn-dark delete" type="submit" @onclick="(async ()=> await DeleteClass(item.Id))" value="USUŃ" />
+									<input id="@item.Id" class="btn btn-dark edit" type="submit" value="EDYTUJ" onclick="editClass(this)" />
+									<input class="btn btn-dark edit" type="submit" value="ZAPISZ" @onclick="UpdateClass" />
+								</div>
+							</li>
+						</ul>
                     </button>
                     <div class="panel" id="@String.Format("{0}panel",item.Id)" style="@styles[item.Id]">
                         <div id="studentList">
