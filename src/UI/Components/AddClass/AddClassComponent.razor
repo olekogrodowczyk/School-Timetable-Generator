@@ -48,8 +48,8 @@
                             <li>
                                 <div class="btn-container">
                                     <input id="@item.Id" class="btn btn-dark delete" type="submit" @onclick="(async ()=> await DeleteClass(item.Id))" value="USUŃ" />
-                                    @*<input id="@teacher.Id" class="btn btn-dark edit" type="submit" value="EDYTUJ" onclick="editTeacher(this)" />
-                                    <input class="btn btn-dark edit" type="submit" value="ZAPISZ" @onclick="UpdateTeacher" />*@                                        
+                                    <input id="@item.Id" class="btn btn-dark edit" type="submit" value="EDYTUJ" onclick="editClass(this)" />
+                                    <input class="btn btn-dark edit" type="submit" value="ZAPISZ" @onclick="UpdateClass" />                                        
                                 </div>
                             </li>
                         </ul>

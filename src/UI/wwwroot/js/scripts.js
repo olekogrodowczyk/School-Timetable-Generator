@@ -520,95 +520,7 @@ class UI {
             localStorage.setItem('ClassroomToEdit', JSON.stringify(copyClass));
         }
     }
-
-
-    static editClass(element) {
-        const u = element.parentElement.parentElement.parentElement;
-        // console.log(element.parentElement.parentElement.parentElement)
-        if (element.value == 'EDYTUJ') {
-
-            const className = u.firstElementChild.firstElementChild;
-            const classNameInput = document.createElement('input');
-            classNameInput.type = 'text';
-            classNameInput.value = className.textContent;
-            classNameInput.addEventListener('click', (e) => {
-                u.parentElement.click();
-            })
-            u.insertBefore(classNameInput, u.firstElementChild)
-            console.log(className.parentElement);
-            u.removeChild(className.parentElement);
-
-            const teacherName = u.children[1];
-            const teacherNameInput = document.createElement('input');
-            teacherNameInput.addEventListener('click', (e) => {
-                u.parentElement.click();
-            })
-
-            teacherNameInput.type = 'text';
-            teacherNameInput.value = teacherName.textContent;
-            u.insertBefore(teacherNameInput, u.children[1])
-            u.removeChild(teacherName);
-
-
-            element.value = 'ZAPISZ';
-
-
-            // document.getElementById('pa').style.pointerEvents = 'none';
-        }
-        else if (element.value === 'ZAPISZ') {
-            const classNameInput = u.children[0]  //input
-            const className = document.createElement('span');
-            className.textContent = classNameInput.value;
-            const li = document.createElement('li')
-            li.appendChild(className);
-            u.insertBefore(li, u.firstElementChild)
-            console.log(classNameInput)
-            u.removeChild(classNameInput);
-            element.value = 'EDYTUJ';
-
-            const teacherNameInput = u.children[1];
-            const teacherName = document.createElement('span');
-            teacherName.textContent = teacherNameInput.value;
-            const l = document.createElement('li')
-            l.appendChild(teacherName);
-            u.insertBefore(l, u.children[1])
-            u.removeChild(teacherNameInput);
-
-
-            const classId = element.id;
-
-            const retrievedData = localStorage.getItem("MyClasses");
-            const classes = JSON.parse(retrievedData);
-            var classData = [];
-            for (var i = 0; i < classes.length; i++) {
-                if (classes[i].id == classId) {
-                    classData = classes[i];
-                    console.log(classData);
-                }
-            }
-
-            //Stworzenie kopii klasy 
-
-            const copyClass = new Class(className.textContent, teacherName.textContent);
-            copyClass.id = classData.id;
-            copyClass.studentsArr = classData.studentsArr;
-            console.log(copyClass);
-
-            //USUNIECIE TEJ KLASY
-            for (var i = 0; i < classesList.length; i++) {
-                if (classesList[i].id == classId) {
-                    classesList.splice(i, 1);
-                }
-            }
-
-            classesList.push(copyClass);
-
-            localStorage.setItem('MyClasses', JSON.stringify(classesList));
-        }
-    }
-
-
-    1
+    
 
     static addStudentToList(student) {
         const list = document.querySelector('#studentList');
@@ -1459,6 +1371,92 @@ function editTeacher(element) {
         var teacherId = u.getAttribute("id");
         var nauczyciel = new Nauczyciel(teacherId, teacherName.textContent, teacherSName.textContent, teacherCount.textContent, dostepnosc);
         localStorage.setItem("TeacherToEdit", JSON.stringify(nauczyciel))
+    }
+}
+
+function editClass(element) {
+    const u = element.parentElement.parentElement.parentElement;
+    console.log(element.parentElement.parentElement.parentElement)
+    if (element.value == 'EDYTUJ') {
+
+        const className = u.firstElementChild.firstElementChild;
+        const classNameInput = document.createElement('input');
+        classNameInput.type = 'text';
+        classNameInput.value = className.textContent;
+        classNameInput.addEventListener('click', (e) => {
+            u.parentElement.click();
+        })
+        u.insertBefore(classNameInput, u.firstElementChild)
+        console.log(className.parentElement);
+        u.removeChild(className.parentElement);
+
+        const teacherName = u.children[1];
+        const teacherNameInput = document.createElement('input');
+        teacherNameInput.addEventListener('click', (e) => {
+            u.parentElement.click();
+        })
+
+        teacherNameInput.type = 'text';
+        teacherNameInput.value = teacherName.textContent;
+        u.insertBefore(teacherNameInput, u.children[1])
+        u.removeChild(teacherName);
+
+
+        element.value = 'ZAPISZ';
+
+
+        // document.getElementById('pa').style.pointerEvents = 'none';
+    }
+    else if (element.value === 'ZAPISZ') {
+        const classNameInput = u.children[0]  //input
+        const className = document.createElement('span');
+        className.textContent = classNameInput.value;
+        const li = document.createElement('li')
+        li.appendChild(className);
+        u.insertBefore(li, u.firstElementChild)
+        console.log(classNameInput)
+        u.removeChild(classNameInput);
+        element.value = 'EDYTUJ';
+
+        const teacherNameInput = u.children[1];
+        const teacherName = document.createElement('span');
+        teacherName.textContent = teacherNameInput.value;
+        const l = document.createElement('li')
+        l.appendChild(teacherName);
+        u.insertBefore(l, u.children[1])
+        u.removeChild(teacherNameInput);
+
+
+        const classId = element.id;
+
+        const retrievedData = localStorage.getItem("MyClasses");
+        const classes = JSON.parse(retrievedData);
+        var classData = [];
+        for (var i = 0; i < classes.length; i++) {
+            if (classes[i].id == classId) {
+                classData = classes[i];
+                console.log(classData);
+            }
+        }
+
+        //Stworzenie kopii klasy 
+
+        const copyClass = new Class(className.textContent, teacherName.textContent);
+        copyClass.id = classData.id;
+        copyClass.studentsArr = classData.studentsArr;
+        console.log(copyClass);
+
+        //USUNIECIE TEJ KLASY
+        for (var i = 0; i < classesList.length; i++) {
+            if (classesList[i].id == classId) {
+                classesList.splice(i, 1);
+            }
+        }
+
+        classesList.push(copyClass);
+
+        localStorage.setItem("ClassToEdit", JSON.stringify(copyClass));
+        localStorage.setItem('MyClasses', JSON.stringify(classesList));
     }
 }
 

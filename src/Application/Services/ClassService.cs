@@ -5,6 +5,7 @@ using Domain.Entities;
 using Domain.Interfaces;
 using Shared.Dto.CreateClassDto;
 using Shared.Dto.CreateStudentDto;
+using Shared.Dto.UpdateClassDto;
 using Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -100,6 +101,14 @@ namespace Application.Services
             int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
             int count = await _classRepository.GetCount(c => c.TimetableId == activeTimetableId);
             return count;
+        }
+
+        public async Task UpdateClass(UpdateClassDto model)
+        {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            var classToUpdate = _mapper.Map<Class>(model);
+            classToUpdate.TimetableId = activeTimetableId;
+            await _classRepository.UpdateAsync(classToUpdate);
         }
     }
 }

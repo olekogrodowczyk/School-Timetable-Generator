@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Dto.CreateClassDto;
 using Shared.Dto.CreateStudentDto;
+using Shared.Dto.UpdateClassDto;
 using Shared.Responses;
 using Shared.ViewModels;
 using System.Collections.Generic;
@@ -70,6 +71,13 @@ namespace WebAPI.Controllers
         {
             await _classService.DeleteClass(classId);
             return Ok(new Shared.Responses.OkResult("Pomyślnie usunięto wybraną klasę"));
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateClass([FromBody] UpdateClassDto model)
+        {
+            await _classService.UpdateClass(model);
+            return Ok(new Shared.Responses.OkResult("Pomyślnie zaktualizowano wybraną klasę"));
         }
     }
 }

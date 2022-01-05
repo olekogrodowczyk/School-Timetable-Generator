@@ -1,4 +1,5 @@
-﻿using Domain.Interfaces;
+﻿using Domain.Entities;
+using Domain.Interfaces;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -7,20 +8,23 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Shared.Dto.CreateClassDto
+namespace Shared.Dto.UpdateClassDto
 {
-    public class CreateClassDtoValidator : AbstractValidator<CreateClassDto>
+    public class UpdateClassDtoValidator : AbstractValidator<UpdateClassDto>
     {
         private readonly ITimetableRepository _timetableRepository;
         private readonly IClassRepository _classRepository;
         private readonly ITeacherRepository _teacherRepository;
 
-        public CreateClassDtoValidator(ITimetableRepository timetableRepository, IClassRepository classRepository
+        public UpdateClassDtoValidator(ITimetableRepository timetableRepository, IClassRepository classRepository
             , ITeacherRepository teacherRepository)
         {
             _timetableRepository = timetableRepository;
             _classRepository = classRepository;
             _teacherRepository = teacherRepository;
+
+            RuleFor(x => x.Id)
+                .NotEmpty().WithMessage("Nie podano identyfikatora");
 
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Nie podano nazwy klasy")

@@ -1,5 +1,6 @@
 ﻿using Shared.Dto.CreateClassDto;
 using Shared.Dto.CreateStudentDto;
+using Shared.Dto.UpdateClassDto;
 using Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -23,5 +24,6 @@ namespace Application.Interfaces
         Task<int> GetClassessCount();
 
         Task<IEnumerable<StudentVm>> GetStudentsFromClass(string className);
+        Task UpdateClass(UpdateClassDto model);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Shared.Dto.CreateClassDto;
 using Shared.Dto.CreateStudentDto;
+using Shared.Dto.UpdateClassDto;
 using Shared.Responses;
 using Shared.ViewModels;
 using System;
@@ -62,6 +63,13 @@ namespace UI.Services.Services
         public async Task DeleteClass(int classId)
         {
             await _httpService.Delete<OkResult>($"api/class?classId={classId}", null);
+        }
+
+        public async Task UpdateClass(ClassModel model)
+        {
+            var updateClassDto = new UpdateClassDto
+            { Id = int.Parse(model.id), Name = model.name, TeacherName=model.teacher };
+            await _httpService.Put<OkResult>($"api/class", updateClassDto);
         }
     }
 }

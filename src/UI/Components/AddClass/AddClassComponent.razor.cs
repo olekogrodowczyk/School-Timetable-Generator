@@ -69,6 +69,28 @@ namespace UI.Components.AddClass
             }
         }
 
+        private async Task UpdateClass()
+        {
+            string classToEditString = await LocalStorageService.GetItemAsync<string>("ClassToEdit");
+            ClassModel classToEdit = null;
+            try
+            {
+                classToEdit = JsonConvert.DeserializeObject<ClassModel>(classToEditString);
+            }
+            catch (Exception ex)
+            {
+                error = true;
+                ToastService.ShowError("Nastąpił problem z serializacją danych");
+            }
+            error = await ComponentRequestHandler.HandleRequest<ClassModel>(ClassHttpService.UpdateClass
+                , classToEdit, _errorMessage, _errors, ToastService);
+            if (!error)
+            {
+                ToastService.ShowSuccess("Pomyślnie zaktualizowano wybranegą klasę");
+                await Refresh();
+            }
+        }
+
         private async Task Refresh()
         {
             classessCreated = await ClassHttpService.GetAllClassess();
