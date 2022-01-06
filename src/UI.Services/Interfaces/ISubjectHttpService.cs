@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ namespace UI.Services.Interfaces
 {
     public interface ISubjectHttpService
     {
-        Task AddSubjectsWithGroups(List<SubjectModel> subjectsWithGroups, string className);
+        Task AddSubjectWithGroups(SubjectModel model, string className);
+        Task<IEnumerable<SubjectVm>> GetAllSubjectsWithGroups();
     }
 }

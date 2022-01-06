@@ -3,6 +3,7 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
 using Shared.Dto.CreateSubjectDto;
+using Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,14 @@ namespace Application.Services
             int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
             int count = await _subjectRepository.GetCount(s => s.TimetableId == activeTimetableId);
             return count;
+        }
+
+        public async Task<IEnumerable<SubjectVm>> GetAllSubjects()
+        {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            var subjects = await _subjectRepository.GetAllSubjectByTimetableIdWithJoins(activeTimetableId);
+            var subjectsVms = _mapper.Map<IEnumerable<SubjectVm>>(subjects);
+            return subjectsVms;
         }
     }
 }

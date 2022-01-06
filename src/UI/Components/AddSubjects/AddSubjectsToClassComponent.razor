@@ -32,7 +32,7 @@
                     </li>
                     <li class="btnNext">
                         <div class="btn-container">
-                            <button id="addSubject" type="submit" class="btn btn-dark">DODAJ PRZEDMIOT</button>
+                            <button id="addSubject" @onclick="AddSubject" type="submit" class="btn btn-dark">DODAJ PRZEDMIOT</button>
                         </div>
                     </li>
                 </ul>
@@ -40,16 +40,48 @@
                     <h6>Dodane przedmioty</h6>
                 </div>
                 <div class="all-seperate">
-
-                </div>
-
-                <div class="btn-container-center">
-                    <!--<a class="btn btn-dark" href="index.html">-->
-                    <button id="submitAllClass" class="btn btn-dark" @onclick="HandleAddSubjectsWithGroups">
-                        <p>ZAPISZ</p><a href="index.html"></a>
+                @foreach(var subject in subjectsCreated)
+                {
+                    <button class="unhiden_item dark-shadow" id="@subject.Id" @onclick="() => ChangeStyle(subject.Id)">
+						<ul class="item">
+							<li>@subject.Name</li>
+							<li>
+								<div class="btn-container">
+									<input id="@subject.Id" class="btn btn-dark delete" type="submit" @onclick="(async ()=> await DeleteSubject(subject.Id))" value="USUŃ" />
+								</div>
+							</li>
+						</ul>
                     </button>
+                     <div class="panel" id="@String.Format("{0}panel",subject.Id)" style="@styles[subject.Id]">
+                        <div id="groupSubjectList">
+                            @foreach(var group in subject.Groups)
+                            {
+                              <div id="@group.Id" class="groupAllInfo dark-shadow">
+                                  <div class="groupDetails">
+                                      <p>Nazwa grupy:</p>
+                                      <p>@group.Name</p>
+                                      <p>Nauczyciel:</p>
+                                      <p>@group.Teacher</p>
+                                      <p>Ilość godzin:</p>
+                                      <p>@group.NumberOfLessonInWeek</p>
+                                      </div>
+                                  
+                                <div class="groupStudents">
+                                    <h3>Lista uczniów</h3>
+                                    @foreach (string student in group.Students.Select(x => x.Student))
+                                    {
+                                        <div>
+                                            <p>@student</p>
+                                        </div>
+                                    }
+                                </div>
+                               </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
 
-                </div>
                 <!--</form>-->
             </div>
         </div>

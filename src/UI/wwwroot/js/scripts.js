@@ -647,113 +647,7 @@ class UI {
         list2.appendChild(row3);
     }
 
-    static addSubjectToList(newSubject) {
-        const list2 = document.querySelector('.all-seperate');
-        const row2 = document.createElement('button');
-        row2.className = "unhiden_item dark-shadow";
-        row2.id = newSubject.id + "item";
-
-        row2.innerHTML = `
-                <ul class="item">
-                <li>
-                <p>${newSubject.name}</p>
-                </li>
-                <li>
-                <div class="btn-container">
-                <input id=${newSubject.id} class="btn btn-dark delete" type="submit" value="USUŃ">
-                </div>
-                </li>
-                </ul>
-                 `;
-        row2.addEventListener("click", function () {
-            this.classList.toggle("active");
-            var panel = this.nextElementSibling;
-            if (panel.style.maxHeight) {
-                panel.style.maxHeight = null;
-            } else {
-                panel.style.maxHeight = panel.scrollHeight + "px";
-            }
-        });
-
-        row2.addEventListener('click', (e) => {
-            UI.deleteSubject(e.target);
-            let s = e.target.id;
-
-            UI.deletePanelClass(e.target, s);
-            for (var i = 0; i < subjectList.length; i++) {
-                if (subjectList[i].id == s) { subjectList.splice(i, 1); }
-            }
-
-            localStorage.setItem('MySubjects', JSON.stringify(subjectList));
-        });
-
-        list2.appendChild(row2);
-
-        const row3 = document.createElement('div');
-        row3.className = 'panel';
-        row3.id = newSubject.id + "panel";
-
-        const row4 = document.createElement('div');
-        row4.id = 'groupSubjectList';
-        let i;
-
-        if (newSubject.groupSubjectList.length > 1) {
-            for (i = 0; i < newSubject.groupSubjectList.length; i++) {
-                const list = document.createElement('div');
-                list.id = i;
-                list.className = "groupAllInfo dark-shadow"
-
-                const row = document.createElement('div');
-                row.className = "groupDetails"
-                row.innerHTML = `
-                            <p>Nazwa grupy:</p>
-                            <p>${newSubject.groupSubjectList[i].name} </p>
-                            <p>Nauczyciel:</p>
-                            <p>${newSubject.groupSubjectList[i].teacher}</p>
-                            <p>Ilość godzin:</p>
-                            <p>${newSubject.groupSubjectList[i].hours}</p> `;
-                list.appendChild(row);
-
-                const r = document.createElement('div');
-                r.className = "groupStudents"
-                const row5 = document.createElement('div');
-
-                row5.innerHTML = `<h3>LISTA UCZNIÓW</h3>`;
-                r.appendChild(row5);
-
-                for (let j = 0; j < newSubject.groupSubjectList[i].studentsName.length; j++) {
-                    const row6 = document.createElement('div');
-                    row6.innerHTML = `
-                                 <p>${newSubject.groupSubjectList[i].studentsName[j]}</p> `;
-                    r.appendChild(row6);
-                }
-
-                list.appendChild(r);
-
-                row4.appendChild(list);
-            }
-            row3.appendChild(row4);
-            list2.appendChild(row3);
-        }
-
-        else {
-            const list = document.createElement('div');
-            list.id = i;
-            list.className = "groupAllInfo dark-shadow"
-
-            const row = document.createElement('div');
-            row.className = "groupDetails"
-            row.innerHTML = `
-                            <p>Nauczyciel:</p>
-                            <p>${newSubject.groupSubjectList[0].teacher}</p>
-                            <p>Ilość godzin:</p>
-                            <p>${newSubject.groupSubjectList[0].hours}</p> `;
-            list.appendChild(row);
-
-            row3.appendChild(list);
-            list2.appendChild(row3);
-        }
-    }
+    
 }
 function removeStudent(id_div, id_student, name) {
     for (let k = 0; k < groupSubjectList.length; k++) {
@@ -836,6 +730,7 @@ function setGroupSubjectOfAllStudents() {
     var retrievedData = localStorage.getItem("MyStudents");
     var classes = JSON.parse(retrievedData);
     let group = new GroupSubject("1");
+    group.name = "wholeClass";
     for (let i = 0; i < classes.length; i++) {
         let id = parseInt(classes[i].Id);
         let name = classes[i].FirstName + " " + classes[i].LastName;
@@ -1454,7 +1349,7 @@ function initializeSubjects() {
         newSubject.setGroupSubjectList(groupSubjectList);
 
         subjectList.push(newSubject);
-
+        localStorage.setItem("SubjectToAdd", JSON.stringify(newSubject));
         localStorage.setItem('MySubjects', JSON.stringify(subjectList));
 
         const bt = document.querySelector(".btnNext");
@@ -1467,7 +1362,6 @@ function initializeSubjects() {
         container.style.maxHeight = null;
         container.style.display = "none";
 
-        UI.addSubjectToList(newSubject);
         UI.clearAllSubjectFields();
         groupSubjectList = [];
     });

@@ -1,4 +1,5 @@
 ﻿using Shared.Dto.CreateSubjectDto;
+using Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace Application.Interfaces
     public interface ISubjectService
     {
         Task<int> CreateSubject(CreateSubjectDto createSubjectDto);
-
+        Task<IEnumerable<SubjectVm>> GetAllSubjects();
         Task<int> GetTeachersCount(int timetableId);
     }
 }

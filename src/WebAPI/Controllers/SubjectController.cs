@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Dto.CreateSubjectDto;
 using Shared.Responses;
+using Shared.ViewModels;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -32,6 +35,13 @@ namespace WebAPI.Controllers
         {
             int result = await _subjectService.GetTeachersCount(timetableId);
             return Ok(new OkResult<int>(result, "Pomyślnie liczbę przedmiotów"));
+        }
+
+        [HttpGet("getall")]
+        public async Task<IActionResult> GetAllSubjectsWithGroups()
+        {
+            var result = await _subjectService.GetAllSubjects();
+            return Ok(new OkResult<IEnumerable<SubjectVm>>(result, "Pomyślnie zwrócono przedmioty"));
         }
     }
 }

@@ -19,7 +19,9 @@ namespace UI.Components.AddSubjects
         protected string value = String.Empty;
         protected string _errorMessage = String.Empty;
         protected string[] _errors;
-        private List<SubjectModel> deserializedValue = new List<SubjectModel>();
+        private bool error;
+        private Dictionary<int, string> styles = new Dictionary<int, string>();
+        private IEnumerable<SubjectVm> subjectsCreated = new List<SubjectVm>();
         private IEnumerable<StudentVm> students;
 
         [Parameter]
@@ -43,18 +45,38 @@ namespace UI.Components.AddSubjects
         [Inject]
         public IToastService ToastService { get; set; }
 
-        protected async Task HandleJson()
+        
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            value = await LocalStorageService.GetItemAsync<string>("MySubjects");
-            Console.WriteLine(value);
-            try
+            if (firstRender)
             {
-                deserializedValue = JsonConvert.DeserializeObject<List<SubjectModel>>(value);
+                await Refresh();
             }
-            catch (Exception ex)
+        }
+
+        private async Task Refresh()
+        {
+            subjectsCreated = await SubjectHttpService.GetAllSubjectsWithGroups();
+            await InitializeStyles();
+            await Task.Delay(50);
+            StateHasChanged();
+        }
+
+        private Task InitializeStyles()
+        {
+            styles.Clear();
+            foreach (var classModel in subjectsCreated)
             {
-                ToastService.ShowError("Nastąpił problem z serializacją danych");
+                styles.Add(classModel.Id, String.Empty);
             }
+            return Task.CompletedTask;
+        }
+
+        protected void ChangeStyle(int classId)
+        {
+            int maxHeight = 427;
+            styles[classId] = styles[classId] == String.Empty ? $"max-height: {maxHeight.ToString()}px;" : String.Empty;
         }
 
         protected override async Task OnInitializedAsync()
@@ -71,13 +93,22 @@ namespace UI.Components.AddSubjects
             await JSRuntime.InvokeVoidAsync("initializeSubjects");
         }
 
-        protected async Task HandleAddSubjectsWithGroups()
-        {
-            await HandleJson();
 
+        protected async Task AddSubject()
+        {
+            value = await LocalStorageService.GetItemAsync<string>("SubjectToAdd");
+            SubjectModel subjectToAdd = null;
             try
             {
-                await SubjectHttpService.AddSubjectsWithGroups(deserializedValue, ClassName);
+                subjectToAdd = JsonConvert.DeserializeObject<SubjectModel>(value);
+            }
+            catch (Exception ex)
+            {
+                ToastService.ShowError("Nastąpił problem z serializacją danych");
+            }
+            try
+            {
+                await SubjectHttpService.AddSubjectWithGroups(subjectToAdd, ClassName);
             }
             catch (ApiException e)
             {
@@ -96,8 +127,20 @@ namespace UI.Components.AddSubjects
                     ToastService.ShowError(error);
                 }
             }
-
             if (_errorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
+            await Refresh();
         }
+
+        private async Task DeleteSubject(int subjectId)
+        {
+            //error = await ComponentRequestHandler.HandleRequest<int>(StudentHttpService.DeleteStudent
+            //    , studentId, _errorMessage, _errors, ToastService);
+            //if (!error)
+            //{
+            //    ToastService.ShowSuccess("Pomyślnie usunięto wybranego ucznia");
+            //}
+            //await Refresh();
+        }
+
     }
 }
