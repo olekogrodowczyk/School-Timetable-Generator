@@ -730,7 +730,7 @@ function setGroupSubjectOfAllStudents() {
     var retrievedData = localStorage.getItem("MyStudents");
     var classes = JSON.parse(retrievedData);
     let group = new GroupSubject("1");
-    group.name = "wholeClass";
+    group.name = "";
     for (let i = 0; i < classes.length; i++) {
         let id = parseInt(classes[i].Id);
         let name = classes[i].FirstName + " " + classes[i].LastName;
