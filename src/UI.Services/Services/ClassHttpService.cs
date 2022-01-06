@@ -25,12 +25,12 @@ namespace UI.Services.Services
 
         public async Task CreateClass(ClassModel model)
         {
-            CreateClassDto createClassDto = new CreateClassDto { Name = model.name, TeacherName = model.teacher };
+            CreateClassDto createClassDto = new CreateClassDto { Name = model.name.Trim(), TeacherName = model.teacher.Trim() };
             var result = await _httpService.Post<OkResult<int>>("api/class", createClassDto);
             foreach (StudentModel student in model.studentsArr)
             {
                 CreateStudentDto createStudentDto =
-                new CreateStudentDto { FirstName = student.imie, LastName = student.nazwisko, ClassId = result.Value };
+                new CreateStudentDto { FirstName = student.imie.Trim(), LastName = student.nazwisko.Trim(), ClassId = result.Value };
                 await _httpService.Post<OkResult<int>>("api/student", createStudentDto);
             }
         }
@@ -68,7 +68,7 @@ namespace UI.Services.Services
         public async Task UpdateClass(ClassModel model)
         {
             var updateClassDto = new UpdateClassDto
-            { Id = int.Parse(model.id), Name = model.name, TeacherName=model.teacher };
+            { Id = int.Parse(model.id), Name = model.name.Trim(), TeacherName=model.teacher.Trim() };
             await _httpService.Put<OkResult>($"api/class", updateClassDto);
         }
     }

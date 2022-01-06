@@ -34,7 +34,7 @@ namespace UI.Services.Services
         public async Task CreateClassroom(ClassroomModel model)
         {
             var dto = new CreateClassroomDto
-            { Code = model.kod, Name = model.nazwa, NumberOfSeats = int.Parse(model.ilosc_miejsc) };
+            { Code = model.kod.Trim(), Name = model.nazwa.Trim(), NumberOfSeats = int.Parse(model.ilosc_miejsc.Trim()) };
             var result = await _httpService.Post<OkResult<int>>("api/classroom", dto);
         }
 
@@ -57,7 +57,8 @@ namespace UI.Services.Services
 
         public async Task UpdateClassroom(ClassroomModel model)
         {
-            var UpdateClassroomDto = new UpdateClassroomDto { Id = model.id, Code = model.kod, Name = model.nazwa, NumberOfSeats = int.Parse(model.ilosc_miejsc) };
+            var UpdateClassroomDto = new UpdateClassroomDto 
+            { Id = model.id, Code = model.kod.Trim(), Name = model.nazwa.Trim(), NumberOfSeats = int.Parse(model.ilosc_miejsc.Trim()) };
             await _httpService.Put<OkResult>($"api/classroom", UpdateClassroomDto);
         }
     }

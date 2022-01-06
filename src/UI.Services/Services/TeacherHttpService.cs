@@ -27,7 +27,7 @@ namespace UI.Services.Services
         public async Task CreateTeacherWithAvailabilities(TeacherModel model)
         {
             var createTeacherDto = new CreateTeacherDto
-            { FirstName = model.imie, LastName = model.nazwisko, HoursAvailability = model.ilosc_godzin };
+            { FirstName = model.imie.Trim(), LastName = model.nazwisko.Trim(), HoursAvailability = model.ilosc_godzin };
             var teacherResult = await _httpService.Post<OkResult<int>>("api/teacher", createTeacherDto);
             var availabilities = await HandleAvailabilities(model.dostepnoscArr, teacherResult.Value);
             foreach (var availabilityDto in availabilities)
@@ -40,7 +40,7 @@ namespace UI.Services.Services
         {
             var availabilities = await HandleAvailabilities(model.dostepnoscArr, model.id);
             var updateTeacherDto = new UpdateTeacherDto
-            { Id = model.id, FirstName = model.imie, LastName = model.nazwisko, HoursAvailability = model.ilosc_godzin
+            { Id = model.id, FirstName = model.imie.Trim(), LastName = model.nazwisko.Trim(), HoursAvailability = model.ilosc_godzin
             , Availabilities = availabilities};
             
             await _httpService.Put<OkResult>("api/teacher", updateTeacherDto);

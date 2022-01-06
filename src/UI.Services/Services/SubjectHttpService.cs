@@ -30,11 +30,11 @@ namespace UI.Services.Services
                 if (group.name == "") { group.name = $"{className} {model.name}"; }
                 CreateGroupDto createGroupDto = new CreateGroupDto
                 {
-                    Name = group.name,
-                    SubjectName = model.name,
-                    ClassName = className,
-                    NumberOfLessonsInWeek = int.Parse(group.hours),
-                    TeacherName = group.teacher,
+                    Name = group.name.Trim(),
+                    SubjectName = model.name.Trim(),
+                    ClassName = className.Trim(),
+                    NumberOfLessonsInWeek = int.Parse(group.hours.Trim()),
+                    TeacherName = group.teacher.Trim(),
                     StudentIds = group.studentsIdArr.ToList(),
                 };
                 var groupResult = await _httpService.Post<OkResult<int>>("api/group", createGroupDto);
