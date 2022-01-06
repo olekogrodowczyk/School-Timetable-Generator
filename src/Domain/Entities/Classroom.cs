@@ -15,5 +15,6 @@ namespace Domain.Entities
         public string Name { get; set; }
         public int NumberOfSeats { get; set; }
         public virtual ICollection<Lesson> Lessons { get; set; }
+        public virtual ICollection<Group> Groups { get; set; }
     }
 }
