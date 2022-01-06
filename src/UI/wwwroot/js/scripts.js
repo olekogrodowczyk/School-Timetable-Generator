@@ -1,9 +1,4 @@
-﻿function DodanieMyStudets() {
-    var lol = ["lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd", "lasl dsd",]
-    localStorage.setItem('MyStudents', JSON.stringify(lol));
-}
-
-var studentId = 0;
+﻿var studentId = 0;
 var studentsList = [];
 class Student {
     constructor(imie, nazwisko) {
@@ -983,6 +978,8 @@ function initializeAddClass() {
 
             studentsList.push(student);
 
+
+            UI.addStudentToList(student);
             UI.clearStudentForm();
         }
     });

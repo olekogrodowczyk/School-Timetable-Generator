@@ -8,47 +8,58 @@
 <section id="add">
         <div class="container">
 
-            <div class="card-container">
-                <div class="card-tittle">
-                    <ul>
-                        <li>KOD</li>
-                        <li>NAZWA</li>
-                        <li>ILOŚĆ MIEJSC</li>
-                    </ul>
-                </div>
-                    <ul class="ul-add green-shadow">
-                        <li> <input type="text" id="kod" name="kod" value="Kod"></li>
-                        <li> <input type="text" id="name" name="name" value="Nazwa"></li>
-                        <li> <input type="number" id="count" name="count" value="1"></li>
-                        <li>
-                            <div class="btn-container">
-                                <input id="submitNewClassroom" class="btn btn-dark" type="submit" @onclick="AddClassroom" value="DODAJ">
-                            </div>
-                        </li>
-                    </ul>
+			<div class="card-container">
+				<ul class="ul-add green-shadow">
+					<li>
+						<div class="detail">
+							<p>Kod sali:</p>
+							<input type="text" id="kod" name="kod" placeholder="Kod">
+						</div>
+						</li>
+					<li>
+						<div class="detail">
+							<p>Nazwa sali:</p>
+							<input type="text" id="name" name="name" placeholder="Nazwa">
+						</div>
+					</li>
+					<li>
+						<div class="detail">
+							<p>
+								Ilość miejsc:
+							</p>
+							<input type="number" id="count" name="count" placeholder="1">
+						</div>
+					</li>
+					<li>
+						<div class="btn-container">
+							<input id="submitNewClassroom" class="btn btn-dark" type="submit" @onclick="AddClassroom" value="DODAJ">
+						</div>
+					</li>
+				</ul>
 
-                    <div class="all dark-shadow">                                      
-                                @foreach(var item in ClassroomsCreated)
-                                {
-                                    <ul class="item">
-                                  <li> <p>@item.Code</p></li>
-                                     <li> <p>@item.Name</p></li>
-                                     <li> <p>@item.NumberOfSeats</p> </li>
-                                     <li> <div class="btn-container">
-                                      <input id="@item.Id" class="btn btn-dark delete" type="submit" value="USUŃ"
-                                      @onclick="async()=>await DeleteClassroom(item.Id)">
-                                      <input id="@item.Id" class="btn btn-dark edit" type="submit" value="EDYTUJ"
-                                       onclick="UI.editClassroom(this)" />
-                                       <input class="btn btn-dark edit" type="submit" value="ZAPISZ" @onclick="UpdateClassroom" />
-                                           </div>
-                                    </li>
-                                    </ul>
-                                }                                                  
-                   </div>
+				<div class="all dark-shadow">
+					@foreach (var item in ClassroomsCreated)
+					{
+						<ul class="item">
+							<li> <p>@item.Code</p></li>
+							<li> <p>@item.Name</p></li>
+							<li> <p>@item.NumberOfSeats</p> </li>
+							<li>
+								<div class="btn-container">
+									<input id="@item.Id" class="btn btn-dark delete" type="submit" value="USUŃ"
+										   @onclick="async()=>await DeleteClassroom(item.Id)">
+									<input id="@item.Id" class="btn btn-dark edit" type="submit" value="EDYTUJ"
+										   onclick="UI.editClassroom(this)" />
+									<input class="btn btn-dark edit" type="submit" value="ZAPISZ" @onclick="UpdateClassroom" />
+								</div>
+							</li>
+						</ul>
+					}
+				</div>
 
-                    
 
-            </div>
+
+			</div>
 
         </div>
     </section>

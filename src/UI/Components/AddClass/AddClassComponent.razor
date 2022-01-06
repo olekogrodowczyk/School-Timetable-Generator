@@ -17,11 +17,17 @@
                             disabled="@isBusy">DODAJ </button>
                         </div>
                     </li>
-                    <li class="addStudent dark-shadow">
-                        <input type="text" id="imie" placeholder="Imie">
-                        <input type="text" id="nazwisko" placeholder="Nazwisko">
-                        <div class="btn-container"><button id="addNew" type="submit" class="btn btn-dark"> DODAJ UCZNIA</button></div>
-                    </li>
+					<li class="addStudent dark-shadow">
+						<div class="detail">
+							<p>Podaj imię ucznia:</p>
+							<input type="text" id="imie" placeholder="Imie">
+						</div>
+						<div class="detail">
+							<p>Podaj nazwisko ucznia:</p>
+							<input type="text" id="nazwisko" placeholder="Nazwisko">
+						</div>
+						<div class="btn-container"><button id="addNew" type="submit" class="btn btn-dark"> DODAJ UCZNIA</button></div>
+					</li>
                     <li class="studentListContainer">
                         <div id="studentList">
                            <!--from js-->

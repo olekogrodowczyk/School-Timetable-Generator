@@ -147,7 +147,7 @@ section {
 .btn-dark {
     background-color: var(--dark-color);
     color: #e7e7e7;
-    ;
+
 }
 
 .btn-light {
@@ -160,6 +160,11 @@ section {
 .btn-border {
     /* background-color: #BB8A52;*/
     border: white 2px solid;
+}
+
+.btn-border-dark {
+    /* background-color: #BB8A52;*/
+    border: white 1.5px solid;
 }
 
 /*FORM*/
