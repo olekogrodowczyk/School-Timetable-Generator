@@ -182,6 +182,15 @@ input[type=text] {
     transition: 1000ms ease;
 }
 
+input[type=password] {
+    padding: 0.5rem 1rem;
+    color: #021f06ef;
+    background-color: var(--secondary-color);
+    border: hidden;
+    border-radius: 26px;
+    transition: 1000ms ease;
+}
+
 input[type=submit] {
     padding: 0.5rem 1rem;
     color: var(--secondary-color);
