@@ -40,7 +40,12 @@ namespace Application.Services
         {
             var names = model.TeacherName.Split(" ");
             int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
-            var teacher = await _teacherRepository.SingleOrDefaultAsync(t => t.FirstName == names[0] && t.LastName == names[1] && t.TimetableId == activeTimetableId);
+            await _classRepository.GetAllAsync();
+            var teacher = 
+                await _teacherRepository.SingleOrDefaultAsync(t => t.FirstName == names[0] && t.LastName == names[1] && t.TimetableId == activeTimetableId, x=>x.Class);
+            if(teacher is null) { throw new NotFoundException("Nie znaleziono podanego nauczyciela"); }
+            if(teacher.Class is not null) { throw new BadRequestException("Podany nauczyciel już jest wychowawcą"); }
+
             var classToAdd = _mapper.Map<Class>(model);
             classToAdd.TeacherId = teacher.Id;
             classToAdd.TimetableId = activeTimetableId;
