@@ -14,13 +14,15 @@ namespace Shared.Dto.CreateClassDto
         private readonly ITimetableRepository _timetableRepository;
         private readonly IClassRepository _classRepository;
         private readonly ITeacherRepository _teacherRepository;
+        private readonly IUserRepository _userRepository;
 
         public CreateClassDtoValidator(ITimetableRepository timetableRepository, IClassRepository classRepository
-            , ITeacherRepository teacherRepository)
+            , ITeacherRepository teacherRepository, IUserRepository userRepository)
         {
             _timetableRepository = timetableRepository;
             _classRepository = classRepository;
             _teacherRepository = teacherRepository;
+            _userRepository = userRepository;
 
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Nie podano nazwy klasy")
@@ -28,13 +30,14 @@ namespace Shared.Dto.CreateClassDto
 
             RuleFor(x => x.TeacherName)
                 .NotEmpty().WithMessage("Nie podano wychowawcy")
-                .MustAsync(teacherExists).WithMessage("Podany nauczyciel nie istnieje");
+                .MustAsync(TeacherExists).WithMessage("Podany nauczyciel nie istnieje");
 
         }
 
-        private async Task<bool> teacherExists(string value, CancellationToken cancellationToken)
+        public async Task<bool> TeacherExists(string value, CancellationToken cancellationToken)
         {
-            return await _teacherRepository.AnyAsync(t => t.FirstName + " " + t.LastName == value);
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            return await _teacherRepository.AnyAsync(t => t.TimetableId==activeTimetableId && t.FirstName + " " + t.LastName == value);
         }
     }
 }

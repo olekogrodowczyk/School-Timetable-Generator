@@ -16,15 +16,18 @@ namespace Shared.Dto.CreateGroupDto
         private readonly ITeacherRepository _teacherRepository;
         private readonly ISubjectRepository _subjectRepository;
         private readonly ITimetableRepository _timetableRepository;
+        private readonly IUserRepository _userRepository;
 
         public CreateGroupDtoValidator(IClassRepository classRepository, IStudentRepository studentRepository
-            , ITeacherRepository teacherRepository, ISubjectRepository subjectRepository, ITimetableRepository timetableRepository)
+            , ITeacherRepository teacherRepository, ISubjectRepository subjectRepository, ITimetableRepository timetableRepository
+            ,IUserRepository userRepository)
         {
             _classRepository = classRepository;
             _studentRepository = studentRepository;
             _teacherRepository = teacherRepository;
             _subjectRepository = subjectRepository;
             _timetableRepository = timetableRepository;
+            _userRepository = userRepository;
 
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Nazwa grupy nie może być pusta")
@@ -32,18 +35,18 @@ namespace Shared.Dto.CreateGroupDto
 
             RuleFor(x => x.StudentIds)
                 .NotEmpty().WithMessage("Grupa nie może być pusta")
-                .MustAsync(studentsExist).WithMessage("Podano nie istniejącego ucznia");
+                .MustAsync(StudentsExist).WithMessage("Podano nie istniejącego ucznia");
 
             RuleFor(x => x.ClassName)
                 .NotEmpty().WithMessage("Nazwa klasy nie może być pusta")
-                .MustAsync(classExists).WithMessage("Podana klasa nie istnieje");
+                .MustAsync(ClassExists).WithMessage("Podana klasa nie istnieje");
 
             RuleFor(x => x.TeacherName)
                 .NotEmpty().WithMessage("Nie podano wychowawcy")
-                .MustAsync(teacherExists).WithMessage("Podany nauczyciel nie istnieje");
+                .MustAsync(TeacherExists).WithMessage("Podany nauczyciel nie istnieje");
 
             RuleFor(x => x.SubjectName)
-                .MustAsync(subjectExists)
+                .MustAsync(SubjectExists)
                 .When(x => !string.IsNullOrEmpty(x.SubjectName))
                 .WithMessage("Podany przedmiot nie istnieje");
 
@@ -51,12 +54,12 @@ namespace Shared.Dto.CreateGroupDto
                 .GreaterThan(0).WithMessage("Ilość dostępnych godzin musi być większa od 0");
         }
 
-        private async Task<bool> classExists(string value, CancellationToken cancellationToken)
+        public async Task<bool> ClassExists(string value, CancellationToken cancellationToken)
         {
             return await _classRepository.AnyAsync(c => c.Name == value);
         }
 
-        private async Task<bool> studentsExist(IEnumerable<int> values, CancellationToken cancellationToken)
+        public async Task<bool> StudentsExist(IEnumerable<int> values, CancellationToken cancellationToken)
         {
             if (values is null) { return false; }
             foreach (int id in values)
@@ -66,12 +69,13 @@ namespace Shared.Dto.CreateGroupDto
             return true;
         }
 
-        private async Task<bool> teacherExists(string value, CancellationToken cancellationToken)
+        public async Task<bool> TeacherExists(string value, CancellationToken cancellationToken)
         {
-            return await _teacherRepository.AnyAsync(t => t.FirstName + " " + t.LastName == value);
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            return await _teacherRepository.AnyAsync(t => t.TimetableId==activeTimetableId && t.FirstName + " " + t.LastName == value);
         }
 
-        private async Task<bool> subjectExists(string value, CancellationToken cancellationToken)
+        public async Task<bool> SubjectExists(string value, CancellationToken cancellationToken)
         {
             return await _subjectRepository.AnyAsync(s => s.Name == value);
         }
