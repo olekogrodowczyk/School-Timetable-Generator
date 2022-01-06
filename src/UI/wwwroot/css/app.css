@@ -167,6 +167,13 @@ section {
     border: white 1.5px solid;
 }
 
+.back-btn {
+    justify-content: right;
+    width: 90%;
+    margin-left: 3rem;
+    margin-bottom: 1rem;
+}
+
 /*FORM*/
 
 input[type=number] {

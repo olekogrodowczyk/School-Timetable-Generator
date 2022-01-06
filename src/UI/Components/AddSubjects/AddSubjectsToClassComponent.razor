@@ -5,44 +5,44 @@
 </AuthorizeView>
 
 <section id="add">
-        <div class="container">
+	<div class="container">
 
-            <div class="card-container">
-                <ul class="ul-add green-shadow">
-                    <li> <p>Nazwa: </p> <input class="selectable" type="text" id="nameSubject" name="name" placeholder="name" required></li>
-                    <li> <p>Podział: </p> <input id="division" type="checkbox" class="selectable" onchange="divisionOn(this);"></li>
-                    <li id="hidden-element"> <p>Ilość grup: </p> <input type="number" class="selectable" id="group"></li>
-                    <li>
-                        <div class="btn-container">
-                            <button id="filldetails" type="submit" class="btn btn-light"> DALEJ </button>
-                            <button id="fillback" type="submit" class="btn btn-light"> COFNIJ </button>
-                        </div>
+		<div class="card-container">
+			<ul class="ul-add green-shadow">
+				<li> <p>Nazwa: </p> <input class="selectable" type="text" id="nameSubject" name="name" placeholder="name" required></li>
+				<li> <p>Podział: </p> <input id="division" type="checkbox" class="selectable" onchange="divisionOn(this);"></li>
+				<li id="hidden-element"> <p>Ilość grup: </p> <input type="number" class="selectable" id="group"></li>
+				<li>
+					<div class="btn-container">
+						<button id="filldetails" type="submit" class="btn btn-light"> DALEJ </button>
+						<button id="fillback" type="submit" class="btn btn-light"> COFNIJ </button>
+					</div>
 
-                    </li>
-                    <li class="addTeacher">
+				</li>
+				<li class="addTeacher">
 
-                    </li>
-                    <li class="divisionStudent">
-                        <div class="studentList">
-                        </div>
-                        <div id="groupSubjectList">
+				</li>
+				<li class="divisionStudent">
+					<div class="studentList">
+					</div>
+					<div id="groupSubjectList">
 
-                        </div>
+					</div>
 
-                    </li>
-                    <li class="btnNext">
-                        <div class="btn-container">
-                            <button id="addSubject" @onclick="AddSubject" type="submit" class="btn btn-dark">DODAJ PRZEDMIOT</button>
-                        </div>
-                    </li>
-                </ul>
-                <div class="under-tittle-container">
-                    <h6>Dodane przedmioty</h6>
-                </div>
-                <div class="all-seperate">
-                @foreach(var subject in subjectsCreated)
-                {
-                    <button class="unhiden_item dark-shadow" id="@subject.Id" @onclick="() => ChangeStyle(subject.Id)">
+				</li>
+				<li class="btnNext">
+					<div class="btn-container">
+						<button id="addSubject" @onclick="AddSubject" type="submit" class="btn btn-dark">DODAJ PRZEDMIOT</button>
+					</div>
+				</li>
+			</ul>
+			<div class="under-tittle-container">
+				<h6>Dodane przedmioty</h6>
+			</div>
+			<div class="all-seperate">
+				@foreach (var subject in subjectsCreated)
+				{
+					<button class="unhiden_item dark-shadow" id="@subject.Id" @onclick="() => ChangeStyle(subject.Id)">
 						<ul class="item">
 							<li>@subject.Name</li>
 							<li>
@@ -51,39 +51,39 @@
 								</div>
 							</li>
 						</ul>
-                    </button>
-                     <div class="panel" id="@String.Format("{0}panel",subject.Id)" style="@styles[subject.Id]">
-                        <div id="groupSubjectList">
-                            @foreach(var group in subject.Groups)
-                            {
-                              <div id="@group.Id" class="groupAllInfo dark-shadow">
-                                  <div class="groupDetails">
-                                      <p>Nazwa grupy:</p>
-                                      <p>@group.Name</p>
-                                      <p>Nauczyciel:</p>
-                                      <p>@group.Teacher</p>
-                                      <p>Ilość godzin:</p>
-                                      <p>@group.NumberOfLessonInWeek</p>
-                                      </div>
-                                  
-                                <div class="groupStudents">
-                                    <h3>Lista uczniów</h3>
-                                    @foreach (string student in group.Students.Select(x => x.Student))
-                                    {
-                                        <div>
-                                            <p>@student</p>
-                                        </div>
-                                    }
-                                </div>
-                                <input id="@subject.Id" style="margin-top: 15px;" class="btn btn-dark delete" type="submit" @onclick="(async ()=> await DeleteGroup(group.Id))" value="USUŃ" />
-                               </div>
-                            }
-                        </div>
-                    </div>
-                }
-            </div>
+					</button>
+					<div class="panel" id="@String.Format("{0}panel",subject.Id)" style="@styles[subject.Id]">
+						<div id="groupSubjectList">
+							@foreach (var group in subject.Groups)
+							{
+								<div id="@group.Id" class="groupAllInfo dark-shadow">
+									<div class="groupDetails">
+										<p>Nazwa grupy:</p>
+										<p>@group.Name</p>
+										<p>Nauczyciel:</p>
+										<p>@group.Teacher</p>
+										<p>Ilość godzin:</p>
+										<p>@group.NumberOfLessonInWeek</p>
+									</div>
 
-                <!--</form>-->
-            </div>
-        </div>
+									<div class="groupStudents">
+										<h3>Lista uczniów</h3>
+										@foreach (string student in group.Students.Select(x => x.Student))
+										{
+											<div>
+												<p>@student</p>
+											</div>
+										}
+									</div>
+									<input id="@subject.Id" style="margin-top: 15px;" class="btn btn-dark delete" type="submit" @onclick="(async ()=> await DeleteGroup(group.Id))" value="USUŃ" />
+								</div>
+							}
+						</div>
+					</div>
+				}
+			</div>
+
+			<!--</form>-->
+		</div>
+	</div>
     </section>

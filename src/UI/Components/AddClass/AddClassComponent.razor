@@ -5,49 +5,54 @@
 </AuthorizeView>
 
 <section id="add">
-        <div class="container">
+	<div class="container">
+		<div class="back-btn">
+			<a class="btn btn-border" href="/home">WRÓĆ</a>
+		</div>
 
-            <div class="card-container">
-                <ul class="ul-add green-shadow">
-                    <li> <p>Podaj nazwę klasy: </p> <input type="text" id="name" name="name" placeholder="Nazwa" disabled="@isBusy"></li>
-                    <li> <p>Podaj wychowawcę klasy: </p> <input type="text" id="teacherSelect" name="name" placeholder="Nauczyciel" disabled="@isBusy"></li>
-                    <li>
-                        <div class="btn-container">
-                            <button class="btn btn-dark" id="addNewClass" type="submit" value="DODAJ"
-                            disabled="@isBusy">DODAJ </button>
-                        </div>
-                    </li>
-					<li class="addStudent dark-shadow">
-						<div class="detail">
-							<p>Podaj imię ucznia:</p>
-							<input type="text" id="imie" placeholder="Imie">
-						</div>
-						<div class="detail">
-							<p>Podaj nazwisko ucznia:</p>
-							<input type="text" id="nazwisko" placeholder="Nazwisko">
-						</div>
-						<div class="btn-container"><button id="addNew" type="submit" class="btn btn-dark"> DODAJ UCZNIA</button></div>
-					</li>
-                    <li class="studentListContainer">
-                        <div id="studentList">
-                           <!--from js-->
-                        </div>
-                    </li>
+		<div class="card-container">
+			<ul class="ul-add green-shadow">
+				<li> <p>Podaj nazwę klasy: </p> <input type="text" id="name" name="name" placeholder="Nazwa" disabled="@isBusy"></li>
+				<li> <p>Podaj wychowawcę klasy: </p> <input type="text" id="teacherSelect" name="name" placeholder="Nauczyciel" disabled="@isBusy"></li>
+				<li>
+					<div class="btn-container">
+						<button class="btn btn-dark" id="addNewClass" type="submit" value="DODAJ"
+								disabled="@isBusy">
+							DODAJ
+						</button>
+					</div>
+				</li>
+				<li class="addStudent dark-shadow">
+					<div class="detail">
+						<p>Podaj imię ucznia:</p>
+						<input type="text" id="imie" placeholder="Imie">
+					</div>
+					<div class="detail">
+						<p>Podaj nazwisko ucznia:</p>
+						<input type="text" id="nazwisko" placeholder="Nazwisko">
+					</div>
+					<div class="btn-container"><button id="addNew" type="submit" class="btn btn-dark"> DODAJ UCZNIA</button></div>
+				</li>
+				<li class="studentListContainer">
+					<div id="studentList">
+						<!--from js-->
+					</div>
+				</li>
 
-                    <li id="liczba">
-                        <p>Liczba dodanych uczniów: 0</p>
-                    </li>
-                    <li>
-                        <div class="btn-container"><button @onclick="AddClass" id="submitNewClass" type="submit" class="btn btn-dark"> DODAJ KLASĘ </button></div>
-                    </li>
-                </ul>
-                <div class="under-tittle-container">
-                    <h6>Dodane klasy</h6>
-                </div>
-                <div class="all-seperate">
-                   @foreach(var item in classessCreated)
-                {
-                    <button class="unhiden_item dark-shadow" id="@item.Id" @onclick="() => ChangeStyle(item.Id)">
+				<li id="liczba">
+					<p>Liczba dodanych uczniów: 0</p>
+				</li>
+				<li>
+					<div class="btn-container"><button @onclick="AddClass" id="submitNewClass" type="submit" class="btn btn-dark"> DODAJ KLASĘ </button></div>
+				</li>
+			</ul>
+			<div class="under-tittle-container">
+				<h6>Dodane klasy</h6>
+			</div>
+			<div class="all-seperate">
+				@foreach (var item in classessCreated)
+				{
+					<button class="unhiden_item dark-shadow" id="@item.Id" @onclick="() => ChangeStyle(item.Id)">
 						<ul class="item">
 							<li>@item.Name</li>
 							<li>@item.Teacher</li>
@@ -59,27 +64,27 @@
 								</div>
 							</li>
 						</ul>
-                    </button>
-                    <div class="panel" id="@String.Format("{0}panel",item.Id)" style="@styles[item.Id]">
-                        <div id="studentList">
-                            @foreach(var student in item.Students)
-                            {
-                          <ul class="dark-shadow">
-                              <li>@String.Format("{0} {1}", student.FirstName, student.LastName)"</li>
-                              <li>
-                                  <div id="@student.Id" class="btn-container">
-                                      <input id="@student.Id" @onclick="(async()=>await DeleteStudent(student.Id))"
-                                      class="btn btn-dark delete" type="submit" value="USUŃ" />
-                                  </div>
-                              </li>
-                          </ul>
-                            }
-                        </div>
-                    </div>
-                    }
-                </div>
-                   
+					</button>
+					<div class="panel" id="@String.Format("{0}panel",item.Id)" style="@styles[item.Id]">
+						<div id="studentList">
+							@foreach (var student in item.Students)
+							{
+								<ul class="dark-shadow">
+									<li>@String.Format("{0} {1}", student.FirstName, student.LastName)"</li>
+									<li>
+										<div id="@student.Id" class="btn-container">
+											<input id="@student.Id" @onclick="(async()=>await DeleteStudent(student.Id))"
+												   class="btn btn-dark delete" type="submit" value="USUŃ" />
+										</div>
+									</li>
+								</ul>
+							}
+						</div>
+					</div>
+				}
+			</div>
 
-            </div>
-        </div>
+
+		</div>
+	</div>
     </section>
