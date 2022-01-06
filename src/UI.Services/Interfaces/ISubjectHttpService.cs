@@ -11,6 +11,7 @@ namespace UI.Services.Interfaces
     public interface ISubjectHttpService
     {
         Task AddSubjectWithGroups(SubjectModel model, string className);
+        Task DeleteSubjectWithGroups(int subjectId);
         Task<IEnumerable<SubjectVm>> GetAllSubjectsWithGroups();
     }
 }

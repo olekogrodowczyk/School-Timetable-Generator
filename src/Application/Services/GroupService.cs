@@ -60,6 +60,21 @@ namespace Application.Services
             return group.Id;
         }
 
+        public async Task DeleteGroupWithAssignments(int groupId)
+        {
+            await _groupRepository.GetAllAsync();
+            var groupEntity = await _groupRepository.GetByIdAsync(groupId);
+            var subject = await _subjectRepository.SingleOrDefaultAsync(x => x.Id == groupEntity.SubjectId, x => x.Groups);
+            if (subject is not null && subject.Groups.Count() == 1)
+            {
+                await _subjectRepository.DeleteAsync(subject.Id);
+            }
+            else
+            {
+                await _groupRepository.DeleteAsync(groupId);
+            }
+        }
+
         private async Task HandleAssignmentsCreating(IEnumerable<Student> students, int groupId)
         {
             int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
@@ -85,5 +100,6 @@ namespace Application.Services
             }
             return students;
         }
+
     }
 }

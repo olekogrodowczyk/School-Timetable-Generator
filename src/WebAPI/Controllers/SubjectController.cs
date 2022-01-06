@@ -43,5 +43,12 @@ namespace WebAPI.Controllers
             var result = await _subjectService.GetAllSubjects();
             return Ok(new OkResult<IEnumerable<SubjectVm>>(result, "Pomyślnie zwrócono przedmioty"));
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteSubjectWithGroups([FromQuery] int subjectId)
+        {
+            await _subjectService.DeleteSubject(subjectId);
+            return Ok(new Shared.Responses.OkResult("Pomyślnie usunięto wybrany przedmiot"));
+        }
     }
 }

@@ -48,5 +48,10 @@ namespace Application.Services
             var subjectsVms = _mapper.Map<IEnumerable<SubjectVm>>(subjects);
             return subjectsVms;
         }
+
+        public async Task DeleteSubject(int subjectId)
+        {
+            await _subjectRepository.DeleteAsync(subjectId);
+        }
     }
 }

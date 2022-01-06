@@ -46,5 +46,10 @@ namespace UI.Services.Services
             var result = await _httpService.Get<OkResult<IEnumerable<SubjectVm>>>("api/subject/getall");
             return result.Value;
         }
+
+        public async Task DeleteSubjectWithGroups(int subjectId)
+        {
+            var result = await _httpService.Delete<OkResult>($"api/subject?subjectId={subjectId}", null);
+        }
     }
 }

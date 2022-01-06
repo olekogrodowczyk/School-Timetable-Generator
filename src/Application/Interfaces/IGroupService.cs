@@ -10,5 +10,6 @@ namespace Application.Interfaces
     public interface IGroupService
     {
         Task<int> CreateGroup(CreateGroupDto model);
+        Task DeleteGroupWithAssignments(int groupId);
     }
 }

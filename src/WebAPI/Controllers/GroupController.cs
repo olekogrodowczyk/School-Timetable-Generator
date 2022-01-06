@@ -26,5 +26,12 @@ namespace WebAPI.Controllers
             int result = await _groupService.CreateGroup(model);
             return Ok(new OkResult<int>(result, "Pomyślnie dodano nową grupę"));
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromQuery] int groupId)
+        {
+            await _groupService.DeleteGroupWithAssignments(groupId);
+            return Ok(new Shared.Responses.OkResult("Pomyślnie usunięto wybraną grupę"));
+        }
     }
 }

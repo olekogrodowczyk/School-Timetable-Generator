@@ -43,6 +43,9 @@ namespace UI.Components.AddSubjects
         public NavigationManager NavigationManager { get; set; }
 
         [Inject]
+        public IGroupHttpService GroupHttpService { get; set; }
+
+        [Inject]
         public IToastService ToastService { get; set; }
 
         
@@ -93,6 +96,16 @@ namespace UI.Components.AddSubjects
             await JSRuntime.InvokeVoidAsync("initializeSubjects");
         }
 
+        protected async Task DeleteGroup(int groupId)
+        {
+            error = await ComponentRequestHandler.HandleRequest<int>(GroupHttpService.DeleteGroupWithAssignments
+                , groupId, _errorMessage, _errors, ToastService);
+            if (!error)
+            {
+                ToastService.ShowSuccess("Pomyślnie usunięto wybraną grupę");
+            }
+            await Refresh();
+        }
 
         protected async Task AddSubject()
         {
@@ -133,13 +146,13 @@ namespace UI.Components.AddSubjects
 
         private async Task DeleteSubject(int subjectId)
         {
-            //error = await ComponentRequestHandler.HandleRequest<int>(StudentHttpService.DeleteStudent
-            //    , studentId, _errorMessage, _errors, ToastService);
-            //if (!error)
-            //{
-            //    ToastService.ShowSuccess("Pomyślnie usunięto wybranego ucznia");
-            //}
-            //await Refresh();
+            error = await ComponentRequestHandler.HandleRequest<int>(SubjectHttpService.DeleteSubjectWithGroups
+                , subjectId, _errorMessage, _errors, ToastService);
+            if (!error)
+            {
+                ToastService.ShowSuccess("Pomyślnie usunięto wybrany przedmiot");
+            }
+            await Refresh();
         }
 
     }
