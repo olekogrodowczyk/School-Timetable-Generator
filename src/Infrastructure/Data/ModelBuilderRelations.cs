@@ -48,7 +48,7 @@ namespace Infrastructure.Data
             modelBuilder.Entity<Assignment>()
                 .HasOne<Student>(x => x.Student)
                 .WithMany(x => x.Assignments)
-                .HasForeignKey(x => x.GroupId)
+                .HasForeignKey(x => x.StudentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Lesson>()
