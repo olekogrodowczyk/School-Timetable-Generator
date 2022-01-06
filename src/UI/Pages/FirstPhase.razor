@@ -3,7 +3,7 @@
 
 <AuthorizeView>
     <NotAuthorized>
-        @if(true) { NavigationManager.NavigateTo("login"); }
+        @if(true) { NavigationManager.NavigateTo("/"); }
     </NotAuthorized>
 </AuthorizeView>
 
@@ -24,22 +24,11 @@
     </section>
 
 @code{
-    private bool isBusy;
-
-    [Inject]
-    public ITimetableStateHttpService TimetableStateHttpService{ get; set; }
-
     [Inject]
     public NavigationManager NavigationManager{ get; set; }
 
-    
-
     protected override async Task OnInitializedAsync()
     {
-        isBusy = true;
-        int currentTimetable = await TimetableStateHttpService.GetCurrentTimetable();
-        int currentPhase = await TimetableStateHttpService.GetCurrentPhase(currentTimetable);
-        isBusy = false;
-        if(currentPhase==2) { NavigationManager.NavigateTo("addsubjects"); }
+        
     }
 }

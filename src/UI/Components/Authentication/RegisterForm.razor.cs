@@ -54,7 +54,7 @@ namespace UI.Components.Authentication
                     ToastService.ShowError(error);
                 }
             }
-            if (_errorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zarejestrowano"); Navigation.NavigateTo("/login"); }
+            if (_errorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zarejestrowano"); Navigation.NavigateTo("/"); }
         }
     }
 }

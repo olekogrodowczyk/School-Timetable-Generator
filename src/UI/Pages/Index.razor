@@ -1,12 +1,18 @@
 ﻿@page "/"
+@using UI.Services.Interfaces
 
 <AuthorizeView>
     <Authorized>
-        @if(true) { NavigationManager.NavigateTo("home"); }
+        @if(true) { isAuthenticated = true; isBusy = true; }
     </Authorized>
+    <NotAuthorized>
+        @if(true) { isAuthenticated = false;isBusy = false; }
+    </NotAuthorized>
 </AuthorizeView>
 
 <section id="glowny">
+@if (!isBusy)
+    {       
             <div class="start">
                 <h1>Stwórzmy razem Twój plan zajęć</h1>
                  <div class="przyciski">
@@ -18,18 +24,46 @@
            <img src="./image/3573383.svg" alt="">
         </div>
       
-    </section>
-
+    
+    }
+    else
+    {
+        <div style="margin: auto;" class="lds-dual-ring"></div>
+    }
+</section>
 
 @code {
+    private bool isBusy;
+    private bool isAuthenticated;
+
     [Inject]
-    public NavigationManager NavigationManager { get; set; }
+    public ITimetableStateHttpService TimetableStateHttpService{ get; set; }
+
+    [Inject]
+    public NavigationManager NavigationManager{ get; set; }
 
     protected Task<AuthenticationState> AuthStat { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();     
+        base.OnInitialized();
+        await Task.Delay(10);
+        if (isAuthenticated)
+        {
+        isBusy = true;
+        int currentTimetable = await TimetableStateHttpService.GetCurrentTimetable();
+        int currentPhase = await TimetableStateHttpService.GetCurrentPhase(currentTimetable);
+        isBusy = false;
+            switch (currentPhase)
+            {
+                case 1:
+                    NavigationManager.NavigateTo("home");
+                    break;
+                case 2:
+                    NavigationManager.NavigateTo("addsubjects");
+                    break;
+            }
+        }    
     }
 }
 
