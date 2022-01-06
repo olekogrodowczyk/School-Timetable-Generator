@@ -87,15 +87,19 @@ namespace Application.Services
         public async Task<ClassVm> GetClassByName(string className)
         {
             await _teacherRepository.GetAllAsync();
-            var classToMap = await _classRepository.SingleOrDefaultAsync(x => x.Name == className, x => x.Teacher);
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            var classToMap = await _classRepository.SingleOrDefaultAsync
+                (x => x.Name == className && x.TimetableId==activeTimetableId, x => x.Teacher);
             if (classToMap == null) { throw new NotFoundException("Class name couldn't be found"); }
             return _mapper.Map<ClassVm>(classToMap);
         }
 
         public async Task<IEnumerable<StudentVm>> GetStudentsFromClass(string className)
         {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
             await _studentRepository.GetAllAsync();
-            var classFound = await _classRepository.SingleOrDefaultAsync(x => x.Name == className, x => x.Students);
+            var classFound = await _classRepository.SingleOrDefaultAsync
+                (x => x.Name == className && x.TimetableId==activeTimetableId, x => x.Students);
             if (classFound == null) { throw new NotFoundException("Class name couldn't be found"); }
             var result = _mapper.Map<IEnumerable<StudentVm>>(classFound.Students);
             return result;
