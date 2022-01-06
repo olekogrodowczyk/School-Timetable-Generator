@@ -43,7 +43,7 @@ namespace Infrastructure.Data
                 .HasOne<Group>(x => x.Group)
                 .WithMany(x => x.Assignments)
                 .HasForeignKey(x => x.GroupId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Assignment>()
                 .HasOne<Student>(x => x.Student)
@@ -91,7 +91,7 @@ namespace Infrastructure.Data
                 .HasOne<Subject>(x => x.Subject)
                 .WithMany(x => x.Groups)
                 .HasForeignKey(x => x.SubjectId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Group>()
                 .HasOne<Teacher>(x => x.Teacher)
