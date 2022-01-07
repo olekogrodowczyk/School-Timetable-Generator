@@ -27,7 +27,7 @@ namespace Application.Services
         private readonly IUserRepository _userRepository;
 
         static int deep = 0;
-        static List<int> periods = new List<int>() { 0, 1, 2, 3 };
+        static List<int> periods = new List<int>() { 0};
         static List<Group> lessonss = new List<Group>();
         static List<Classroom> classess = new List<Classroom>();
         static int inMemory = 0;
@@ -99,10 +99,10 @@ namespace Application.Services
                 }
                 timeLessonss[finalList[final]].Clear();
                 timeLessonss[finalList[final]].Add(lesson);
-                if (lesson.ClassId == null)
+                if (lesson.ClassroomId == null)
                 {
                     int a = classMaker(finalList[final], lesson.ClassId);
-                    lesson.ClassId = a;
+                    lesson.ClassroomId = a;
                 }
                 for (int i = 0; i < inMemory.Count; i++)
                 {
@@ -141,13 +141,9 @@ namespace Application.Services
 
         }
 
-        static private int classMaker(int period, int lessonPeople)
-        {
-            return 0;
-        }
 
-        // prace w toku
-        /*
+
+       
         static private int classMaker(int period, int lessonPeople)
         {
 
@@ -157,6 +153,7 @@ namespace Application.Services
 
             for (int i = 0; i < timeLessonss[period].Count(); i++)
             {
+                if(timeLessonss[period][i].ClassroomId!=null)
                 notAvailable.Add((int)timeLessonss[period][i].ClassroomId);
             }
             for (int i = 0; i < classess.Count; i++)
@@ -171,7 +168,7 @@ namespace Application.Services
                     }
                 }
                 if (a == 0)
-                    available.Add(classess[i].Id-1);
+                    available.Add(classess[i].Id);
             }
 
             if (available.Count == 0)
@@ -180,12 +177,12 @@ namespace Application.Services
             int indeks = 1;
             for (int i = 0; i < available.Count; i++)
             {
-
-                a = lessonss[available[i]].ClassId;
+                var classroomById = classess.SingleOrDefault(x => x.Id == available[i]);
+                a = classroomById.NumberOfSeats;
                 if ((a > lessonPeople) && (a < min))
                 {
                     min = a;
-                    indeks = i;
+                    indeks = available[i];
 
                 }
 
@@ -197,7 +194,7 @@ namespace Application.Services
         }
 
 
-        */
+        
 
         public async Task Init()
         {
@@ -247,6 +244,18 @@ namespace Application.Services
                 {
                     Console.WriteLine("Nauczyciel: " + timeLessonss[x][y].TeacherId + " Klasa: " + timeLessonss[x][y].ClassId + " Start o godzinie: " + hourmakerStart(x).ToString() + " Koniec o godzinie: " +
                         hourmakerEnd(x) + " Sala: " + timeLessonss[x][y].ClassroomId);
+
+                    Lesson toBase = new Lesson();
+                    toBase.SubjectId = (int)timeLessonss[x][y].SubjectId;
+                    toBase.TeacherId = timeLessonss[x][y].TeacherId;
+                    toBase.GroupId = timeLessonss[x][y].Id;
+                    toBase.ClassroomId = (int)timeLessonss[x][y].ClassroomId;
+                    toBase.StartsAt = hourmakerStart(x);
+                    toBase.EndsAt = hourmakerEnd(x);
+                    toBase.DayOfWeek = dayMaker(x);
+                   // await _lessonRepository.AddAsync(toBase);
+
+
 
 
                 }
