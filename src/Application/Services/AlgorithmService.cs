@@ -257,7 +257,7 @@ namespace Application.Services
                     toBase.StartsAt = hourmakerStart(x);
                     toBase.EndsAt = hourmakerEnd(x);
                     toBase.DayOfWeek = dayMaker(x);
-                    // await _lessonRepository.AddAsync(toBase);
+                     await _lessonRepository.AddAsync(toBase);
 
 
 
