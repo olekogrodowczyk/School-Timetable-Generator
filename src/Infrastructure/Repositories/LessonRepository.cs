@@ -1,4 +1,6 @@
-﻿using Domain.Interfaces;
+﻿using Domain.Entities;
+using Domain.Interfaces;
+using Infrastructure.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +9,10 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
-    public class LessonRepository : ILessonRepository
+    public class LessonRepository : EfRepository<Lesson>, ILessonRepository
     {
+        public LessonRepository(ApplicationDbContext context) : base(context)
+        {
+        }
     }
 }
