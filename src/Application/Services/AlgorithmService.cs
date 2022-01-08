@@ -27,7 +27,7 @@ namespace Application.Services
         private readonly IUserRepository _userRepository;
 
         static int deep = 0;
-        static List<int> periods = new List<int>() { 0};
+        static List<int> periods = new List<int>();
         static List<Group> lessonss = new List<Group>();
         static List<Classroom> classess = new List<Classroom>();
         static int inMemory = 0;
@@ -35,7 +35,7 @@ namespace Application.Services
         static List<List<Group>> timeLessonss = new List<List<Group>>();
         static List<List<Group>> timeLessonssCorrect = new List<List<Group>>();
         static List<Group> errorList = new List<Group>();
-        static int day_periods = 40;
+        static int day_periods = 8;
 
         public AlgorithmService(IAssignmentRepository assignmentRepository, IAvailabilityRepository availabilityRepository
             , IClassRepository classRepository, IClassroomRepository classroomRepository, IGroupRepository groupRepository
@@ -143,7 +143,7 @@ namespace Application.Services
 
 
 
-       
+
         static private int classMaker(int period, int lessonPeople)
         {
 
@@ -153,8 +153,8 @@ namespace Application.Services
 
             for (int i = 0; i < timeLessonss[period].Count(); i++)
             {
-                if(timeLessonss[period][i].ClassroomId!=null)
-                notAvailable.Add((int)timeLessonss[period][i].ClassroomId);
+                if (timeLessonss[period][i].ClassroomId != null)
+                    notAvailable.Add((int)timeLessonss[period][i].ClassroomId);
             }
             for (int i = 0; i < classess.Count; i++)
             {
@@ -194,10 +194,14 @@ namespace Application.Services
         }
 
 
-        
+
 
         public async Task Init()
         {
+            for(int i=0;i<40;i++)
+            {
+                periods.Add(i);
+            }
 
             var Classess = await _classroomRepository.GetAllAsync();
             var Lessonss = await _groupRepository.GetAllAsync();
@@ -243,7 +247,7 @@ namespace Application.Services
                 for (int y = 0; y < timeLessonss[x].Count; y++)
                 {
                     Console.WriteLine("Nauczyciel: " + timeLessonss[x][y].TeacherId + " Klasa: " + timeLessonss[x][y].ClassId + " Start o godzinie: " + hourmakerStart(x).ToString() + " Koniec o godzinie: " +
-                        hourmakerEnd(x) + " Sala: " + timeLessonss[x][y].ClassroomId);
+                        hourmakerEnd(x) + " Dnia " + dayMaker(x) + " Sala: " + timeLessonss[x][y].ClassroomId);
 
                     Lesson toBase = new Lesson();
                     toBase.SubjectId = (int)timeLessonss[x][y].SubjectId;
@@ -253,7 +257,7 @@ namespace Application.Services
                     toBase.StartsAt = hourmakerStart(x);
                     toBase.EndsAt = hourmakerEnd(x);
                     toBase.DayOfWeek = dayMaker(x);
-                   // await _lessonRepository.AddAsync(toBase);
+                    // await _lessonRepository.AddAsync(toBase);
 
 
 
@@ -272,6 +276,8 @@ namespace Application.Services
             }
 
             Console.WriteLine("Ciekawostka zostalo uzyte :" + licznik + " rekurencji");
+            periods.Clear();
+            timeLessonss.Clear();
         }
 
 
