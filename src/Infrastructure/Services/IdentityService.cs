@@ -124,7 +124,7 @@ namespace Infrastructure.Services
             await _context.Users.AddAsync(newUser);
             await _context.SaveChangesAsync();
 
-            var newTimetable = new TimeTable { CreatorId = newUser.Id, CurrentPhase = 1, Name = "Default" };
+            var newTimetable = new TimeTable { CreatorId = newUser.Id, CurrentPhase = 1 };
             await _context.TimeTables.AddAsync(newTimetable);
             await _context.SaveChangesAsync();
 

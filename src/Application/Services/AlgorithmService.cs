@@ -22,6 +22,7 @@ namespace Application.Services
         private readonly ITeacherRepository _teacherRepository;
         private readonly ITimetableRepository _timetableRepository;
         private readonly IUserRepository _userRepository;
+        private readonly ITimetableService _timetableService;
 
         static int deep = 0;
         static List<int> periods = new List<int>();
@@ -37,7 +38,8 @@ namespace Application.Services
         public AlgorithmService(IAssignmentRepository assignmentRepository, IAvailabilityRepository availabilityRepository
             , IClassRepository classRepository, IClassroomRepository classroomRepository, IGroupRepository groupRepository
             , ILessonRepository lessonRepository, IStudentRepository studentRepository, ISubjectRepository subjectRepository
-            , ITeacherRepository teacherRepository, ITimetableRepository timetableRepository, IUserRepository userRepository)
+            , ITeacherRepository teacherRepository, ITimetableRepository timetableRepository, IUserRepository userRepository
+            , ITimetableService timetableService)
         {
             _assignmentRepository = assignmentRepository;
             _availabilityRepository = availabilityRepository;
@@ -50,6 +52,7 @@ namespace Application.Services
             _teacherRepository = teacherRepository;
             _timetableRepository = timetableRepository;
             _userRepository = userRepository;
+            _timetableService = timetableService;
         }
 
         static private bool PlaceLesson(Group lesson, int nothere = 9999)
@@ -262,6 +265,14 @@ namespace Application.Services
             periods.Clear();
             timeLessonss.Clear();
         }
+
+        private async Task handleChangingPhase()
+        {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            const int thirdPhaseNumber = 3;
+            await _timetableService.ChangePhaseNumber(activeTimetableId, thirdPhaseNumber);
+        }
+
         static private int dayMaker(int period)
         {
             if (period < day_periods)

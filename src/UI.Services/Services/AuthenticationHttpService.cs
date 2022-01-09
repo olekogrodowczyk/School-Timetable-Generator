@@ -3,7 +3,6 @@ using Application.Dto.RegisterUserVm;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Shared.Dto.CreateTimetableDto;
 using Shared.Responses;
 using System;
 using System.Net.Http;

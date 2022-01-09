@@ -3,7 +3,6 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
-using Shared.Dto.CreateTimetableDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,10 +25,10 @@ namespace Application.Services
             _userContextService = userContextService;
         }
 
-        public async Task<int> CreateTimetable(CreateTimetableDto model)
+        public async Task<int> CreateTimetable()
         {
             int loggedUserId = _userContextService.GetUserId ?? 0;
-            var timetable = _mapper.Map<TimeTable>(model);
+            var timetable = new TimeTable();
             timetable.CreatorId = loggedUserId;
             await _timetableRepository.AddAsync(timetable);
             return timetable.Id;

@@ -1,5 +1,4 @@
-﻿using Shared.Dto.CreateTimetableDto;
-using Shared.Responses;
+﻿using Shared.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +19,9 @@ namespace UI.Services.Services
             _httpService = httpService;
         }
 
-        public async Task<int> CreateTimetable(CreateTimetableDto model)
+        public async Task<int> CreateTimetable()
         {
-            var result = await _httpService.Post<OkResult<int>>("api/timetable", model);
+            var result = await _httpService.Post<OkResult<int>>("api/timetable", null);
             return result.Value;
         }
 

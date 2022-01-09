@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Dto.ChangePhaseDto;
-using Shared.Dto.CreateTimetableDto;
 using Shared.Responses;
 using System.Threading.Tasks;
 
@@ -23,9 +22,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateTimetableDto model)
+        public async Task<IActionResult> Create()
         {
-            var result = await _timetableService.CreateTimetable(model);
+            var result = await _timetableService.CreateTimetable();
             return Ok(new OkResult<int>(result, "Pomyślnie utworzono nowy plan lekcji"));
         }
 

@@ -11,7 +11,6 @@ namespace Domain.Entities
     {
         public int CreatorId { get; set; }
         public virtual User Creator { get; set; }
-        public string Name { get; set; }
         public int CurrentPhase { get; set; }
         public virtual ICollection<Class> Classess { get; set; }
         public virtual ICollection<Classroom> Classrooms { get; set; }

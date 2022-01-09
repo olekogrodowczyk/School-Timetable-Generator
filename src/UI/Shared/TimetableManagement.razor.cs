@@ -1,6 +1,5 @@
 ﻿using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
-using Shared.Dto.CreateTimetableDto;
 using System;
 using System.Threading.Tasks;
 using UI.Services.Exceptions;
@@ -23,8 +22,7 @@ namespace UI.Shared
         {
             try
             {
-                var model = new CreateTimetableDto { Name = "Nazwa1" };
-                await TimetableHttpService.CreateTimetable(model);
+                await TimetableHttpService.CreateTimetable();
             }
             catch (ApiException e)
             {
