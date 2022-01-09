@@ -34,6 +34,7 @@ namespace Application.Services
         static List<List<Group>> timeLessonssCorrect = new List<List<Group>>();
         static List<Group> errorList = new List<Group>();
         static int day_periods = 8;
+        int activeTimetableId;
 
         public AlgorithmService(IAssignmentRepository assignmentRepository, IAvailabilityRepository availabilityRepository
             , IClassRepository classRepository, IClassroomRepository classroomRepository, IGroupRepository groupRepository
@@ -191,13 +192,14 @@ namespace Application.Services
 
         public async Task Init()
         {
-            for(int i=0;i<40;i++)
+            activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            for (int i=0;i<40;i++)
             {
                 periods.Add(i);
             }
 
-            var Classess = await _classroomRepository.GetAllAsync();
-            var Lessonss = await _groupRepository.GetAllAsync();
+            var Classess = await _classroomRepository.GetWhereAsync(c=>c.TimetableId == activeTimetableId);
+            var Lessonss = await _groupRepository.GetWhereAsync(g => g.TimetableId == activeTimetableId);
             lessonss = Lessonss.ToList();
             classess = Classess.ToList();
 
@@ -264,13 +266,15 @@ namespace Application.Services
             Console.WriteLine("Ciekawostka zostalo uzyte :" + licznik + " rekurencji");
             periods.Clear();
             timeLessonss.Clear();
+
+            await handleChangingPhase();
         }
 
         private async Task handleChangingPhase()
-        {
-            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+        {            
             const int thirdPhaseNumber = 3;
             await _timetableService.ChangePhaseNumber(activeTimetableId, thirdPhaseNumber);
+            await _timetableService.CreateTimetable();
         }
 
         static private int dayMaker(int period)

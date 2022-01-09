@@ -16,21 +16,28 @@ namespace Application.Services
         private readonly ITimetableRepository _timetableRepository;
         private readonly IMapper _mapper;
         private readonly IUserContextService _userContextService;
+        private readonly IUserRepository _userRepository;
 
         public TimetableService(ITimetableRepository timetableRepository, IMapper mapper
-            , IUserContextService userContextService)
+            , IUserContextService userContextService, IUserRepository userRepository)
         {
             _timetableRepository = timetableRepository;
             _mapper = mapper;
             _userContextService = userContextService;
+            _userRepository = userRepository;
         }
 
         public async Task<int> CreateTimetable()
         {
             int loggedUserId = _userContextService.GetUserId ?? 0;
+            var loggedUser = await _userRepository.GetByIdAsync(loggedUserId);
+            
             var timetable = new TimeTable();
             timetable.CreatorId = loggedUserId;
             await _timetableRepository.AddAsync(timetable);
+            loggedUser.CurrentTimetableId = timetable.Id;
+            await _userRepository.UpdateAsync(loggedUser);
+
             return timetable.Id;
         }
 
