@@ -56,23 +56,24 @@ namespace Application.Services
             _timetableService = timetableService;
         }
 
-        static private bool PlaceLesson(Group lesson, int nothere = 9999)
+        private async Task<bool> PlaceLesson(Group lesson, int nothere = 9999)
         {
             List<int> howMany = new List<int>();
+          
 
             for (int i = 0; i < periods.Count; i++)
             {
-                if ((i == nothere) && (CountErrors(i, lesson)) > 0)
+                if ((i == nothere) && (await CountErrors(i, lesson)) > 0)
                     howMany.Add(999);
 
                 else
-                  if ((classMaker(i, lesson.ClassId /* tu ma byc ilosc osob a nie classId */)) == -1)
+                  if ((await classMaker(i, lesson.ClassId /* tu ma byc ilosc osob a nie classId */)) == -1)
                 {
-                    howMany.Add(CountErrors(i, lesson) + 1);
+                    howMany.Add(await CountErrors(i, lesson) + 1);
                 }
                 else
                 {
-                    howMany.Add(CountErrors(i, lesson));
+                    howMany.Add(await CountErrors(i, lesson));
                 }
             }
             int minValue = howMany.Min();
@@ -86,7 +87,7 @@ namespace Application.Services
             int final = rand.Next(finalList.Count() - 1);
             if (minValue == 0)
             {
-                lesson.ClassroomId = classMaker(finalList[final], lesson.ClassId);
+                lesson.ClassroomId = await classMaker(finalList[final], lesson.ClassId);
                 timeLessonss[finalList[final]].Add(lesson);
                 return true;
             }
@@ -101,7 +102,7 @@ namespace Application.Services
                 timeLessonss[finalList[final]].Add(lesson);
                 if (lesson.ClassroomId == null)
                 {
-                    int a = classMaker(finalList[final], lesson.ClassId);
+                    int a = await classMaker (finalList[final], lesson.ClassId);
                     lesson.ClassroomId = a;
                 }
                 for (int i = 0; i < inMemory.Count; i++)
@@ -126,7 +127,7 @@ namespace Application.Services
         }
 
 
-        static private int CountErrors(int period, Group lesson)
+        private async Task<int> CountErrors(int period, Group lesson)
         {
             int count = 0;
 
@@ -141,12 +142,13 @@ namespace Application.Services
 
         }
 
-        static private int classMaker(int period, int lessonPeople)
+        private async Task<int> classMaker(int period, int lessonPeople)
         {
 
             List<int> notAvailable = new List<int>();
             List<int> available = new List<int>();
             int a = 0;
+            
 
             for (int i = 0; i < timeLessonss[period].Count(); i++)
             {
@@ -184,7 +186,7 @@ namespace Application.Services
                 }
 
             }
-            if (min == 0)
+            if (min == 999)
                 return -1;
             else
                 return indeks;
@@ -193,7 +195,7 @@ namespace Application.Services
         public async Task Init()
         {
             activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
-            for (int i=0;i<40;i++)
+            for (int i=0;i<1;i++)
             {
                 periods.Add(i);
             }
@@ -246,9 +248,9 @@ namespace Application.Services
                     toBase.TeacherId = timeLessonss[x][y].TeacherId;
                     toBase.GroupId = timeLessonss[x][y].Id;
                     toBase.ClassroomId = (int)timeLessonss[x][y].ClassroomId;
-                    toBase.StartsAt = hourmakerStart(x);
-                    toBase.EndsAt = hourmakerEnd(x);
-                    toBase.DayOfWeek = dayMaker(x);
+                    toBase.StartsAt = await hourmakerStart(x);
+                    toBase.EndsAt = await hourmakerEnd (x);
+                    toBase.DayOfWeek = await dayMaker (x);
                     await _lessonRepository.AddAsync(toBase);
                 }
 
@@ -267,7 +269,7 @@ namespace Application.Services
             periods.Clear();
             timeLessonss.Clear();
 
-            await handleChangingPhase();
+            
         }
 
         private async Task handleChangingPhase()
@@ -277,7 +279,7 @@ namespace Application.Services
             await _timetableService.CreateTimetable();
         }
 
-        static private int dayMaker(int period)
+        private async Task<int> dayMaker(int period)
         {
             if (period < day_periods)
                 return 1;
@@ -292,13 +294,19 @@ namespace Application.Services
             return -1;
         }
 
-        static private int hourmakerStart(int period)
+        private async Task<int> hourmakerStart(int period)
         {
             return (period % day_periods) + 8;
         }
-        static private int hourmakerEnd(int period)
+        private async Task<int> hourmakerEnd(int period)
         {
             return (period % day_periods) + 9;
+        }
+
+        private async Task<int> counter(Group x)
+        {
+            int assignments = await _assignmentRepository.GetCount(y => y.GroupId == x.Id && y.TimetableId == activeTimetableId);
+            return assignments;
         }
     }
 }
