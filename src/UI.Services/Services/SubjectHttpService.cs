@@ -41,9 +41,9 @@ namespace UI.Services.Services
             }
         }
 
-        public async Task<IEnumerable<SubjectVm>> GetAllSubjectsWithGroups()
+        public async Task<IEnumerable<SubjectVm>> GetAllSubjectsWithGroups(string className)
         {
-            var result = await _httpService.Get<OkResult<IEnumerable<SubjectVm>>>("api/subject/getall");
+            var result = await _httpService.Get<OkResult<IEnumerable<SubjectVm>>>($"api/subject/getall?className={className}");
             return result.Value;
         }
 

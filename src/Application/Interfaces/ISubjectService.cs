@@ -12,7 +12,7 @@ namespace Application.Interfaces
     {
         Task<int> CreateSubject(CreateSubjectDto createSubjectDto);
         Task DeleteSubject(int subjectId);
-        Task<IEnumerable<SubjectVm>> GetAllSubjects();
+        Task<IEnumerable<SubjectVm>> GetAllSubjects(string className);
         Task<int> GetTeachersCount(int timetableId);
     }
 }

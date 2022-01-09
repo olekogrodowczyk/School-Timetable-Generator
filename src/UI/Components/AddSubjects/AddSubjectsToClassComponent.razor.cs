@@ -60,7 +60,7 @@ namespace UI.Components.AddSubjects
 
         private async Task Refresh()
         {
-            subjectsCreated = await SubjectHttpService.GetAllSubjectsWithGroups();
+            subjectsCreated = await SubjectHttpService.GetAllSubjectsWithGroups(ClassName);
             await InitializeStyles();
             await Task.Delay(50);
             StateHasChanged();

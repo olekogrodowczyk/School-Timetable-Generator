@@ -9,6 +9,6 @@ namespace Domain.Interfaces
 {
     public interface ISubjectRepository : IRepository<Subject>
     {
-        Task<IEnumerable<Subject>> GetAllSubjectByTimetableIdWithJoins(int timetableId);
+        Task<IEnumerable<Subject>> GetAllSubjectByTimetableIdWithJoins(int timetableId, string className);
     }
 }

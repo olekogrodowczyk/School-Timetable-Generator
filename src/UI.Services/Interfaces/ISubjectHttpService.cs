@@ -12,6 +12,6 @@ namespace UI.Services.Interfaces
     {
         Task AddSubjectWithGroups(SubjectModel model, string className);
         Task DeleteSubjectWithGroups(int subjectId);
-        Task<IEnumerable<SubjectVm>> GetAllSubjectsWithGroups();
+        Task<IEnumerable<SubjectVm>> GetAllSubjectsWithGroups(string className);
     }
 }

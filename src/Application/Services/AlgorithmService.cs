@@ -11,9 +11,6 @@ namespace Application.Services
 {
     public class AlgorithmService : IAlgorithmService
     {
-
-
-
         private readonly IAssignmentRepository _assignmentRepository;
         private readonly IAvailabilityRepository _availabilityRepository;
         private readonly IClassRepository _classRepository;
@@ -54,7 +51,6 @@ namespace Application.Services
             _timetableRepository = timetableRepository;
             _userRepository = userRepository;
         }
-
 
         static private bool PlaceLesson(Group lesson, int nothere = 9999)
         {
@@ -141,9 +137,6 @@ namespace Application.Services
 
         }
 
-
-
-
         static private int classMaker(int period, int lessonPeople)
         {
 
@@ -193,9 +186,6 @@ namespace Application.Services
                 return indeks;
         }
 
-
-
-
         public async Task Init()
         {
             for(int i=0;i<40;i++)
@@ -241,9 +231,6 @@ namespace Application.Services
             Console.WriteLine("Podłączone zostały nastepujace lekcje: ");
             for (int x = 0; x < timeLessonss.Count; x++)
             {
-
-
-
                 for (int y = 0; y < timeLessonss[x].Count; y++)
                 {
                     Console.WriteLine("Nauczyciel: " + timeLessonss[x][y].TeacherId + " Klasa: " + timeLessonss[x][y].ClassId + " Start o godzinie: " + hourmakerStart(x).ToString() + " Koniec o godzinie: " +
@@ -257,11 +244,7 @@ namespace Application.Services
                     toBase.StartsAt = hourmakerStart(x);
                     toBase.EndsAt = hourmakerEnd(x);
                     toBase.DayOfWeek = dayMaker(x);
-                     await _lessonRepository.AddAsync(toBase);
-
-
-
-
+                    await _lessonRepository.AddAsync(toBase);
                 }
 
             }
@@ -279,8 +262,6 @@ namespace Application.Services
             periods.Clear();
             timeLessonss.Clear();
         }
-
-
         static private int dayMaker(int period)
         {
             if (period < day_periods)
@@ -304,17 +285,5 @@ namespace Application.Services
         {
             return (period % day_periods) + 9;
         }
-
-
-
-
-
-
-
-
-
-
     }
-
-
 }

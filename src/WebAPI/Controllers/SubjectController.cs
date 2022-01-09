@@ -38,9 +38,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getall")]
-        public async Task<IActionResult> GetAllSubjectsWithGroups()
+        public async Task<IActionResult> GetAllSubjectsWithGroups([FromQuery] string className)
         {
-            var result = await _subjectService.GetAllSubjects();
+            var result = await _subjectService.GetAllSubjects(className);
             return Ok(new OkResult<IEnumerable<SubjectVm>>(result, "Pomyślnie zwrócono przedmioty"));
         }
 

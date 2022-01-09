@@ -41,10 +41,10 @@ namespace Application.Services
             return count;
         }
 
-        public async Task<IEnumerable<SubjectVm>> GetAllSubjects()
+        public async Task<IEnumerable<SubjectVm>> GetAllSubjects(string className)
         {
             int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
-            var subjects = await _subjectRepository.GetAllSubjectByTimetableIdWithJoins(activeTimetableId);
+            var subjects = await _subjectRepository.GetAllSubjectByTimetableIdWithJoins(activeTimetableId, className);
             var subjectsVms = _mapper.Map<IEnumerable<SubjectVm>>(subjects);
             return subjectsVms;
         }

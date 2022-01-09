@@ -16,16 +16,21 @@ namespace Infrastructure.Repositories
         {
         }
 
-        public async Task<IEnumerable<Subject>> GetAllSubjectByTimetableIdWithJoins(int timetableId)
+        public async Task<IEnumerable<Subject>> GetAllSubjectByTimetableIdWithJoins(int timetableId, string className)
         {
             await _context.Assignments.ToListAsync();
             await _context.Groups.ToListAsync();
-            var subjects = _context.Subjects.Where(x => x.TimetableId == timetableId)
+            await _context.Classess.ToListAsync();
+            var subjects = _context.Subjects
                 .Include(x => x.Groups)
                 .ThenInclude(x => x.Teacher)
                 .Include(x => x.Groups)
                 .ThenInclude(x => x.Assignments)
-                .ThenInclude(x => x.Student);
+                .ThenInclude(x => x.Student)
+                .Include(x=>x.Groups)
+                .ThenInclude(x=>x.Class)
+                .Where(x => x.TimetableId == timetableId && x.Groups.All(group=>group.Class.Name==className));
+                
             return subjects;
         }
     }
