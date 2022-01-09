@@ -34,5 +34,13 @@ namespace UI.Components.AddSubjects
             classessNames = await ClassHttpService.GetAllClassessNames();
             isBusy = false;
         }
+
+        protected async Task GenerateTimetable()
+        {
+            await TimetableHttpService.Generate();
+        }
+
+        [Inject]
+        public ITimetableHttpService TimetableHttpService { get; set; }
     }
 }

@@ -5,9 +5,7 @@
         <div class="container">
         <div class="logo">
             <h1>LOGO</h1>
-        </div>
-        <button @onclick="GenerateTimetable" class="btn dark-shadow" >Generuj</button>
-                        
+        </div>                                
         <div class="nav">
            <AuthenticationMenu></AuthenticationMenu>
         </div>
@@ -21,13 +19,3 @@
     </footer>
 
     <BlazoredToasts />
-
-    @code{
-    [Inject]
-    public ITimetableHttpService TimetableHttpService{ get; set; }
-
-    protected async Task GenerateTimetable()
-    {
-        await TimetableHttpService.Generate();
-    }
-    }
