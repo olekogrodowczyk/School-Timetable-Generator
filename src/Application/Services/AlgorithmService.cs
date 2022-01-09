@@ -59,22 +59,28 @@ namespace Application.Services
         private async Task<bool> PlaceLesson(Group lesson, int nothere = 9999)
         {
             List<int> howMany = new List<int>();
-          
 
+            int counting = 0;
             for (int i = 0; i < periods.Count; i++)
             {
                 if ((i == nothere) && (await CountErrors(i, lesson)) > 0)
                     howMany.Add(999);
 
                 else
-                  if ((await classMaker(i, lesson.ClassId /* tu ma byc ilosc osob a nie classId */)) == -1)
+                  if (await classMaker(i, await counter(lesson)) == -1)
                 {
-                    howMany.Add(await CountErrors(i, lesson) + 1);
+                    counting++;
+                    howMany.Add(await CountErrors(i, lesson)+9);
                 }
                 else
                 {
                     howMany.Add(await CountErrors(i, lesson));
                 }
+            }
+            if (counting == periods.Count())
+            {
+                errorList.Add(lesson);
+                return false;
             }
             int minValue = howMany.Min();
             List<int> finalList = new List<int>();
@@ -87,7 +93,7 @@ namespace Application.Services
             int final = rand.Next(finalList.Count() - 1);
             if (minValue == 0)
             {
-                lesson.ClassroomId = await classMaker(finalList[final], lesson.ClassId);
+                lesson.ClassroomId = await classMaker(finalList[final], await counter(lesson));
                 timeLessonss[finalList[final]].Add(lesson);
                 return true;
             }
@@ -102,7 +108,7 @@ namespace Application.Services
                 timeLessonss[finalList[final]].Add(lesson);
                 if (lesson.ClassroomId == null)
                 {
-                    int a = await classMaker (finalList[final], lesson.ClassId);
+                    int a = await classMaker (finalList[final], await counter(lesson));
                     lesson.ClassroomId = a;
                 }
                 for (int i = 0; i < inMemory.Count; i++)
@@ -178,7 +184,7 @@ namespace Application.Services
             {
                 var classroomById = classess.SingleOrDefault(x => x.Id == available[i]);
                 a = classroomById.NumberOfSeats;
-                if ((a > lessonPeople) && (a < min))
+                if ((a >= lessonPeople) && (a < min))
                 {
                     min = a;
                     indeks = available[i];
@@ -195,15 +201,22 @@ namespace Application.Services
         public async Task Init()
         {
             activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
-            for (int i=0;i<1;i++)
+            for (int i=0;i<40;i++)
             {
                 periods.Add(i);
             }
+
+           
 
             var Classess = await _classroomRepository.GetWhereAsync(c=>c.TimetableId == activeTimetableId);
             var Lessonss = await _groupRepository.GetWhereAsync(g => g.TimetableId == activeTimetableId);
             lessonss = Lessonss.ToList();
             classess = Classess.ToList();
+
+            for(int i=0;i<lessonss.Count;i++)
+            {
+                lessonss[i].ClassroomId = null;
+            }
 
 
             for (int i = 0; i < periods.Count; i++)
@@ -219,7 +232,7 @@ namespace Application.Services
                 var lista2 = timeLessonss.Select(lst => lst.ToList()).ToList();
                 inMemory = errorList.Count();
                 PlaceLesson(lessonss[i]);
-                if (inMemory + 1 < errorList.Count())
+                if (inMemory  < errorList.Count())
                 {
 
                     for (int x = 0; x < lista2.Count(); x++)
@@ -240,8 +253,8 @@ namespace Application.Services
             {
                 for (int y = 0; y < timeLessonss[x].Count; y++)
                 {
-                    Console.WriteLine("Nauczyciel: " + timeLessonss[x][y].TeacherId + " Klasa: " + timeLessonss[x][y].ClassId + " Start o godzinie: " + hourmakerStart(x).ToString() + " Koniec o godzinie: " +
-                        hourmakerEnd(x) + " Dnia " + dayMaker(x) + " Sala: " + timeLessonss[x][y].ClassroomId);
+                    Console.WriteLine("Nauczyciel: " + timeLessonss[x][y].TeacherId + " Klasa: " + timeLessonss[x][y].ClassId + " Start o godzinie: " + (await hourmakerStart(x)).ToString() + " Koniec o godzinie: " +
+                        await hourmakerEnd(x) + " Dnia " + await dayMaker(x) + " Sala: " + timeLessonss[x][y].ClassroomId);
 
                     Lesson toBase = new Lesson();
                     toBase.SubjectId = (int)timeLessonss[x][y].SubjectId;
@@ -268,6 +281,8 @@ namespace Application.Services
             Console.WriteLine("Ciekawostka zostalo uzyte :" + licznik + " rekurencji");
             periods.Clear();
             timeLessonss.Clear();
+            timeLessonssCorrect.Clear();
+            errorList.Clear();
 
             
         }
@@ -305,8 +320,8 @@ namespace Application.Services
 
         private async Task<int> counter(Group x)
         {
-            int assignments = await _assignmentRepository.GetCount(y => y.GroupId == x.Id && y.TimetableId == activeTimetableId);
-            return assignments;
+           // int assignments = await _assignmentRepository.GetCount(y => y.GroupId == x.Id && y.TimetableId == activeTimetableId);
+            return 6;
         }
     }
 }
