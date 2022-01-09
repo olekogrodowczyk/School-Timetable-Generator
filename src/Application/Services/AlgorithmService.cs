@@ -202,10 +202,11 @@ namespace Application.Services
         public async Task Init()
         {
             //Exception example
-            throw new AlgorithmException("Wystąpiły błędy podczas generowania planu lekcji, zbyt mała ilość sal " +
-                ",a grup jest zbyt dużo");
+           // throw new AlgorithmException("Wystąpiły błędy podczas generowania planu lekcji, zbyt mała ilość sal " +
+        //        ",a grup jest zbyt dużo");
 
             activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+
             for (int i=0;i<40;i++)
             {
                 periods.Add(i);
@@ -237,7 +238,7 @@ namespace Application.Services
                 var lista2 = timeLessonss.Select(lst => lst.ToList()).ToList();
                 inMemory = errorList.Count();
                 await PlaceLesson(lessonss[i]);
-                if (inMemory + 1 < errorList.Count())
+                if (inMemory  < errorList.Count())
                 {
 
                     for (int x = 0; x < lista2.Count(); x++)
@@ -325,8 +326,10 @@ namespace Application.Services
 
         private async Task<int> counter(Group x)
         {
-           // int assignments = await _assignmentRepository.GetCount(y => y.GroupId == x.Id && y.TimetableId == activeTimetableId);
-            return 6;
+            int assignments = await _assignmentRepository.GetCount(y => y.GroupId == x.Id && y.TimetableId == activeTimetableId);
+            return assignments;
+
+
         }
     }
 }
