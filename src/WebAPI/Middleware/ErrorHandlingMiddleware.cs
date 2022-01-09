@@ -60,6 +60,11 @@ namespace WebAPI.Middleware
                         result = new ErrorResult("Nastąpił błąd przy wprowadzaniu danych do bazy danych");
                         break;
 
+                    case AlgorithmException algorithmException:
+                        code = HttpStatusCode.BadRequest;
+                        result = new ErrorResult(algorithmException.Message);
+                        break;
+
                     case Exception:
                         code = HttpStatusCode.InternalServerError;
                         result = string.IsNullOrWhiteSpace(e.Message) ? new ErrorResult("Error") : new ErrorResult(e.Message);

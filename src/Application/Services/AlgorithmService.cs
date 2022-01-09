@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
 using Domain.Entities;
 using Domain.Interfaces;
 using System;
@@ -123,7 +124,7 @@ namespace Application.Services
                         return false;
                     }
                     licznik++;
-                    PlaceLesson(inMemory[i], finalList[final]);
+                    await PlaceLesson(inMemory[i], finalList[final]);
                     deep--;
                 }
 
@@ -200,6 +201,10 @@ namespace Application.Services
 
         public async Task Init()
         {
+            //Exception example
+            throw new AlgorithmException("Wystąpiły błędy podczas generowania planu lekcji, zbyt mała ilość sal " +
+                ",a grup jest zbyt dużo");
+
             activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
             for (int i=0;i<40;i++)
             {
@@ -231,8 +236,8 @@ namespace Application.Services
                 deep = 0;
                 var lista2 = timeLessonss.Select(lst => lst.ToList()).ToList();
                 inMemory = errorList.Count();
-                PlaceLesson(lessonss[i]);
-                if (inMemory  < errorList.Count())
+                await PlaceLesson(lessonss[i]);
+                if (inMemory + 1 < errorList.Count())
                 {
 
                     for (int x = 0; x < lista2.Count(); x++)
