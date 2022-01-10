@@ -56,5 +56,6 @@ namespace Application.Services
             if (timetable == null) { throw new NotFoundException($"Timetable with id: {timetableId} hasn't been found"); }
             return timetable.CurrentPhase;
         }
+
     }
 }

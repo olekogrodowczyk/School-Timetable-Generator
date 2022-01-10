@@ -110,6 +110,12 @@ namespace Infrastructure.Data
                 .WithMany(x => x.Groups)
                 .HasForeignKey(x => x.ClassroomId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Subject>()
+                .HasOne<Class>(x => x.Class)
+                .WithMany(x => x.Subjects)
+                .HasForeignKey(x => x.ClassId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
