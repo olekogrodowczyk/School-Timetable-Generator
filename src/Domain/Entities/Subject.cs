@@ -12,7 +12,7 @@ namespace Domain.Entities
         public string Name { get; set; }
         public int? TimetableId { get; set; }
         public virtual TimeTable TimeTable { get; set; }
-        public int? ClassId { get; set; }
+        public int ClassId { get; set; }
         public virtual Class Class { get; set; }
         public virtual ICollection<Lesson> Lessons { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
