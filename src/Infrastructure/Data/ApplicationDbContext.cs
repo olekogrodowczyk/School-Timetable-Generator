@@ -42,7 +42,7 @@ namespace Infrastructure.Data
                 .HasIndex(x => new { x.TimetableId, x.Name }).IsUnique();
 
             modelBuilder.Entity<Subject>()
-                .HasIndex(x => new { x.TimetableId, x.Name }).IsUnique();
+                .HasIndex(x => new { x.TimetableId, x.Name, x.ClassId }).IsUnique();
 
             modelBuilder.Entity<Teacher>()
                 .HasIndex(x => new { x.TimetableId, x.FirstName, x.LastName }).IsUnique();
