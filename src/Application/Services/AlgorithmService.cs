@@ -29,6 +29,7 @@ namespace Application.Services
         static List<int> periods = new List<int>();
         static List<Group> lessonss = new List<Group>();
         static List<Classroom> classess = new List<Classroom>();
+        static List<Availability> availabilities = new List<Availability>();
         static int inMemory = 0;
         static int licznik = 0;
         static List<List<Group>> timeLessonss = new List<List<Group>>();
@@ -62,16 +63,22 @@ namespace Application.Services
             List<int> howMany = new List<int>();
 
             int counting = 0;
+            int countingT = 0;
             for (int i = 0; i < periods.Count; i++)
             {
                 if ((i == nothere) && (await CountErrors(i, lesson)) > 0)
                     howMany.Add(999);
+                if(await isTeacherAvailable(i,lesson.TeacherId)==false)
+                {
+                    howMany.Add(999);
+                    countingT++;
+                }    
 
                 else
                   if (await classMaker(i, await counter(lesson)) == -1)
                 {
                     counting++;
-                    howMany.Add(await CountErrors(i, lesson)+9);
+                    howMany.Add(await CountErrors(i, lesson) + 999);
                 }
                 else
                 {
@@ -79,6 +86,11 @@ namespace Application.Services
                 }
             }
             if (counting == periods.Count())
+            {
+                errorList.Add(lesson);
+                return false;
+            }
+            if(countingT==periods.Count())
             {
                 errorList.Add(lesson);
                 return false;
@@ -109,7 +121,7 @@ namespace Application.Services
                 timeLessonss[finalList[final]].Add(lesson);
                 if (lesson.ClassroomId == null)
                 {
-                    int a = await classMaker (finalList[final], await counter(lesson));
+                    int a = await classMaker(finalList[final], await counter(lesson));
                     lesson.ClassroomId = a;
                 }
                 for (int i = 0; i < inMemory.Count; i++)
@@ -155,7 +167,7 @@ namespace Application.Services
             List<int> notAvailable = new List<int>();
             List<int> available = new List<int>();
             int a = 0;
-            
+
 
             for (int i = 0; i < timeLessonss[period].Count(); i++)
             {
@@ -205,19 +217,23 @@ namespace Application.Services
             //await _timetableService.GetTimetableGeneretingOutcome(activeTimetableId);
             //return;
 
-            for (int i=0;i<40;i++)
+            for (int i = 0; i < 40; i++)
             {
                 periods.Add(i);
             }
 
-           
 
-            var Classess = await _classroomRepository.GetWhereAsync(c=>c.TimetableId == activeTimetableId);
+
+            var Classess = await _classroomRepository.GetWhereAsync(c => c.TimetableId == activeTimetableId);
             var Lessonss = await _groupRepository.GetWhereAsync(g => g.TimetableId == activeTimetableId);
+            var Teachers = await _teacherRepository.GetWhereAsync(t => t.TimetableId == activeTimetableId);
+            var availability = await _availabilityRepository.GetWhereAsync(a => a.TimetableId == activeTimetableId);
             lessonss = Lessonss.ToList();
             classess = Classess.ToList();
+            Teachers = Teachers.ToList();
+            availabilities = availability.ToList();
 
-            for(int i=0;i<lessonss.Count;i++)
+            for (int i = 0; i < lessonss.Count; i++)
             {
                 lessonss[i].ClassroomId = null;
             }
@@ -236,7 +252,7 @@ namespace Application.Services
                 var lista2 = timeLessonss.Select(lst => lst.ToList()).ToList();
                 inMemory = errorList.Count();
                 await PlaceLesson(lessonss[i]);
-                if (inMemory  < errorList.Count())
+                if (inMemory < errorList.Count())
                 {
 
                     for (int x = 0; x < lista2.Count(); x++)
@@ -269,8 +285,8 @@ namespace Application.Services
                     toBase.GroupId = timeLessonss[x][y].Id;
                     toBase.ClassroomId = (int)timeLessonss[x][y].ClassroomId;
                     toBase.StartsAt = await hourmakerStart(x);
-                    toBase.EndsAt = await hourmakerEnd (x);
-                    toBase.DayOfWeek = await dayMaker (x);
+                    toBase.EndsAt = await hourmakerEnd(x);
+                    toBase.DayOfWeek = await dayMaker(x);
                     toBase.TimetableId = activeTimetableId;
                     lessons.Add(toBase);
                 }
@@ -293,7 +309,7 @@ namespace Application.Services
             timeLessonssCorrect.Clear();
             errorList.Clear();
 
-            
+
         }
 
         private async Task DeleteLessonsFromTimetable()
@@ -306,7 +322,7 @@ namespace Application.Services
         }
 
         private async Task handleChangingPhase()
-        {            
+        {
             const int thirdPhaseNumber = 3;
             await _timetableService.ChangePhaseNumber(activeTimetableId, thirdPhaseNumber);
             var timetable = await _timetableRepository.GetByIdAsync(activeTimetableId);
@@ -345,5 +361,49 @@ namespace Application.Services
 
 
         }
+
+        private async Task<string>DayInString(int period)
+        {
+            if (period < day_periods)
+                return "Poniedziałek";
+            if (period < 2 * day_periods)
+                return "Wtorek";
+            if (period < 3 * day_periods)
+                return "Środa";
+            if (period < 4 * day_periods)
+                return "Czwartek";
+            if (period < 5 * day_periods)
+                return "Piątek";
+            return "Błąd";
+        }
+
+        
+        private async Task<bool> isTeacherAvailable(int period, int teacherID)
+            {
+            var correctAvailability = availabilities.Where(a => a.TeacherId == teacherID);
+            var day = await DayInString(period);         
+            var hour = await hourmakerStart(period);
+            var correctDayAvailability = correctAvailability.Where(c => c.DayOfWeek == day);
+            var correctHourAvailability = correctDayAvailability.Where(h => h.StartsAt == hour);
+            if (correctHourAvailability.Count() > 0)
+                return true;
+            else
+                return false;
+
+
+
+
+
+            }
+
+        private  enum dayOfWeeks
+        {
+            Poniedziałek,
+            Wtorek,
+            Środa,
+            Czwartek,
+            Piątek
+        }
+        
     }
 }
