@@ -14,5 +14,6 @@ namespace Infrastructure.Repositories
         public LessonRepository(ApplicationDbContext context) : base(context)
         {
         }
+
     }
 }
