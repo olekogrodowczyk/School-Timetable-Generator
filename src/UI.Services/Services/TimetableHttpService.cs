@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UI.Services.Interfaces;
 using UI;
 using Shared.Dto.ChangePhaseDto;
+using Shared.ViewModels;
 
 namespace UI.Services.Services
 {
@@ -30,5 +31,17 @@ namespace UI.Services.Services
             var result = await _httpService.Post<OkResult>("api/timetable/generate", null);
         }
 
+        public async Task<IEnumerable<TimetableOutcomeVm>> GetAlgorithmOutcome(int timetableId)
+        {
+            var result = await _httpService.Get<OkResult<IEnumerable<TimetableOutcomeVm>>>
+                ($"api/timetable/getoutcome/{timetableId}");
+            return result.Value;
+        }
+
+        public async Task<IEnumerable<TimetableVm>> GetGeneratedPlans()
+        {
+            var result = await _httpService.Get<OkResult<IEnumerable<TimetableVm>>>("api/timetable/getoutcomelist");
+            return result.Value;
+        }
     }
 }

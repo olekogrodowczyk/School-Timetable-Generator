@@ -11,25 +11,17 @@
                     <div class="title">
                         <p>DATA WYGENEROWANIA PLANU:</p>
                     </div>
-
-                    <li>
-                        <div class="planDetail">
-                           <span>2022-11-1</span> 
-                            <button class="btn btn-border">PRZEJDŹ</button>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="planDetail">
-                           <span>2022-11-1</span> 
-                            <button class="btn btn-border">PRZEJDŹ</button>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="planDetail">
-                           <span>2022-11-1</span> 
-                            <button class="btn btn-border">PRZEJDŹ</button>
-                        </div>
-                    </li>
+                    @foreach(var timetable in generatedTimetables)
+                    {
+                       <li>
+                           <div class="planDetail">
+                               <span>@timetable.GenereteTime</span>
+                               <a class="btn btn-border" href="/plans/@timetable.Id">Przejdź</a>
+                               <button class="btn btn-border">Przełącz</button>
+                           </div>
+                       </li>
+                    }
+                    <button class="btn btn-border">Nowy plan lekcji</button>
                 </ul>
             </div>
         </div>

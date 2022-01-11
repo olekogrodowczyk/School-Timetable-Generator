@@ -1,0 +1,11 @@
+﻿@page "/plans/{TimetableId}"
+
+<div id="add-class">
+<Header Title="Twój plan lekcji"></Header>
+<PlanComponent TimetableId="@TimetableId"></PlanComponent>
+</div>
+
+@code{
+    [Parameter]
+    public string TimetableId { get; set; }
+}

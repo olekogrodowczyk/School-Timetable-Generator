@@ -12,6 +12,7 @@ namespace Application.Interfaces
         Task ChangePhaseNumber(int timetableId, int phaseNumber);
         Task<int> CreateTimetable();
         Task<int> GetCurrentPhase(int timetableId);
+        Task<IEnumerable<TimetableVm>> GetGeneratedTimetables();
         Task<IEnumerable<TimetableOutcomeVm>> GetTimetableGeneretingOutcome(int timetableId);
     }
 }

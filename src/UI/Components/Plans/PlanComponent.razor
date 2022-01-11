@@ -1,0 +1,43 @@
+﻿<section>
+    <div class="container" style="font-weight: normal;">
+        <ul>
+            @foreach(var classObject in outcomeData)
+            {
+                <li><b>@classObject.ClassName</b></li>
+                <br />
+                <li>
+                    <ul>
+                        @foreach(var dayOfWeek in classObject.DayOfWeeks)
+                        {
+                          <li><b>@dayOfWeek.DayOfWeek</b></li>
+                          <br />
+                          <li>
+                              <ul>
+                                  @foreach(var lesson in dayOfWeek.Lessons)
+                                  {
+                                    <li><b>Przedmiot</b> - @lesson.SubjectName</li>
+                                    <li><b>Grupa</b> - @lesson.GroupName</li>
+                                    <li><b>Nauczyciel</b> - @lesson.Teacher</li>
+                                    <li><b>Godzina rozpoczęcia</b> - @lesson.StartsAt</li>
+                                    <li><b>Godzina zakończenia</b> - @lesson.EndsAt</li>
+                                    <br />
+                                  }                                   
+                              </ul>
+                          </li>
+                        }
+                    </ul>
+                </li>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+            }
+        </ul>
+        
+    </div>
+</section>         
+
+@code {
+
+}

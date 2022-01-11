@@ -48,16 +48,19 @@
         await Task.Delay(10);
         if (isAuthenticated)
         {
-        isBusy = true;
-        int currentTimetable = await TimetableStateHttpService.GetCurrentTimetable();
-        int currentPhase = await TimetableStateHttpService.GetCurrentPhase(currentTimetable);
-        isBusy = false;
+            isBusy = true;
+            int currentTimetable = await TimetableStateHttpService.GetCurrentTimetable();
+            int currentPhase = await TimetableStateHttpService.GetCurrentPhase(currentTimetable);
+            isBusy = false;
             switch (currentPhase)
             {
                 case 1:
                     NavigationManager.NavigateTo("home");
                     break;
                 case 2:
+                    NavigationManager.NavigateTo("addsubjects");
+                    break;
+                case 3:
                     NavigationManager.NavigateTo("addsubjects");
                     break;
             }

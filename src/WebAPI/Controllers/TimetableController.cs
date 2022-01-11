@@ -52,12 +52,18 @@ namespace WebAPI.Controllers
             return Ok(new Shared.Responses.OkResult("Udało się"));
         }
 
-        [AllowAnonymous]
         [HttpGet("getoutcome/{timetableId}")]
         public async Task<IActionResult> GetTimetableGeneretingOutcome([FromRoute]int timetableId)
         {
             var result = await _timetableService.GetTimetableGeneretingOutcome(timetableId);
             return Ok(new OkResult<IEnumerable<TimetableOutcomeVm>>(result, "Pomyślnie zwrócono wynik działania algorytmu"));
+        }
+
+        [HttpGet("getoutcomelist")]
+        public async Task<IActionResult> GetTimetablesGeneretedForUser()
+        {
+            var result = await _timetableService.GetGeneratedTimetables();
+            return Ok(new OkResult<IEnumerable<TimetableVm>>(result, "Pomyślnie zwrócono wygenerowane plany lekcji"));
         }
     }
 }
