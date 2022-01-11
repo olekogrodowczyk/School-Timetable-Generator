@@ -200,10 +200,10 @@ namespace Application.Services
         }
 
         public async Task Init()
-        {           
+        {
             activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
-            await _timetableService.GetTimetableGeneretingOutcome(activeTimetableId);
-            return;
+            //await _timetableService.GetTimetableGeneretingOutcome(activeTimetableId);
+            //return;
 
             for (int i=0;i<40;i++)
             {
@@ -253,6 +253,9 @@ namespace Application.Services
             }
 
             Console.WriteLine("Podłączone zostały nastepujace lekcje: ");
+
+            await DeleteLessonsFromTimetable();
+            List<Lesson> lessons = new List<Lesson>();
             for (int x = 0; x < timeLessonss.Count; x++)
             {
                 for (int y = 0; y < timeLessonss[x].Count; y++)
@@ -268,10 +271,12 @@ namespace Application.Services
                     toBase.StartsAt = await hourmakerStart(x);
                     toBase.EndsAt = await hourmakerEnd (x);
                     toBase.DayOfWeek = await dayMaker (x);
-                    await _lessonRepository.AddAsync(toBase);
+                    toBase.TimetableId = activeTimetableId;
+                    lessons.Add(toBase);
                 }
-
             }
+            await _lessonRepository.AddRangeAsync(lessons);
+
             Console.WriteLine();
             Console.WriteLine("Nie udalo sie podlaczyc: ");
             Console.WriteLine();
@@ -281,7 +286,7 @@ namespace Application.Services
 
                 Console.WriteLine("Nauczyciel: " + errorList[i].TeacherId + " Klasa: " + errorList[i].ClassId);
             }
-
+            await handleChangingPhase();
             Console.WriteLine("Ciekawostka zostalo uzyte :" + licznik + " rekurencji");
             periods.Clear();
             timeLessonss.Clear();
@@ -291,11 +296,22 @@ namespace Application.Services
             
         }
 
+        private async Task DeleteLessonsFromTimetable()
+        {
+            var lessons = await _lessonRepository.GetWhereAsync(x => x.TimetableId == activeTimetableId);
+            foreach (var lesson in lessons)
+            {
+                await _lessonRepository.DeleteAsync(lesson.Id);
+            }
+        }
+
         private async Task handleChangingPhase()
         {            
             const int thirdPhaseNumber = 3;
             await _timetableService.ChangePhaseNumber(activeTimetableId, thirdPhaseNumber);
-            await _timetableService.CreateTimetable();
+            var timetable = await _timetableRepository.GetByIdAsync(activeTimetableId);
+            timetable.GenereteTime = DateTime.UtcNow;
+            await _timetableRepository.UpdateAsync(timetable);
         }
 
         private async Task<int> dayMaker(int period)

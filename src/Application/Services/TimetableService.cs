@@ -88,6 +88,14 @@ namespace Application.Services
             return outcomeList;
         }
 
+        public async Task<IEnumerable<TimetableVm>> GetGeneratedTimetables()
+        {
+            int loggedUserId = _userContextService.GetUserId ?? 0;
+            var result = await _timetableRepository.GetWhereAsync(x => x.CreatorId == loggedUserId && x.CurrentPhase==3);
+            var mappedResult = _mapper.Map<IEnumerable<TimetableVm>>(result);
+            return mappedResult;
+        }
+
         private string MatchDayOfWeekByNumber(int numberOfWeek) => numberOfWeek switch
         {
             1 => "Poniedziałek",
