@@ -1379,18 +1379,20 @@ function initializeSubjects() {
 
         const ch = document.querySelector('#division')
         if (ch.checked) {
-            addGroupSubjectFields();
-            displayStudents()
-            var r = document.querySelector("#groupSubjectList").style.height;
-            console.log(r);
-            s.style.height = "auto";
-            s.style.maxHeight = "min-content";
-            s.style.padding = "2rem";
-            const bt = document.querySelector(".btnNext");
-            const b = document.querySelector("#addSubject");
-            b.disabled = true;
-            bt.style.visibility = "visible";
-            bt.style.display = "flex";
+            if (validateNumberOfGroup() != false) {
+                addGroupSubjectFields();
+                displayStudents()
+                var r = document.querySelector("#groupSubjectList").style.height;
+                console.log(r);
+                s.style.height = "auto";
+                s.style.maxHeight = "min-content";
+                s.style.padding = "2rem";
+                const bt = document.querySelector(".btnNext");
+                const b = document.querySelector("#addSubject");
+                b.disabled = true;
+                bt.style.visibility = "visible";
+                bt.style.display = "flex";
+            }
         }
         else { //jezeli nie ma podzialu
             let oneGroupSubject = setGroupSubjectOfAllStudents();
@@ -1485,6 +1487,18 @@ function validateFormStudent() {
     }
     else if (nazwisko == null || nazwisko == "") {
         alert("Podaj nazwisko ucznia");
+        return false;
+    }
+}
+
+function validateNumberOfGroup() {
+    var number = document.getElementById("group").value;
+    if (number <= 1 ) {
+        alert("Liczba grup musi być większa niż 1");
+        return false;
+    }
+    else if (number >= 10) {
+        alert("Za duża ilość grup");
         return false;
     }
 }
