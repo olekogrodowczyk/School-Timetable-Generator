@@ -200,12 +200,10 @@ namespace Application.Services
         }
 
         public async Task Init()
-        {
-            //Exception example
-           // throw new AlgorithmException("Wystąpiły błędy podczas generowania planu lekcji, zbyt mała ilość sal " +
-        //        ",a grup jest zbyt dużo");
-
+        {           
             activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            await _timetableService.GetTimetableGeneretingOutcome(activeTimetableId);
+            return;
 
             for (int i=0;i<40;i++)
             {

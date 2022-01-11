@@ -3,6 +3,7 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
+using Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +18,19 @@ namespace Application.Services
         private readonly IMapper _mapper;
         private readonly IUserContextService _userContextService;
         private readonly IUserRepository _userRepository;
+        private readonly ISubjectRepository _subjectRepository;
+        private readonly ILessonRepository _lessonRepository;
 
         public TimetableService(ITimetableRepository timetableRepository, IMapper mapper
-            , IUserContextService userContextService, IUserRepository userRepository)
+            , IUserContextService userContextService, IUserRepository userRepository, ISubjectRepository subjectRepository
+            , ILessonRepository lessonRepository)
         {
             _timetableRepository = timetableRepository;
             _mapper = mapper;
             _userContextService = userContextService;
             _userRepository = userRepository;
+            _subjectRepository = subjectRepository;
+            _lessonRepository = lessonRepository;
         }
 
         public async Task<int> CreateTimetable()
@@ -56,6 +62,39 @@ namespace Application.Services
             if (timetable == null) { throw new NotFoundException($"Timetable with id: {timetableId} hasn't been found"); }
             return timetable.CurrentPhase;
         }
+
+        public async Task<IEnumerable<TimetableOutcomeVm>> GetTimetableGeneretingOutcome(int timetableId)
+        {
+            var subjects = await _subjectRepository.GetAllSubjectsWithLessonsJoins(timetableId);
+            var subjectsByClass = subjects.GroupBy(s => s.Class.Name).ToList();
+            List<TimetableOutcomeVm> outcomeList = new List<TimetableOutcomeVm>();
+            foreach (var subject in subjectsByClass)
+            {
+                var aggregatedLessons = subject.Aggregate(new List<LessonVm>(), (a, b) =>
+                {
+                    a.AddRange(_mapper.Map<List<LessonVm>>(b.Lessons));
+                    return a;
+                }).GroupBy(x => x.DayOfWeek, (key, value) => new DayOfWeekOutcomeVm{ DayOfWeek = key, Lessons = value.ToList()})
+                .OrderBy(x => x.DayOfWeek).ToList();
+
+                outcomeList.Add(new TimetableOutcomeVm
+                {
+                    ClassName = subject.Key,
+                    DayOfWeeks = aggregatedLessons
+                });
+            }
+            return outcomeList;
+        }
+
+        private string MatchDayOfWeekByNumber(int numberOfWeek) => numberOfWeek switch
+        {
+            0 => "Poniedziałek",
+            1 => "Wtorek",
+            2 => "Środa",
+            3 => "Czwartek",
+            4 => "Piątek",
+            _ => "Błąd"
+        };
 
     }
 }

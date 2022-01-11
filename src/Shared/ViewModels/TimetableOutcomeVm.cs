@@ -11,6 +11,6 @@ namespace Shared.ViewModels
     public class TimetableOutcomeVm
     {
         public string ClassName { get; set; }
-        public IList<LessonVm> Lessons { get; set; } = new List<LessonVm>();
+        public IList<DayOfWeekOutcomeVm> DayOfWeeks { get; set; } = new List<DayOfWeekOutcomeVm>();
     }
 }

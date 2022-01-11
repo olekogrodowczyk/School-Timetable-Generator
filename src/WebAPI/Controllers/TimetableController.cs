@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Dto.ChangePhaseDto;
 using Shared.Responses;
+using Shared.ViewModels;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -48,6 +50,13 @@ namespace WebAPI.Controllers
         {
             await _algorithmService.Init();
             return Ok(new Shared.Responses.OkResult("Udało się"));
+        }
+
+        [HttpGet("getoutcome/{timetableId}")]
+        public async Task<IActionResult> GetTimetableGeneretingOutcome([FromRoute]int timetableId)
+        {
+            var result = await _timetableService.GetTimetableGeneretingOutcome(timetableId);
+            return Ok(new OkResult<IEnumerable<TimetableOutcomeVm>>(result, "Pomyślnie zwrócono wynik działania algorytmu"));
         }
     }
 }

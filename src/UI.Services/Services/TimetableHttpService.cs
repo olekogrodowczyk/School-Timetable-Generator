@@ -29,5 +29,6 @@ namespace UI.Services.Services
         {
             var result = await _httpService.Post<OkResult>("api/timetable/generate", null);
         }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,6 @@ namespace Application.Interfaces
         Task ChangePhaseNumber(int timetableId, int phaseNumber);
         Task<int> CreateTimetable();
         Task<int> GetCurrentPhase(int timetableId);
+        Task<IEnumerable<TimetableOutcomeVm>> GetTimetableGeneretingOutcome(int timetableId);
     }
 }
