@@ -17,19 +17,26 @@ namespace Application.Services
         private readonly IMapper _mapper;
         private readonly ISubjectRepository _subjectRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IClassRepository _classRepository;
 
-        public SubjectService(IMapper mapper, ISubjectRepository subjectRepository, IUserRepository userRepository)
+        public SubjectService(IMapper mapper, ISubjectRepository subjectRepository, IUserRepository userRepository
+            , IClassRepository classRepository)
         {
             _mapper = mapper;
             _subjectRepository = subjectRepository;
             _userRepository = userRepository;
+            _classRepository = classRepository;
         }
 
         public async Task<int> CreateSubject(CreateSubjectDto createSubjectDto)
         {
             int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            var classEntity = await _classRepository.SingleOrDefaultAsync
+                (x=> x.TimetableId==activeTimetableId && x.Name == createSubjectDto.ClassName);
+
             var subject = _mapper.Map<Subject>(createSubjectDto);
             subject.TimetableId = activeTimetableId;
+            subject.ClassId = classEntity.Id;
             await _subjectRepository.AddAsync(subject);
             return subject.Id;
         }

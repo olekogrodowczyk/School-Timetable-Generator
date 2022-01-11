@@ -24,7 +24,7 @@ namespace UI.Services.Services
         public async Task AddSubjectWithGroups(SubjectModel model, string className)
         {
             var subjectResult = await _httpService.Post<OkResult<int>>("api/subject",
-                    new CreateSubjectDto { Name = model.name });            
+                    new CreateSubjectDto { Name = model.name, ClassName = className });            
             foreach (var group in model.groupSubjectList)
             {
                 if (group.name == "") { group.name = $"{className} {model.name}"; }
