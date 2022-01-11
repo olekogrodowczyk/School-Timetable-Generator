@@ -19,7 +19,10 @@ namespace UI.Components.Plans
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            await Refresh();
+            if(firstRender)
+            {
+                await Refresh();
+            }            
         }
 
         private async Task Refresh()
