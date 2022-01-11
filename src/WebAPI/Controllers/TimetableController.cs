@@ -52,6 +52,7 @@ namespace WebAPI.Controllers
             return Ok(new Shared.Responses.OkResult("Udało się"));
         }
 
+        [AllowAnonymous]
         [HttpGet("getoutcome/{timetableId}")]
         public async Task<IActionResult> GetTimetableGeneretingOutcome([FromRoute]int timetableId)
         {

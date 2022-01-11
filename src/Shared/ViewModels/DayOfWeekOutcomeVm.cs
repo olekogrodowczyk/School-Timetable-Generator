@@ -8,7 +8,8 @@ namespace Shared.ViewModels
 {
     public class DayOfWeekOutcomeVm
     {
-        public int DayOfWeek { get; set; }
+        public string DayOfWeek { get; set; }
+        public int DayOfWeekNumber { get; set; }
         public IList<LessonVm> Lessons { get; set; } = new List<LessonVm>();
     }
 }

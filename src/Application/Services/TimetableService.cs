@@ -68,14 +68,16 @@ namespace Application.Services
             var subjects = await _subjectRepository.GetAllSubjectsWithLessonsJoins(timetableId);
             var subjectsByClass = subjects.GroupBy(s => s.Class.Name).ToList();
             List<TimetableOutcomeVm> outcomeList = new List<TimetableOutcomeVm>();
+
             foreach (var subject in subjectsByClass)
             {
                 var aggregatedLessons = subject.Aggregate(new List<LessonVm>(), (a, b) =>
                 {
                     a.AddRange(_mapper.Map<List<LessonVm>>(b.Lessons));
                     return a;
-                }).GroupBy(x => x.DayOfWeek, (key, value) => new DayOfWeekOutcomeVm{ DayOfWeek = key, Lessons = value.ToList()})
-                .OrderBy(x => x.DayOfWeek).ToList();
+                }).GroupBy(x => x.DayOfWeek, (key, value) =>
+                new DayOfWeekOutcomeVm{ DayOfWeek = MatchDayOfWeekByNumber(key), DayOfWeekNumber=key, Lessons = value.ToList()})
+                .OrderBy(x => x.DayOfWeekNumber).ToList();
 
                 outcomeList.Add(new TimetableOutcomeVm
                 {
@@ -88,13 +90,14 @@ namespace Application.Services
 
         private string MatchDayOfWeekByNumber(int numberOfWeek) => numberOfWeek switch
         {
-            0 => "Poniedziałek",
-            1 => "Wtorek",
-            2 => "Środa",
-            3 => "Czwartek",
-            4 => "Piątek",
+            1 => "Poniedziałek",
+            2 => "Wtorek",
+            3 => "Środa",
+            4 => "Czwartek",
+            5 => "Piątek",
             _ => "Błąd"
         };
+
 
     }
 }
