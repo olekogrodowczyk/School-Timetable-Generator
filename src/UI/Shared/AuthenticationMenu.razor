@@ -5,10 +5,11 @@
     <AuthorizeView>
     <NotAuthorized>
     <a href="/login" class="btn btn-border-dark">Logowanie</a>
-    <a href="/register" class="btn btn-border-dark mf-5">Rejestracja</a>
+    <a href="/register" class="btn btn-border-dark">Rejestracja</a>
        </NotAuthorized>
-       <Authorized>
-        <a class="btn btn-primary" @onclick="LogOutAsync">Wyloguj się</a>
+       <Authorized>        
+        <a class="btn btn-border-dark" href="plans">Twoje plany</a>
+        <a class="btn btn-border-dark" @onclick="LogOutAsync">Wyloguj się</a>
          </Authorized>             
      </AuthorizeView>                                    
 
