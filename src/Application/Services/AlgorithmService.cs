@@ -1,11 +1,9 @@
-﻿using Application.Exceptions;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Domain.Entities;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.Services
@@ -25,18 +23,18 @@ namespace Application.Services
         private readonly IUserRepository _userRepository;
         private readonly ITimetableService _timetableService;
 
-        static int deep = 0;
-        static List<int> periods = new List<int>();
-        static List<Group> lessonss = new List<Group>();
-        static List<Classroom> classess = new List<Classroom>();
-        static List<Availability> availabilities = new List<Availability>();
-        static int inMemory = 0;
-        static int licznik = 0;
-        static List<List<Group>> timeLessonss = new List<List<Group>>();
-        static List<List<Group>> timeLessonssCorrect = new List<List<Group>>();
-        static List<Group> errorList = new List<Group>();
-        static int day_periods = 8;
-        int activeTimetableId;
+        private static int deep = 0;
+        private static List<int> periods = new List<int>();
+        private static List<Group> lessonss = new List<Group>();
+        private static List<Classroom> classess = new List<Classroom>();
+        private static List<Availability> availabilities = new List<Availability>();
+        private static int inMemory = 0;
+        private static int licznik = 0;
+        private static List<List<Group>> timeLessonss = new List<List<Group>>();
+        private static List<List<Group>> timeLessonssCorrect = new List<List<Group>>();
+        private static List<Group> errorList = new List<Group>();
+        private static int day_periods = 8;
+        private int activeTimetableId;
 
         public AlgorithmService(IAssignmentRepository assignmentRepository, IAvailabilityRepository availabilityRepository
             , IClassRepository classRepository, IClassroomRepository classroomRepository, IGroupRepository groupRepository
@@ -68,12 +66,11 @@ namespace Application.Services
             {
                 if ((i == nothere) && (await CountErrors(i, lesson)) > 0)
                     howMany.Add(999);
-                if(await isTeacherAvailable(i,lesson.TeacherId)==false)
+                if (await isTeacherAvailable(i, lesson.TeacherId) == false)
                 {
                     howMany.Add(999);
                     countingT++;
-                }    
-
+                }
                 else
                   if (await classMaker(i, await counter(lesson)) == -1)
                 {
@@ -90,7 +87,7 @@ namespace Application.Services
                 errorList.Add(lesson);
                 return false;
             }
-            if(countingT==periods.Count())
+            if (countingT == periods.Count())
             {
                 errorList.Add(lesson);
                 return false;
@@ -139,12 +136,10 @@ namespace Application.Services
                     await PlaceLesson(inMemory[i], finalList[final]);
                     deep--;
                 }
-
             }
 
             return true;
         }
-
 
         private async Task<int> CountErrors(int period, Group lesson)
         {
@@ -154,20 +149,16 @@ namespace Application.Services
             {
                 if ((timeLessonss[period][i].ClassId == lesson.ClassId) || (timeLessonss[period][i].TeacherId == lesson.TeacherId))
                     count++;
-
             }
 
             return count;
-
         }
 
         private async Task<int> classMaker(int period, int lessonPeople)
         {
-
             List<int> notAvailable = new List<int>();
             List<int> available = new List<int>();
             int a = 0;
-
 
             for (int i = 0; i < timeLessonss[period].Count(); i++)
             {
@@ -201,9 +192,7 @@ namespace Application.Services
                 {
                     min = a;
                     indeks = available[i];
-
                 }
-
             }
             if (min == 999)
                 return -1;
@@ -222,8 +211,6 @@ namespace Application.Services
                 periods.Add(i);
             }
 
-
-
             var Classess = await _classroomRepository.GetWhereAsync(c => c.TimetableId == activeTimetableId);
             var Lessonss = await _groupRepository.GetWhereAsync(g => g.TimetableId == activeTimetableId);
             var Teachers = await _teacherRepository.GetWhereAsync(t => t.TimetableId == activeTimetableId);
@@ -238,13 +225,11 @@ namespace Application.Services
                 lessonss[i].ClassroomId = null;
             }
 
-
             for (int i = 0; i < periods.Count; i++)
             {
                 timeLessonss.Add(new List<Group>());
                 timeLessonssCorrect.Add(new List<Group>());
             }
-
 
             for (int i = 0; i < lessonss.Count; i++)
             {
@@ -254,15 +239,12 @@ namespace Application.Services
                 await PlaceLesson(lessonss[i]);
                 if (inMemory < errorList.Count())
                 {
-
                     for (int x = 0; x < lista2.Count(); x++)
                     {
                         timeLessonss[x].Clear();
                         for (int y = 0; y < lista2[x].Count(); y++)
                         {
-
                             timeLessonss[x].Add(lista2[x][y]);
-
                         }
                     }
                 }
@@ -276,17 +258,17 @@ namespace Application.Services
             {
                 for (int y = 0; y < timeLessonss[x].Count; y++)
                 {
-                    Console.WriteLine("Nauczyciel: " + timeLessonss[x][y].TeacherId + " Klasa: " + timeLessonss[x][y].ClassId + " Start o godzinie: " + (await hourmakerStart(x)).ToString() + " Koniec o godzinie: " +
-                        await hourmakerEnd(x) + " Dnia " + await dayMaker(x) + " Sala: " + timeLessonss[x][y].ClassroomId);
+                    Console.WriteLine("Nauczyciel: " + timeLessonss[x][y].TeacherId + " Klasa: " + timeLessonss[x][y].ClassId + " Start o godzinie: " + hourmakerStart(x).ToString() + " Koniec o godzinie: " +
+                        hourmakerEnd(x) + " Dnia " + dayMaker(x) + " Sala: " + timeLessonss[x][y].ClassroomId);
 
                     Lesson toBase = new Lesson();
                     toBase.SubjectId = (int)timeLessonss[x][y].SubjectId;
                     toBase.TeacherId = timeLessonss[x][y].TeacherId;
                     toBase.GroupId = timeLessonss[x][y].Id;
                     toBase.ClassroomId = (int)timeLessonss[x][y].ClassroomId;
-                    toBase.StartsAt = await hourmakerStart(x);
-                    toBase.EndsAt = await hourmakerEnd(x);
-                    toBase.DayOfWeek = await dayMaker(x);
+                    toBase.StartsAt = hourmakerStart(x);
+                    toBase.EndsAt = hourmakerEnd(x);
+                    toBase.DayOfWeek = dayMaker(x);
                     toBase.TimetableId = activeTimetableId;
                     lessons.Add(toBase);
                 }
@@ -299,7 +281,6 @@ namespace Application.Services
 
             for (int i = 0; i < errorList.Count; i++)
             {
-
                 Console.WriteLine("Nauczyciel: " + errorList[i].TeacherId + " Klasa: " + errorList[i].ClassId);
             }
             await handleChangingPhase();
@@ -308,8 +289,6 @@ namespace Application.Services
             timeLessonss.Clear();
             timeLessonssCorrect.Clear();
             errorList.Clear();
-
-
         }
 
         private async Task DeleteLessonsFromTimetable()
@@ -330,26 +309,22 @@ namespace Application.Services
             await _timetableRepository.UpdateAsync(timetable);
         }
 
-        private async Task<int> dayMaker(int period)
+        private int dayMaker(int period)
         {
-            if (period < day_periods)
-                return 1;
-            if (period < 2 * day_periods)
-                return 2;
-            if (period < 3 * day_periods)
-                return 3;
-            if (period < 4 * day_periods)
-                return 4;
-            if (period < 5 * day_periods)
-                return 5;
+            if (period < day_periods) { return 1; }                
+            if (period < 2 * day_periods) { return 2; }               
+            if (period < 3 * day_periods) { return 3; }                
+            if (period < 4 * day_periods) { return 4; }                
+            if (period < 5 * day_periods) { return 5; }               
             return -1;
         }
 
-        private async Task<int> hourmakerStart(int period)
+        private int hourmakerStart(int period)
         {
             return (period % day_periods) + 8;
         }
-        private async Task<int> hourmakerEnd(int period)
+
+        private int hourmakerEnd(int period)
         {
             return (period % day_periods) + 9;
         }
@@ -358,45 +333,32 @@ namespace Application.Services
         {
             int assignments = await _assignmentRepository.GetCount(y => y.GroupId == x.Id && y.TimetableId == activeTimetableId);
             return assignments;
-
-
         }
 
-        private async Task<string>DayInString(int period)
+        private string DayInString(int period)
         {
-            if (period < day_periods)
-                return "Poniedziałek";
-            if (period < 2 * day_periods)
-                return "Wtorek";
-            if (period < 3 * day_periods)
-                return "Środa";
-            if (period < 4 * day_periods)
-                return "Czwartek";
-            if (period < 5 * day_periods)
-                return "Piątek";
+            if (period < day_periods) { return "Poniedziałek"; }
+            if (period < 2 * day_periods) { return "Wtorek"; }
+            if (period < 3 * day_periods) { return "Środa"; }
+            if (period < 4 * day_periods) { return "Czwartek"; }
+            if (period < 5 * day_periods) { return "Piątek"; }
             return "Błąd";
         }
 
-        
         private async Task<bool> isTeacherAvailable(int period, int teacherID)
-            {
+        {
             var correctAvailability = availabilities.Where(a => a.TeacherId == teacherID);
-            var day = await DayInString(period);         
-            var hour = await hourmakerStart(period);
+            var day = DayInString(period);
+            var hour = hourmakerStart(period);
             var correctDayAvailability = correctAvailability.Where(c => c.DayOfWeek == day);
             var correctHourAvailability = correctDayAvailability.Where(h => h.StartsAt == hour);
             if (correctHourAvailability.Count() > 0)
                 return true;
             else
                 return false;
+        }
 
-
-
-
-
-            }
-
-        private  enum dayOfWeeks
+        private enum dayOfWeeks
         {
             Poniedziałek,
             Wtorek,
@@ -404,6 +366,5 @@ namespace Application.Services
             Czwartek,
             Piątek
         }
-        
     }
 }
