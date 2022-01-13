@@ -66,7 +66,7 @@ namespace Application.Services
         public async Task<IEnumerable<TimetableOutcomeVm>> GetTimetableGeneretingOutcome(int timetableId)
         {
             var subjects = await _subjectRepository.GetAllSubjectsWithLessonsJoins(timetableId);
-            var subjectsByClass = subjects.GroupBy(s => s.Class.Name).ToList();
+            var subjectsByClass = subjects.GroupBy(s => s.Class?.Name).ToList();
             List<TimetableOutcomeVm> outcomeList = new List<TimetableOutcomeVm>();
 
             foreach (var subject in subjectsByClass)
