@@ -305,7 +305,7 @@ namespace Application.Services
             const int thirdPhaseNumber = 3;
             await _timetableService.ChangePhaseNumber(activeTimetableId, thirdPhaseNumber);
             var timetable = await _timetableRepository.GetByIdAsync(activeTimetableId);
-            timetable.GenereteTime = DateTime.UtcNow;
+            timetable.GenereteTime = DateTime.Now;
             await _timetableRepository.UpdateAsync(timetable);
         }
 
