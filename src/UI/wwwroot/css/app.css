@@ -147,7 +147,6 @@ section {
 .btn-dark {
     background-color: var(--dark-color);
     color: #e7e7e7;
-
 }
 
 .btn-light {
@@ -1197,7 +1196,7 @@ input:focus {
     background-color: #122a2d;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -1208,3 +1207,53 @@ input:focus {
 .planDetail span {
     margin-right: 200px;
 }
+
+.showPlan {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+.class {
+    padding: 16px 36px;
+    width: max-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 16px 0px;
+    align-self: center;
+}
+
+
+
+.showPlan .class_name {
+    font-size: 26px;
+    color: #f5fffb;
+}
+
+.showPlan .week {
+    display: flex;
+}
+
+    .showPlan .week ul {
+        padding: 6px 16px;
+    }
+
+.showPlan .day {
+    font-size: larger;
+    color: rgba(255, 222, 180, 0.671);
+    padding-bottom: 6px;
+}
+
+.showPlan .one_detail {
+    margin: 16px 0;
+    padding: 16px;
+    border-radius: 10px;
+    background-color: #ffffff13;
+}
+
+    .showPlan .one_detail li {
+        padding: 6px 0;
+    }

@@ -1,40 +1,37 @@
-﻿<section>
+﻿<section id="add">
     <div class="container" style="font-weight: normal;">
-        <ul>
+        
+        
             @foreach(var classObject in outcomeData)
             {
-                <li><b>@classObject.ClassName</b></li>
-                <br />
+                <div class="showPlan">
+            <ul class="class dark-shadow">
+                <li><b class="class_name">@classObject.ClassName</b></li>
                 <li>
-                    <ul>
+                    <div class="week">
                         @foreach(var dayOfWeek in classObject.DayOfWeeks)
                         {
-                          <li><b>@dayOfWeek.DayOfWeek</b></li>
-                          <br />
-                          <li>
-                              <ul>
+                            <ul>
+                          <li class="day"><b>@dayOfWeek.DayOfWeek</b></li>
+                          <li>                              
                                   @foreach(var lesson in dayOfWeek.Lessons)
                                   {
-                                    <li><b>Przedmiot</b> - @lesson.SubjectName</li>
-                                    <li><b>Grupa</b> - @lesson.GroupName</li>
-                                    <li><b>Nauczyciel</b> - @lesson.Teacher</li>
-                                    <li><b>Godzina rozpoczęcia</b> - @lesson.StartsAt</li>
-                                    <li><b>Godzina zakończenia</b> - @lesson.EndsAt</li>
-                                    <br />
-                                  }                                   
-                              </ul>
+                                      <div class="one_detail">
+                                        <li><b>Przedmiot</b> - @lesson.SubjectName</li>
+                                        <li><b>Grupa</b> - @lesson.GroupName</li>
+                                        <li><b>Nauczyciel</b> - @lesson.Teacher</li>
+                                        <li><b>Godzina rozpoczęcia</b> - @lesson.StartsAt</li>
+                                        <li><b>Godzina zakończenia</b> - @lesson.EndsAt</li>
+                                    </div>
+                                  }                                                              
                           </li>
+                          </ul>
                         }
-                    </ul>
+                    </div>
                 </li>
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-            }
-        </ul>
-        
+                </ul>
+        </div>
+            }      
     </div>
 </section>         
 
