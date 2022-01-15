@@ -1081,10 +1081,11 @@ input:focus {
 #add-subject button {
     margin-top: 0 !important;
 }
-
+#fillbackClass,
 #fillback {
     visibility: collapse;
 }
+
 
 #add-subject .panel {
     background: none;

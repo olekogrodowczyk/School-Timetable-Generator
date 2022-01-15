@@ -960,8 +960,6 @@ function initializeAddClass() {
     addNew.addEventListener('click', (e) => {
         e.preventDefault();
         if (validateFormStudent() != false) {
-
-
             //const t = document.querySelector("#liczba");
             //t.style.visibility = "visible";
             const element = document.querySelector("#submitNewClass");
@@ -983,11 +981,11 @@ function initializeAddClass() {
             UI.clearStudentForm();
         }
     });
-
+    var back = document.querySelector('#fillbackClass');
     var addNewClass = document.querySelector('#addNewClass');
     addNewClass.addEventListener('click', (e) => {
         e.preventDefault();
-
+        back.style.visibility = "visible";
         const element = document.querySelector(".addStudent");
         element.style.visibility = "visible";
         element.style.padding = " 0 16px"
@@ -996,21 +994,51 @@ function initializeAddClass() {
         k.style.visibility = "hidden";
         const s = document.querySelector("#submitNewClass");
         s.style.visibility = "hidden";
+        const teacher = document.querySelector('#teacherSelect').value;
+        localStorage.setItem('TeacherToSelect', JSON.stringify(teacher));
+        const el = document.querySelectorAll(".selectable");
+        el.forEach(e => {
+            e.disabled = "true";
+        });
+    });
+
+    back.addEventListener('click', (e) => {
+        e.preventDefault();
+        back.style.visibility = "hidden";
+        addNewClass.style.visibility = "visible"
+        const k = document.querySelector(".studentListContainer");
+        k.style.visibility = "hidden";
+        k.style.height = 0;
+        const s = document.querySelector("#addNewClass");
+        s.style.visibility = "visible";
+        const element = document.querySelector(".addStudent");
+        element.style.visibility = "hidden";
+        element.style.padding = "0 0";
+        element.style.height = "0";
+        studentsList = [];
+
+        const row = document.querySelector('#studentList');
+        row.innerHTML = '';
+
+        const el = document.querySelectorAll(".selectable");
+        el.forEach(e => {
+            e.removeAttribute("disabled");
+        });
+
+        UI.clearClassForm();
     });
 
     var addNewClassSubmit = document.querySelector('#submitNewClass');
-    submitNewClass.addEventListener('click', (e) => {
+    addNewClassSubmit.addEventListener('click', (e) => {
         e.preventDefault();
         if (validateFormClass() != false) {
-
+            back.style.visibility = "hidden";
 
             const name = document.querySelector('#name').value;
             const teacher = document.querySelector('#teacherSelect').value
             // const studentsArr = document.querySelector('#nazwisko').value;
 
             let newclass = new Class(name, teacher);
-
-            console.log(studentsList[0].imie);
 
             studentsList.forEach(student => {
                 newclass.newStudent(student.Imie, student.Nazwisko);
@@ -1023,8 +1051,11 @@ function initializeAddClass() {
             localStorage.setItem('MyClasses', JSON.stringify(classesList));
             localStorage.setItem('ClassToAdd', JSON.stringify(newclass));
 
+           // UI.addClassToList(newclass);
+            
+
             const k = document.querySelector(".studentListContainer");
-            k.style.visibility = "hiddem";
+            k.style.visibility = "hidden";
             k.style.height = 0;
             const s = document.querySelector("#addNewClass");
             s.style.visibility = "visible";
@@ -1036,6 +1067,11 @@ function initializeAddClass() {
 
             const row = document.querySelector('#studentList');
             row.innerHTML = '';
+
+            const el = document.querySelectorAll(".selectable");
+            el.forEach(e => {
+                e.removeAttribute("disabled");
+            });
 
             UI.clearClassForm();
         }
@@ -1378,7 +1414,7 @@ function initializeSubjects() {
         });
 
         const ch = document.querySelector('#division')
-        if (ch.checked) {
+        if (ch.checked =="true") {
             if (validateNumberOfGroup() != false) {
                 addGroupSubjectFields();
                 displayStudents()
