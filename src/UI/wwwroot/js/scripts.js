@@ -985,22 +985,8 @@ function initializeAddClass() {
     var addNewClass = document.querySelector('#addNewClass');
     addNewClass.addEventListener('click', (e) => {
         e.preventDefault();
-        back.style.visibility = "visible";
-        const element = document.querySelector(".addStudent");
-        element.style.visibility = "visible";
-        element.style.padding = " 0 16px"
-        element.style.height = element.scrollHeight + 10 + "px";
-        const k = document.querySelector("#addNewClass");
-        k.style.visibility = "hidden";
-        const s = document.querySelector("#submitNewClass");
-        s.style.visibility = "hidden";
-        const teacher = document.querySelector('#teacherSelect').value;
-        localStorage.setItem('TeacherToSelect', JSON.stringify(teacher));
-        const el = document.querySelectorAll(".selectable");
-        el.forEach(e => {
-            e.disabled = "true";
-        });
     });
+
 
     back.addEventListener('click', (e) => {
         e.preventDefault();
@@ -1537,4 +1523,23 @@ function validateNumberOfGroup() {
         alert("Za duża ilość grup");
         return false;
     }
+}
+
+function teacherExist() {
+    var back = document.querySelector('#fillbackClass');
+    back.style.visibility = "visible";
+    const element = document.querySelector(".addStudent");
+    element.style.visibility = "visible";
+    element.style.padding = " 0 16px"
+    element.style.height = element.scrollHeight + 10 + "px";
+    const k = document.querySelector("#addNewClass");
+    k.style.visibility = "hidden";
+    const s = document.querySelector("#submitNewClass");
+    s.style.visibility = "hidden";
+    const teacher = document.querySelector('#teacherSelect').value;
+    localStorage.setItem('TeacherToSelect', JSON.stringify(teacher));
+    const el = document.querySelectorAll(".selectable");
+    el.forEach(e => {
+        e.disabled = "true";
+    });
 }
