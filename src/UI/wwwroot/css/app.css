@@ -1190,10 +1190,10 @@ input:focus {
 }
 
 .planUl {
-    min-width: 600px;
-    width: 30%;
+    min-width: 650px;
+    width: 650px;
     margin: auto;
-    padding: 1rem 3rem;
+    padding: 3rem 3rem;
     background-color: #122a2d;
     display: flex;
     flex-direction: column;
@@ -1202,7 +1202,7 @@ input:focus {
 }
 
 .planUl .title {
-    width: 100%;
+    width: 600px;
     margin-bottom: 16px;
 }
 
@@ -1228,7 +1228,6 @@ input:focus {
 
 .planDetail span {
     margin: 6px;
-   
     color: rgba(255, 222, 180, 0.671);
 }
 
