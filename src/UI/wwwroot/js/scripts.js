@@ -985,6 +985,8 @@ function initializeAddClass() {
     var addNewClass = document.querySelector('#addNewClass');
     addNewClass.addEventListener('click', (e) => {
         e.preventDefault();
+        const teacher = document.querySelector('#teacherSelect').value;
+        localStorage.setItem('TeacherToSelect', JSON.stringify(teacher));
     });
 
 
@@ -1536,8 +1538,7 @@ function teacherExist() {
     k.style.visibility = "hidden";
     const s = document.querySelector("#submitNewClass");
     s.style.visibility = "hidden";
-    const teacher = document.querySelector('#teacherSelect').value;
-    localStorage.setItem('TeacherToSelect', JSON.stringify(teacher));
+  
     const el = document.querySelectorAll(".selectable");
     el.forEach(e => {
         e.disabled = "true";
