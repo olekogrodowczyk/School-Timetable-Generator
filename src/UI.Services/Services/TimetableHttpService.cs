@@ -43,5 +43,16 @@ namespace UI.Services.Services
             var result = await _httpService.Get<OkResult<IEnumerable<TimetableVm>>>("api/timetable/getoutcomelist");
             return result.Value;
         }
+
+        public async Task ChangeCurrentUserTimetable(int timetableId)
+        {
+            var result = await _httpService.Patch<OkResult>($"api/timetable/changecurrenttimetable?timetableId={timetableId}",null);
+        }
+
+        public async Task<int> GetCurrentUserTimetableId()
+        {
+            var result = await _httpService.Get<OkResult<int>>("api/timetable/getcurrenttimetable");
+            return result.Value;
+        }
     }
 }

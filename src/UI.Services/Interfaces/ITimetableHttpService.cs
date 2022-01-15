@@ -10,9 +10,11 @@ namespace UI.Services.Interfaces
 {
     public interface ITimetableHttpService
     {
+        Task ChangeCurrentUserTimetable(int timetableId);
         Task<int> CreateTimetable();
         Task Generate();
         Task<IEnumerable<TimetableOutcomeVm>> GetAlgorithmOutcome(int timetableId);
+        Task<int> GetCurrentUserTimetableId();
         Task<IEnumerable<TimetableVm>> GetGeneratedPlans();
     }
 }
