@@ -109,6 +109,8 @@ namespace UI.Components.AddTeachers
                 error = true;
                 ToastService.ShowError("Nastąpił problem z serializacją danych");
             }
+            bool teacherExists = await CheckIfTeacherExists(teacherToAdd.imie, teacherToAdd.nazwisko);
+            if (teacherExists) { return; }
             if (error) { return; }
             error = await ComponentRequestHandler.HandleRequest<TeacherModel>(TeacherHttpService.CreateTeacherWithAvailabilities
                 , teacherToAdd, _errorMessage, _errors, ToastService);
@@ -118,6 +120,17 @@ namespace UI.Components.AddTeachers
                 ToastService.ShowSuccess("Pomyślnie dodano nowego nauczyciela");               
             }
             await Refresh();
+        }
+
+        public async Task<bool> CheckIfTeacherExists(string firstName, string lastName)
+        {
+            bool teacherExists = await TeacherHttpService.TeacherExists(firstName, lastName);
+            if (teacherExists)
+            {
+                ToastService.ShowError($"Podany nauczyciel - {firstName} {lastName} już istnieje");
+                return true;
+            }
+            return false;
         }
 
         public async Task DeleteTeacher(int teacherId)
