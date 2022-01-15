@@ -76,5 +76,14 @@ namespace Application.Services
                 await _availabilityService.CreateAvailability(availability);
             }
         }
+
+        public async Task<bool> TeacherExists(string firstName, string lastName)
+        {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            var teacher = await _teacherRepository.SingleOrDefaultAsync(x=>x.TimetableId == activeTimetableId
+            && x.FirstName == firstName && x.LastName == lastName);
+            if(teacher == null) { return false; }
+            return true;
+        } 
     }
 }

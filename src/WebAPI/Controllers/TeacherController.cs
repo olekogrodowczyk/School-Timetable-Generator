@@ -58,6 +58,13 @@ namespace WebAPI.Controllers
             return Ok(new Shared.Responses.OkResult("Pomyślnie zaktualizowano wybranego nauczyciela"));
         }
 
+        [HttpGet("teacherexists")]
+        public async Task<IActionResult> TeacherExists([FromQuery] string firstName, [FromQuery] string lastName)
+        {
+            var result = await _teacherService.TeacherExists(firstName, lastName);
+            return Ok(new OkResult<bool>(result, "Pomyślnie sprawdzono czy nauczyciel istnieje"));
+        }
+
 
     }
 }
