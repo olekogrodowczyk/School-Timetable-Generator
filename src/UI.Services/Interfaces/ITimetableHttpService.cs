@@ -15,6 +15,6 @@ namespace UI.Services.Interfaces
         Task Generate();
         Task<IEnumerable<TimetableOutcomeVm>> GetAlgorithmOutcome(int timetableId);
         Task<int> GetCurrentUserTimetableId();
-        Task<IEnumerable<TimetableVm>> GetGeneratedPlans();
+        Task<IEnumerable<TimetableVm>> GetUserTimetables();
     }
 }

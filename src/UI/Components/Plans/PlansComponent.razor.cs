@@ -33,7 +33,7 @@ namespace UI.Components.Plans
 
         private async Task Refresh()
         {
-            generatedTimetables = await TimetableHttpService.GetGeneratedPlans();
+            generatedTimetables = await TimetableHttpService.GetUserTimetables();
             currentTimetableId = await TimetableHttpService.GetCurrentUserTimetableId();
             StateHasChanged();
         }

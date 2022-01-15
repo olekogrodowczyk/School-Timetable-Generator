@@ -14,7 +14,7 @@ namespace Application.Interfaces
         Task<int> CreateTimetable();
         Task<int> GetCurrentPhase(int timetableId);
         Task<int> GetCurrentUserTimetableId();
-        Task<IEnumerable<TimetableVm>> GetGeneratedTimetables();
+        Task<IEnumerable<TimetableVm>> GetUserTimetables();
         Task<IEnumerable<TimetableOutcomeVm>> GetTimetableGeneretingOutcome(int timetableId);
     }
 }

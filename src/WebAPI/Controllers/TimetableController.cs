@@ -59,10 +59,10 @@ namespace WebAPI.Controllers
             return Ok(new OkResult<IEnumerable<TimetableOutcomeVm>>(result, "Pomyślnie zwrócono wynik działania algorytmu"));
         }
 
-        [HttpGet("getoutcomelist")]
-        public async Task<IActionResult> GetTimetablesGeneretedForUser()
+        [HttpGet("getusertimetables")]
+        public async Task<IActionResult> GetUserTimetables()
         {
-            var result = await _timetableService.GetGeneratedTimetables();
+            var result = await _timetableService.GetUserTimetables();
             return Ok(new OkResult<IEnumerable<TimetableVm>>(result, "Pomyślnie zwrócono wygenerowane plany lekcji"));
         }
 

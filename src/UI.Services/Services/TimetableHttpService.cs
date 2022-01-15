@@ -38,9 +38,9 @@ namespace UI.Services.Services
             return result.Value;
         }
 
-        public async Task<IEnumerable<TimetableVm>> GetGeneratedPlans()
+        public async Task<IEnumerable<TimetableVm>> GetUserTimetables()
         {
-            var result = await _httpService.Get<OkResult<IEnumerable<TimetableVm>>>("api/timetable/getoutcomelist");
+            var result = await _httpService.Get<OkResult<IEnumerable<TimetableVm>>>("api/timetable/getusertimetables");
             return result.Value;
         }
 

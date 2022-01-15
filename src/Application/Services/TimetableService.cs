@@ -109,10 +109,10 @@ namespace Application.Services
             await _userRepository.UpdateAsync(loggedUser);          
         }
 
-        public async Task<IEnumerable<TimetableVm>> GetGeneratedTimetables()
+        public async Task<IEnumerable<TimetableVm>> GetUserTimetables()
         {
             int loggedUserId = _userContextService.GetUserId ?? 0;
-            var result = await _timetableRepository.GetWhereAsync(x => x.CreatorId == loggedUserId && x.CurrentPhase==3);
+            var result = await _timetableRepository.GetWhereAsync(x => x.CreatorId == loggedUserId);
             var mappedResult = _mapper.Map<IEnumerable<TimetableVm>>(result);
             return mappedResult;
         }
