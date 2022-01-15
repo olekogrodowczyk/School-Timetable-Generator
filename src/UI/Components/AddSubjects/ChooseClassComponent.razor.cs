@@ -37,7 +37,12 @@ namespace UI.Components.AddSubjects
 
         protected async Task GenerateTimetable()
         {
+            isBusy = true;
             await TimetableHttpService.Generate();
+            isBusy = false;
+            ToastService.ShowSuccess("Pomyślnie wygenerowano plan lekcji");
+            int currentTimetableId = await TimetableHttpService.GetCurrentUserTimetableId();
+            NavigationManager.NavigateTo($"plans/{currentTimetableId}");
         }
 
         [Inject]
