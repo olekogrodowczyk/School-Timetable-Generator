@@ -138,6 +138,16 @@ namespace UI.Components.AddClass
             await Refresh();
         }
 
+        private async Task<bool> CheckIfTeacherFromLocalStorageExists()
+        {
+            string teacherToCheck = await LocalStorageService.GetItemAsync<string>("TeacherToSelect");
+            var teacherNames = teacherToCheck.Split(" ");
+            bool teacherExists = await TeacherHttpService.TeacherExists(teacherNames[0], teacherNames[1]);
+            if (!teacherExists) { ToastService.ShowError("Podany nauczyciel nie istnieje"); return false; }
+            await JSRuntime.InvokeVoidAsync("teacherExist");
+            return true;
+        }
+
         protected async Task AddClass()
         {
             string classToAddString = await LocalStorageService.GetItemAsync<string>("ClassToAdd");
@@ -151,12 +161,7 @@ namespace UI.Components.AddClass
                 error = true;
                 ToastService.ShowError("Nastąpił problem z serializacją danych");
             }
-            if (error) { return; }
-
-            var teacherNames = classToAdd.teacher.Split(" ");
-            bool teacherExists = await TeacherHttpService.TeacherExists(teacherNames[0], teacherNames[1]);
-            if (!teacherExists) { ToastService.ShowError("Podany nauczyciel nie istnieje"); return; }
-
+            if (error) { return; }            
             error = await ComponentRequestHandler.HandleRequest<ClassModel>(ClassHttpService.CreateClass
                 , classToAdd, _errorMessage, _errors, ToastService);
             if (!error)

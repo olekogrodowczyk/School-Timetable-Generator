@@ -17,7 +17,7 @@
 				<li>
 					<div class="btn-container">
 						<button class="btn btn-dark" id="addNewClass" type="submit" value="DODAJ"
-								disabled="@isBusy">
+								disabled="@isBusy" @onclick="CheckIfTeacherFromLocalStorageExists">
 							DODAJ
 						</button>
 						<button class="btn btn-dark" id="fillbackClass" type="submit" value="COFNIJ"
