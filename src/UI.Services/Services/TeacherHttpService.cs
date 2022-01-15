@@ -64,6 +64,12 @@ namespace UI.Services.Services
             return result.Value;
         }
 
+        public async Task<bool> TeacherExists(string firstName, string lastName)
+        {
+            var result = await _httpService.Get<OkResult<bool>>($"api/teacher/teacherexists?firstName={firstName}&lastName={lastName}");
+            return result.Value;
+        }
+
         private Task<List<CreateAvailabilityDto>> HandleAvailabilities(char[][] values, int teacherId)
         {
             const int startsAtInit = 8;

@@ -48,6 +48,9 @@ namespace UI.Components.AddSubjects
         [Inject]
         public IToastService ToastService { get; set; }
 
+        [Inject]
+        public ITeacherHttpService TeacherHttpService { get; set; }
+
         
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -119,6 +122,8 @@ namespace UI.Components.AddSubjects
             {
                 ToastService.ShowError("Nastąpił problem z serializacją danych");
             }
+            if (await CheckTeachersExistance(subjectToAdd)) { return; }
+            if (_errorMessage != String.Empty) { ToastService.ShowError(String.Empty, _errorMessage); }
             try
             {
                 await SubjectHttpService.AddSubjectWithGroups(subjectToAdd, ClassName);
@@ -132,7 +137,6 @@ namespace UI.Components.AddSubjects
             {
                 _errorMessage = e.Message;
             }
-            if (_errorMessage != String.Empty) { ToastService.ShowError(String.Empty, _errorMessage); }
             if (_errors != null)
             {
                 foreach (string error in _errors)
@@ -142,6 +146,22 @@ namespace UI.Components.AddSubjects
             }
             if (_errorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
             await Refresh();
+        }
+
+        private async Task<bool> CheckTeachersExistance(SubjectModel subjectToAdd)
+        {
+            bool error = false;
+            foreach (var item in subjectToAdd.groupSubjectList)
+            {
+                var teacherNames = item.teacher.Split(" ");
+                bool teacherExists = await TeacherHttpService.TeacherExists(teacherNames[0], teacherNames[1]);
+                if (!teacherExists) 
+                { 
+                    ToastService.ShowError($"Podany nauczyciel - {teacherNames[0]} {teacherNames[1]} nie istnieje");
+                    error = true;
+                }
+            }
+            return error;
         }
 
         private async Task DeleteSubject(int subjectId)

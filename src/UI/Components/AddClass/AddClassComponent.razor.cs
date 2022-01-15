@@ -152,6 +152,11 @@ namespace UI.Components.AddClass
                 ToastService.ShowError("Nastąpił problem z serializacją danych");
             }
             if (error) { return; }
+
+            var teacherNames = classToAdd.teacher.Split(" ");
+            bool teacherExists = await TeacherHttpService.TeacherExists(teacherNames[0], teacherNames[1]);
+            if (!teacherExists) { ToastService.ShowError("Podany nauczyciel nie istnieje"); return; }
+
             error = await ComponentRequestHandler.HandleRequest<ClassModel>(ClassHttpService.CreateClass
                 , classToAdd, _errorMessage, _errors, ToastService);
             if (!error)
