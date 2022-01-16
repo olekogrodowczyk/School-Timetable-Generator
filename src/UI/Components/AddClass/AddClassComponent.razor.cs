@@ -142,6 +142,12 @@ namespace UI.Components.AddClass
         {
             string teacherToCheck = await LocalStorageService.GetItemAsync<string>("TeacherToSelect");
             var teacherNames = teacherToCheck.Split(" ");
+            if (teacherNames.Length != 2)
+            {
+                ToastService.ShowError("Nieprawidłowe dane nauczyciela");
+                return false;
+            }
+
             bool teacherExists = await TeacherHttpService.TeacherExists(teacherNames[0], teacherNames[1]);
             if (!teacherExists) { ToastService.ShowError("Podany nauczyciel nie istnieje"); return false; }
             await JSRuntime.InvokeVoidAsync("teacherExist");

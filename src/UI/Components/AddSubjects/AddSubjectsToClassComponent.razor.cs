@@ -154,6 +154,11 @@ namespace UI.Components.AddSubjects
             foreach (var item in subjectToAdd.groupSubjectList)
             {
                 var teacherNames = item.teacher.Split(" ");
+                if (teacherNames.Length != 2)
+                {
+                    ToastService.ShowError("Nieprawidłowe dane nauczyciela");
+                    error = true;
+                }
                 bool teacherExists = await TeacherHttpService.TeacherExists(teacherNames[0], teacherNames[1]);
                 if (!teacherExists) 
                 { 
