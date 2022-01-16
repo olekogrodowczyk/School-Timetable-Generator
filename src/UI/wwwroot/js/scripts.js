@@ -1402,7 +1402,9 @@ function initializeSubjects() {
         });
 
         const ch = document.querySelector('#division')
-        if (ch.checked =="true") {
+        
+        if (ch.checked) {
+            console.log(ch);
             if (validateNumberOfGroup() != false) {
                 addGroupSubjectFields();
                 displayStudents()
@@ -1418,7 +1420,8 @@ function initializeSubjects() {
                 bt.style.display = "flex";
             }
         }
-        else { //jezeli nie ma podzialu
+        else {
+          
             let oneGroupSubject = setGroupSubjectOfAllStudents();
             displayTeacherFiels();
         }
