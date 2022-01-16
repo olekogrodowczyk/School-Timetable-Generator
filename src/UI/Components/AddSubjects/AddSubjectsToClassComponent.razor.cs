@@ -122,7 +122,7 @@ namespace UI.Components.AddSubjects
             {
                 ToastService.ShowError("Nastąpił problem z serializacją danych");
             }
-            if (await CheckTeachersExistance(subjectToAdd)) { return; }
+            if (await ValidateData(subjectToAdd)) { return; }
             if (_errorMessage != String.Empty) { ToastService.ShowError(String.Empty, _errorMessage); }
             try
             {
@@ -148,15 +148,25 @@ namespace UI.Components.AddSubjects
             await Refresh();
         }
 
-        private async Task<bool> CheckTeachersExistance(SubjectModel subjectToAdd)
+        private async Task<bool> ValidateData(SubjectModel subjectToAdd)
         {
             bool error = false;
             foreach (var item in subjectToAdd.groupSubjectList)
             {
+                if(item.name == null || item.teacher == null || item.hours == null)
+                {
+                    ToastService.ShowError("Podano puste dane");
+                    error = true;
+                }
+                if(item.hours == null || int.Parse(item.hours) <0)
+                {
+                    ToastService.ShowError("Podano nieprawidłową liczbę godzin");
+                    error = true;
+                }
                 var teacherNames = item.teacher.Split(" ");
                 if (teacherNames.Length != 2)
                 {
-                    ToastService.ShowError("Nieprawidłowe dane nauczyciela");
+                    ToastService.ShowError("Podano nieprawidłowe dane nauczyciela");
                     error = true;
                 }
                 bool teacherExists = await TeacherHttpService.TeacherExists(teacherNames[0], teacherNames[1]);
