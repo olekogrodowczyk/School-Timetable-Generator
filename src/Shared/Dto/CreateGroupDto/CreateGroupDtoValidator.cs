@@ -17,10 +17,11 @@ namespace Shared.Dto.CreateGroupDto
         private readonly ISubjectRepository _subjectRepository;
         private readonly ITimetableRepository _timetableRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IGroupRepository _groupRepository;
 
         public CreateGroupDtoValidator(IClassRepository classRepository, IStudentRepository studentRepository
             , ITeacherRepository teacherRepository, ISubjectRepository subjectRepository, ITimetableRepository timetableRepository
-            ,IUserRepository userRepository)
+            ,IUserRepository userRepository, IGroupRepository groupRepository)
         {
             _classRepository = classRepository;
             _studentRepository = studentRepository;
@@ -28,10 +29,11 @@ namespace Shared.Dto.CreateGroupDto
             _subjectRepository = subjectRepository;
             _timetableRepository = timetableRepository;
             _userRepository = userRepository;
-
+            _groupRepository = groupRepository;
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Nazwa grupy nie może być pusta")
-                .MinimumLength(2).WithMessage("Minimalna długość nazwy grupy to 2");
+                .MinimumLength(2).WithMessage("Minimalna długość nazwy grupy to 2")
+                .MustAsync(GroupNotExists).WithMessage(x => $"Podana grupa: {x.Name} już istnieje");
 
             RuleFor(x => x.StudentIds)
                 .NotEmpty().WithMessage("Grupa nie może być pusta")
@@ -78,6 +80,14 @@ namespace Shared.Dto.CreateGroupDto
         public async Task<bool> SubjectExists(string value, CancellationToken cancellationToken)
         {
             return await _subjectRepository.AnyAsync(s => s.Name == value);
+        }
+
+        public async Task<bool> GroupNotExists(string value, CancellationToken cancellationToken)
+        {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            bool groupExists = await _groupRepository.AnyAsync(x => x.TimetableId == activeTimetableId && x.Name == value);
+            if (groupExists) { return false; }
+            return true;
         }
     }
 }

@@ -26,7 +26,8 @@ namespace Shared.Dto.CreateClassDto
 
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Nie podano nazwy klasy")
-                .MinimumLength(1).WithMessage("Minimalna długość nazwy klasy to 1");
+                .MinimumLength(1).WithMessage("Minimalna długość nazwy klasy to 1")
+                .MustAsync(ClassNotExists).WithMessage("Podana klasa już istnieje");
 
             RuleFor(x => x.TeacherName)
                 .NotEmpty().WithMessage("Nie podano wychowawcy")
@@ -38,6 +39,14 @@ namespace Shared.Dto.CreateClassDto
         {
             int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
             return await _teacherRepository.AnyAsync(t => t.TimetableId==activeTimetableId && t.FirstName + " " + t.LastName == value);
+        }
+
+        public async Task<bool> ClassNotExists(string value, CancellationToken cancellationToken)
+        {
+            int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
+            bool classExists = await _classRepository.AnyAsync(x => x.TimetableId == activeTimetableId && x.Name == value);
+            if (classExists) { return false; }
+            return true;
         }
     }
 }

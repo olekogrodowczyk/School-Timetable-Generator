@@ -19,4 +19,6 @@ namespace Shared.Dto.CreateSubjectDto
             profile.CreateMap<CreateSubjectDto, Subject>();
         }
     }
+
+
 }
