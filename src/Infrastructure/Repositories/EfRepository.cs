@@ -45,11 +45,8 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<T> GetByIdAsync(int id)
         {
-            var query = _context.Set<T>().AsQueryable();
-            query = includeProperties?.Aggregate(query, (current, include) => current.Include(include));
-
             var result = await _context.Set<T>().FindAsync(id);
             if (result == null) { throw new NotFoundException($"Result is not found with id:{id} with given type: {typeof(T)}"); }
             return result;
@@ -60,7 +57,7 @@ namespace Infrastructure.Repositories
             var query = _context.Set<T>().AsQueryable();
             query = includeProperties?.Aggregate(query, (current, include) => current.Include(include));
 
-            return await _context.Set<T>().ToListAsync();
+            return await query.ToListAsync();
         }
 
         public async Task<IEnumerable<T>> GetWhereAsync(Expression<Func<T, bool>> predicate,
@@ -78,27 +75,26 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
         {
-            var query = _context.Set<T>().AsQueryable();
-            query = includeProperties?.Aggregate(query, (current, include) => current.Include(include));
-
             return await _context.Set<T>().AnyAsync(predicate);
         }
 
         public async Task<T> SingleOrDefaultAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
         {
-            includeProperties?.ToList().ForEach(property => _context.Set<T>().Include(property));
+            var query = _context.Set<T>().AsNoTracking().AsQueryable();
+            query = includeProperties?.Aggregate(query, (current, include) => current.Include(include));
 
-            var result = await _context.Set<T>().SingleOrDefaultAsync(predicate);
+            var result = await query.SingleOrDefaultAsync(predicate);
             return result;
         }
 
         public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
         {
-            includeProperties?.ToList().ForEach(property => _context.Set<T>().Include(property));
+            var query = _context.Set<T>().AsNoTracking().AsQueryable();
+            query = includeProperties?.Aggregate(query, (current, include) => current.Include(include));
 
-            var result = await _context.Set<T>().FirstOrDefaultAsync(predicate);
+            var result = await query.FirstOrDefaultAsync(predicate);
             return result;
         }
 

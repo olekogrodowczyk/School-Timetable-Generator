@@ -11,11 +11,11 @@ namespace Domain.Interfaces
     {
         Task<T> AddAsync(T entity);
         Task AddRangeAsync(IEnumerable<T> entities);
-        Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
+        Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
         Task DeleteAsync(int id);
         Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
         Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties);
-        Task<T> GetByIdAsync(int id, params Expression<Func<T, object>>[] includeProperties);
+        Task<T> GetByIdAsync(int id);
         Task<int> GetCount(Expression<Func<T, bool>> predicate);
         Task<IEnumerable<T>> GetWhereAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
         Task<T> SingleOrDefaultAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
