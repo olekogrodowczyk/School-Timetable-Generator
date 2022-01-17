@@ -116,6 +116,18 @@ namespace Infrastructure.Data
                 .WithMany(x => x.Subjects)
                 .HasForeignKey(x => x.ClassId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UnassignedLesson>()
+                .HasOne<Group>(x => x.Group)
+                .WithMany(x => x.UnassignedLessons)
+                .HasForeignKey(x => x.GroupId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UnassignedLesson>()
+                .HasOne<Teacher>(x => x.Teacher)
+                .WithMany(x => x.UnassignedLessons)
+                .HasForeignKey(x => x.TeacherId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

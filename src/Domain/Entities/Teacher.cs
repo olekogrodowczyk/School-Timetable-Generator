@@ -18,5 +18,6 @@ namespace Domain.Entities
         public virtual ICollection<Group> Groups { get; set; }
         public int? TimetableId { get; set; }
         public virtual TimeTable TimeTable { get; set; }
+        public virtual ICollection<UnassignedLesson> UnassignedLessons { get; set; }
     }
 }

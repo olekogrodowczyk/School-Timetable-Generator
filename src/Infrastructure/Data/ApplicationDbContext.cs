@@ -25,6 +25,7 @@ namespace Infrastructure.Data
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Classroom> Classrooms { get; set; }
         public DbSet<Availability> Availabilities { get; set; }
+        public DbSet<UnassignedLesson> UnassignedLessons { get; set;}
 
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
@@ -49,7 +50,6 @@ namespace Infrastructure.Data
 
             modelBuilder.Entity<Group>()
                 .HasIndex(x => new { x.TimetableId, x.Name }).IsUnique();
-            
 
         }
 
