@@ -74,7 +74,7 @@
 							@foreach (var student in item.Students)
 							{
 								<ul class="dark-shadow">
-									<li>@String.Format("{0} {1}", student.FirstName, student.LastName)"</li>
+									<li>@String.Format("{0} {1}", student.FirstName, student.LastName)</li>
 									<li>
 										<div id="@student.Id" class="btn-container">
 											<input id="@student.Id" @onclick="(async()=>await DeleteStudent(student.Id))"

@@ -174,6 +174,7 @@ namespace UI.Components.AddSubjects
         {
             isInvalid = await ComponentRequestHandler.HandleRequest(SubjectHttpService.DeleteSubjectWithGroups, subjectId, ToastService);
             if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie usunięto wybrany przedmiot"); }
+            await Refresh();
         }
 
     }
