@@ -10,18 +10,17 @@ namespace Application.Services
 {
     public class AlgorithmService : IAlgorithmService
     {
-        private readonly IAssignmentRepository _assignmentRepository;
         private readonly IAvailabilityRepository _availabilityRepository;
-        private readonly IClassRepository _classRepository;
+        private readonly IAssignmentRepository _assignmentRepository;
         private readonly IClassroomRepository _classroomRepository;
         private readonly IGroupRepository _groupRepository;
         private readonly ILessonRepository _lessonRepository;
-        private readonly IStudentRepository _studentRepository;
-        private readonly ISubjectRepository _subjectRepository;
         private readonly ITeacherRepository _teacherRepository;
         private readonly ITimetableRepository _timetableRepository;
         private readonly IUserRepository _userRepository;
         private readonly ITimetableService _timetableService;
+        private readonly IUnassignedLessonRepository _unassignedLessonRepository;
+
 
         private static int deep = 0;
         private static List<int> periods = new List<int>();
@@ -36,24 +35,22 @@ namespace Application.Services
         private static int day_periods = 8;
         private int activeTimetableId;
 
-        public AlgorithmService(IAssignmentRepository assignmentRepository, IAvailabilityRepository availabilityRepository
-            , IClassRepository classRepository, IClassroomRepository classroomRepository, IGroupRepository groupRepository
-            , ILessonRepository lessonRepository, IStudentRepository studentRepository, ISubjectRepository subjectRepository
-            , ITeacherRepository teacherRepository, ITimetableRepository timetableRepository, IUserRepository userRepository
-            , ITimetableService timetableService)
+        public AlgorithmService(IAvailabilityRepository availabilityRepository, IAssignmentRepository assignmentRepository
+            , IClassroomRepository classroomRepository, IGroupRepository groupRepository
+            , ILessonRepository lessonRepository, ITeacherRepository teacherRepository
+            , ITimetableRepository timetableRepository, IUserRepository userRepository
+            , ITimetableService timetableService, IUnassignedLessonRepository unassignedLessonRepository)
         {
-            _assignmentRepository = assignmentRepository;
             _availabilityRepository = availabilityRepository;
-            _classRepository = classRepository;
+            _assignmentRepository = assignmentRepository;
             _classroomRepository = classroomRepository;
             _groupRepository = groupRepository;
             _lessonRepository = lessonRepository;
-            _studentRepository = studentRepository;
-            _subjectRepository = subjectRepository;
             _teacherRepository = teacherRepository;
             _timetableRepository = timetableRepository;
             _userRepository = userRepository;
             _timetableService = timetableService;
+            _unassignedLessonRepository = unassignedLessonRepository;
         }
 
         private async Task<bool> PlaceLesson(Group lesson, int nothere = 9999)
@@ -261,16 +258,19 @@ namespace Application.Services
                     Console.WriteLine("Nauczyciel: " + timeLessonss[x][y].TeacherId + " Klasa: " + timeLessonss[x][y].ClassId + " Start o godzinie: " + hourmakerStart(x).ToString() + " Koniec o godzinie: " +
                         hourmakerEnd(x) + " Dnia " + dayMaker(x) + " Sala: " + timeLessonss[x][y].ClassroomId);
 
-                    Lesson toBase = new Lesson();
-                    toBase.SubjectId = (int)timeLessonss[x][y].SubjectId;
-                    toBase.TeacherId = timeLessonss[x][y].TeacherId;
-                    toBase.GroupId = timeLessonss[x][y].Id;
-                    toBase.ClassroomId = (int)timeLessonss[x][y].ClassroomId;
-                    toBase.StartsAt = hourmakerStart(x);
-                    toBase.EndsAt = hourmakerEnd(x);
-                    toBase.DayOfWeek = dayMaker(x);
-                    toBase.TimetableId = activeTimetableId;
-                    lessons.Add(toBase);
+                    Lesson toDatabase = new Lesson
+                    {
+                        SubjectId = (int)timeLessonss[x][y].SubjectId,
+                        TeacherId = timeLessonss[x][y].TeacherId,
+                        GroupId = timeLessonss[x][y].Id,
+                        ClassroomId = (int)timeLessonss[x][y].ClassroomId,
+                        StartsAt = hourmakerStart(x),
+                        EndsAt = hourmakerEnd(x),
+                        DayOfWeek = dayMaker(x),
+                        TimetableId = activeTimetableId,
+                    };
+                    
+                    lessons.Add(toDatabase);
                 }
             }
             await _lessonRepository.AddRangeAsync(lessons);
@@ -278,10 +278,15 @@ namespace Application.Services
             Console.WriteLine();
             Console.WriteLine("Nie udalo sie podlaczyc: ");
             Console.WriteLine();
-
             for (int i = 0; i < errorList.Count; i++)
             {
                 Console.WriteLine("Nauczyciel: " + errorList[i].TeacherId + " Klasa: " + errorList[i].ClassId);
+                UnassignedLesson unassignedLesson = new UnassignedLesson
+                {
+                    GroupId = errorList[i].ClassId,
+                    TeacherId = errorList[i].TeacherId,
+                };
+                await _unassignedLessonRepository.AddAsync(unassignedLesson);
             }
             await handleChangingPhase();
             Console.WriteLine("Ciekawostka zostalo uzyte :" + licznik + " rekurencji");

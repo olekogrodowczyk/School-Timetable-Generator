@@ -65,6 +65,7 @@ namespace Infrastructure
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IAssignmentRepository, AssignmentRepository>();
             services.AddScoped<ILessonRepository, LessonRepository>();
+            services.AddScoped<IUnassignedLessonRepository, UnassignedLessonRepository>();
 
             return services;
         }
