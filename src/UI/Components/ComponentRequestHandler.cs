@@ -2,15 +2,18 @@
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Threading.Tasks;
+using UI.Services.ErrorModels;
 using UI.Services.Exceptions;
 
 namespace UI.Components
 {
     public static class ComponentRequestHandler
     {
-        public static async Task<bool> HandleRequest<T>
-            (Func<T, Task> action, T value, string errorMessage, string[] errors, IToastService toastService)
+        private static ErrorModel errorModel { get; set; }
+
+        public static async Task<bool> HandleRequest<T>(Func<T, Task> action, T value, IToastService toastService)
         {
+            errorModel = new ErrorModel();
             bool isError = false;
             try
             {
@@ -19,22 +22,23 @@ namespace UI.Components
             catch (ApiException e)
             {
                 isError = true;
-                errorMessage = e.ErrorResult.Message;
-                errors = e.ErrorResult.Errors;
+                errorModel.ErrorMessage = e.ErrorResult.Message;
+                errorModel.Errors = e.ErrorResult.Errors;
             }
             catch (Exception e)
             {
                 isError = true;
-                errorMessage = e.Message;
+                errorModel.ErrorMessage = e.Message;
             }
-            if (errorMessage != String.Empty) { toastService.ShowError(errorMessage, "Błąd"); }
-            if (errors != null)
+            if (errorModel.ErrorMessage != String.Empty) { toastService.ShowError(errorModel.ErrorMessage, "Błąd"); }
+            if (errorModel.Errors != null) 
             {
-                foreach (string error in errors)
+                foreach (string error in errorModel.Errors)
                 {
                     toastService.ShowError(error);
                 }
             }
+            errorModel.Clear();
             return isError;
         }
     }

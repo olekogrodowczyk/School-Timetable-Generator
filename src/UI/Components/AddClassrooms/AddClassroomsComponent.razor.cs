@@ -8,6 +8,7 @@ using Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UI.Services.ErrorModels;
 using UI.Services.Interfaces;
 using UI.Services.Models;
 
@@ -15,12 +16,9 @@ namespace UI.Components.AddClassrooms
 {
     public partial class AddClassroomsComponent
     {
-        protected string value = String.Empty;
-        protected string _errorMessage = String.Empty;
-        protected string[] _errors;
-        private bool error;
+        private bool isInvalid = false;        
         private List<ClassroomModel> deserializedValue = new List<ClassroomModel>();
-        private IEnumerable<ClassroomVm> ClassroomsCreated = new List<ClassroomVm>();
+        private IEnumerable<ClassroomVm> classroomsCreated = new List<ClassroomVm>();
 
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
@@ -50,70 +48,43 @@ namespace UI.Components.AddClassrooms
             if (firstRender)
             {           
                 await JSRuntime.InvokeVoidAsync("initializeAddClassrooms");
-                ClassroomsCreated = await ClassroomHttpService.GetAllClassroomsCreated();
-                StateHasChanged();
+                await Refresh();
             }
+        }
+
+        private async Task Refresh()
+        {
+            isInvalid = false;
+            classroomsCreated = await ClassroomHttpService.GetAllClassroomsCreated();
+            StateHasChanged();
         }
         
         
         protected async Task AddClassroom()
         {
             string classroomToAddString = await LocalStorageService.GetItemAsync<string>("ClassroomToAdd");
-            ClassroomModel classroomToAdd = null;
-            try
-            {
-                classroomToAdd = JsonConvert.DeserializeObject<ClassroomModel>(classroomToAddString);
-            }
-            catch (Exception ex)
-            {
-                error = true;
-                ToastService.ShowError("Nastąpił problem z serializacją danych");
-            }
-            if(error) { return; }
-            error = await ComponentRequestHandler.HandleRequest<ClassroomModel>(ClassroomHttpService.CreateClassroom
-                ,classroomToAdd, _errorMessage, _errors, ToastService);
-            if (!error) 
-            { 
-                ToastService.ShowSuccess("Pomyślnie dodano nową salę");                                     
-            }
-            ClassroomsCreated = await ClassroomHttpService.GetAllClassroomsCreated();
-            StateHasChanged();
+            var classroomToAdd = await JsonDeserializer.DeserializeValue<ClassroomModel>(classroomToAddString, ToastService);
+            isInvalid = await ComponentRequestHandler.HandleRequest(ClassroomHttpService.CreateClassroom, classroomToAdd, ToastService);
+           
+            if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie dodano nową salę"); }
+            await Refresh();
         }
 
         protected async Task UpdateClassroom()
         {
             string classroomToEditString = await LocalStorageService.GetItemAsync<string>("ClassroomToEdit");
-            ClassroomModel classroomToEdit = null;
-            try
-            {
-                classroomToEdit = JsonConvert.DeserializeObject<ClassroomModel>(classroomToEditString);
-            }
-            catch (Exception ex)
-            {
-                error = true;
-                ToastService.ShowError("Nastąpił problem z serializacją danych");
-            }
-            error = await ComponentRequestHandler.HandleRequest<ClassroomModel>(ClassroomHttpService.UpdateClassroom
-                , classroomToEdit, _errorMessage, _errors, ToastService);
-            if (error) { NavigationManager.NavigateTo("addclassrooms", true); }
-            if (!error)
-            {
-                ToastService.ShowSuccess("Pomyślnie zaktualizowano wybraną salę");             
-            }
-            ClassroomsCreated = await ClassroomHttpService.GetAllClassroomsCreated();
-            StateHasChanged();
+            var classroomToEdit =  await JsonDeserializer.DeserializeValue<ClassroomModel>(classroomToEditString, ToastService);
+            isInvalid = await ComponentRequestHandler.HandleRequest(ClassroomHttpService.UpdateClassroom, classroomToEdit, ToastService);       
+          
+            if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie zaktualizowano wybraną salę"); }
+            await Refresh();
         }
 
         protected async Task DeleteClassroom(int classroomId)
         {
-            error = await ComponentRequestHandler.HandleRequest<int>(ClassroomHttpService.DeleteClassroom
-                , classroomId, _errorMessage, _errors, ToastService);
-            if (!error)
-            {
-                ToastService.ShowSuccess("Pomyślnie usunięto wybraną salę");
-            }
-            ClassroomsCreated = await ClassroomHttpService.GetAllClassroomsCreated();
-            StateHasChanged();
+            isInvalid = await ComponentRequestHandler.HandleRequest(ClassroomHttpService.DeleteClassroom, classroomId, ToastService);
+            if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie usunięto wybraną salę"); }
+            await Refresh();
         }
     }
 }

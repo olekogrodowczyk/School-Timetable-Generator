@@ -11,15 +11,14 @@ using System;
 using UI.Services.Models;
 using Newtonsoft.Json;
 using UI.Services.Exceptions;
+using UI.Services.ErrorModels;
 
 namespace UI.Components.AddSubjects
 {
     public partial class AddSubjectsToClassComponent
     {
-        protected string value = String.Empty;
-        protected string _errorMessage = String.Empty;
-        protected string[] _errors;
-        private bool error;
+        private bool isInvalid;
+        private ErrorModel errorModel;
         private Dictionary<int, string> styles = new Dictionary<int, string>();
         private IEnumerable<SubjectVm> subjectsCreated = new List<SubjectVm>();
         private IEnumerable<StudentVm> students;
@@ -63,6 +62,7 @@ namespace UI.Components.AddSubjects
 
         private async Task Refresh()
         {
+            isInvalid = false;
             subjectsCreated = await SubjectHttpService.GetAllSubjectsWithGroups(ClassName);
             await InitializeStyles();
             await Task.Delay(50);
@@ -101,50 +101,41 @@ namespace UI.Components.AddSubjects
 
         protected async Task DeleteGroup(int groupId)
         {
-            error = await ComponentRequestHandler.HandleRequest<int>(GroupHttpService.DeleteGroupWithAssignments
-                , groupId, _errorMessage, _errors, ToastService);
-            if (!error)
-            {
-                ToastService.ShowSuccess("Pomyślnie usunięto wybraną grupę");
-            }
+            isInvalid = await ComponentRequestHandler.HandleRequest(GroupHttpService.DeleteGroupWithAssignments, groupId, ToastService);
+            if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie usunięto wybraną grupę"); }
             await Refresh();
         }
 
         protected async Task AddSubject()
         {
-            value = await LocalStorageService.GetItemAsync<string>("SubjectToAdd");
-            SubjectModel subjectToAdd = null;
-            try
-            {
-                subjectToAdd = JsonConvert.DeserializeObject<SubjectModel>(value);
-            }
-            catch (Exception ex)
-            {
-                ToastService.ShowError("Nastąpił problem z serializacją danych");
-            }
+            
+            string subjectToAddString = await LocalStorageService.GetItemAsync<string>("SubjectToAdd");
+            var subjectToAdd = await JsonDeserializer.DeserializeValue<SubjectModel>(subjectToAddString, ToastService);
+            errorModel = new ErrorModel();
             if (await ValidateData(subjectToAdd)) { return; }
-            if (_errorMessage != String.Empty) { ToastService.ShowError(String.Empty, _errorMessage); }
+            if (errorModel.ErrorMessage != String.Empty) { ToastService.ShowError(String.Empty, errorModel.ErrorMessage); }
             try
             {
                 await SubjectHttpService.AddSubjectWithGroups(subjectToAdd, ClassName);
             }
             catch (ApiException e)
             {
-                _errorMessage = e.ErrorResult.Message;
-                _errors = e.ErrorResult.Errors;
+                errorModel.ErrorMessage = e.ErrorResult.Message;
+                errorModel.Errors = e.ErrorResult.Errors;
             }
             catch (Exception e)
             {
-                _errorMessage = e.Message;
+                errorModel.ErrorMessage = e.Message;
             }
-            if (_errors != null)
+            if (errorModel.Errors != null)
             {
-                foreach (string error in _errors)
+                foreach (string error in errorModel.Errors)
                 {
                     ToastService.ShowError(error);
                 }
             }
-            if (_errorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
+            if (errorModel.ErrorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
+            errorModel.Clear();
             await Refresh();
         }
 
@@ -158,7 +149,7 @@ namespace UI.Components.AddSubjects
                     ToastService.ShowError("Podano puste dane");
                     error = true;
                 }
-                if(item.hours == null || int.Parse(item.hours) <0)
+                if(item.hours == null || int.Parse(item.hours) < 0)
                 {
                     ToastService.ShowError("Podano nieprawidłową liczbę godzin");
                     error = true;
@@ -181,13 +172,8 @@ namespace UI.Components.AddSubjects
 
         private async Task DeleteSubject(int subjectId)
         {
-            error = await ComponentRequestHandler.HandleRequest<int>(SubjectHttpService.DeleteSubjectWithGroups
-                , subjectId, _errorMessage, _errors, ToastService);
-            if (!error)
-            {
-                ToastService.ShowSuccess("Pomyślnie usunięto wybrany przedmiot");
-            }
-            await Refresh();
+            isInvalid = await ComponentRequestHandler.HandleRequest(SubjectHttpService.DeleteSubjectWithGroups, subjectId, ToastService);
+            if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie usunięto wybrany przedmiot"); }
         }
 
     }
