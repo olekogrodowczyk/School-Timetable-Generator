@@ -230,18 +230,21 @@ namespace Application.Services
 
             for (int i = 0; i < lessonss.Count; i++)
             {
-                deep = 0;
-                var lista2 = timeLessonss.Select(lst => lst.ToList()).ToList();
-                inMemory = errorList.Count();
-                await PlaceLesson(lessonss[i]);
-                if (inMemory < errorList.Count())
+                for (int j = 0; j < lessonss[i].NumberOfLessonInWeek; j++)
                 {
-                    for (int x = 0; x < lista2.Count(); x++)
+                    deep = 0;
+                    var lista2 = timeLessonss.Select(lst => lst.ToList()).ToList();
+                    inMemory = errorList.Count();
+                    await PlaceLesson(lessonss[i]);
+                    if (inMemory < errorList.Count())
                     {
-                        timeLessonss[x].Clear();
-                        for (int y = 0; y < lista2[x].Count(); y++)
+                        for (int x = 0; x < lista2.Count(); x++)
                         {
-                            timeLessonss[x].Add(lista2[x][y]);
+                            timeLessonss[x].Clear();
+                            for (int y = 0; y < lista2[x].Count(); y++)
+                            {
+                                timeLessonss[x].Add(lista2[x][y]);
+                            }
                         }
                     }
                 }
