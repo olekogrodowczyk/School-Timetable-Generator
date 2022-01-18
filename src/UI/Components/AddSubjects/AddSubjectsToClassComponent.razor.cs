@@ -11,15 +11,14 @@ using System;
 using UI.Services.Models;
 using Newtonsoft.Json;
 using UI.Services.Exceptions;
+using UI.Services.ErrorModels;
 
 namespace UI.Components.AddSubjects
 {
     public partial class AddSubjectsToClassComponent
     {
-        protected string value = String.Empty;
-        protected string _errorMessage = String.Empty;
-        protected string[] _errors;
-        private bool error;
+        private bool isInvalid;
+        private ErrorModel errorModel;
         private Dictionary<int, string> styles = new Dictionary<int, string>();
         private IEnumerable<SubjectVm> subjectsCreated = new List<SubjectVm>();
         private IEnumerable<StudentVm> students;
@@ -48,7 +47,12 @@ namespace UI.Components.AddSubjects
         [Inject]
         public IToastService ToastService { get; set; }
 
-        
+        [Inject]
+        public ITeacherHttpService TeacherHttpService { get; set; }
+
+        [Inject]
+        public ITimetableStateHttpService TimetableStateHttpService { get; set; }
+
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -58,8 +62,34 @@ namespace UI.Components.AddSubjects
             }
         }
 
+        protected override async Task OnInitializedAsync()
+        {
+            await PhaseGuard();
+            students = await ClassHttpService.GetAllStudentsFromClass(ClassName);
+            if (students.Count() == 0)
+            {
+                ToastService.ShowError("W tej klasie nie ma żadnych uczniów!", "Błąd");
+                NavigationManager.NavigateTo("/");
+                return;
+            }
+            await LocalStorageService.SetItemAsync("MyStudents", students);
+            await JSRuntime.InvokeVoidAsync("initializeSubjects");
+        }
+
+        protected async Task PhaseGuard()
+        {
+            int currentTimetable = await TimetableStateHttpService.GetCurrentTimetable();
+            int currentPhase = await TimetableStateHttpService.GetCurrentPhase(currentTimetable);
+            if (currentPhase != 3 && currentPhase != 2)
+            {
+                NavigationManager.NavigateTo("/");
+            }
+        }
+
+
         private async Task Refresh()
         {
+            isInvalid = false;
             subjectsCreated = await SubjectHttpService.GetAllSubjectsWithGroups(ClassName);
             await InitializeStyles();
             await Task.Delay(50);
@@ -82,76 +112,73 @@ namespace UI.Components.AddSubjects
             styles[classId] = styles[classId] == String.Empty ? $"max-height: {maxHeight.ToString()}px;" : String.Empty;
         }
 
-        protected override async Task OnInitializedAsync()
-        {
-            await LocalStorageService.RemoveItemAsync("MySubjects");
-            students = await ClassHttpService.GetAllStudentsFromClass(ClassName);
-            if (students.Count() == 0)
-            {
-                ToastService.ShowError("W tej klasie nie ma żadnych uczniów!", "Błąd");
-                NavigationManager.NavigateTo("/");
-                return;
-            }
-            await LocalStorageService.SetItemAsync("MyStudents", students);
-            await JSRuntime.InvokeVoidAsync("initializeSubjects");
-        }
-
-        protected async Task DeleteGroup(int groupId)
-        {
-            error = await ComponentRequestHandler.HandleRequest<int>(GroupHttpService.DeleteGroupWithAssignments
-                , groupId, _errorMessage, _errors, ToastService);
-            if (!error)
-            {
-                ToastService.ShowSuccess("Pomyślnie usunięto wybraną grupę");
-            }
-            await Refresh();
-        }
-
         protected async Task AddSubject()
-        {
-            value = await LocalStorageService.GetItemAsync<string>("SubjectToAdd");
-            SubjectModel subjectToAdd = null;
-            try
-            {
-                subjectToAdd = JsonConvert.DeserializeObject<SubjectModel>(value);
-            }
-            catch (Exception ex)
-            {
-                ToastService.ShowError("Nastąpił problem z serializacją danych");
-            }
+        {           
+            string subjectToAddString = await LocalStorageService.GetItemAsync<string>("SubjectToAdd");
+            var subjectToAdd = await JsonDeserializer.DeserializeValue<SubjectModel>(subjectToAddString, ToastService);
+            errorModel = new ErrorModel();
+            if (await ValidateData(subjectToAdd)) { return; }
+            if (errorModel.ErrorMessage != String.Empty) { ToastService.ShowError(String.Empty, errorModel.ErrorMessage); }
             try
             {
                 await SubjectHttpService.AddSubjectWithGroups(subjectToAdd, ClassName);
             }
             catch (ApiException e)
             {
-                _errorMessage = e.ErrorResult.Message;
-                _errors = e.ErrorResult.Errors;
+                errorModel.ErrorMessage = e.ErrorResult.Message;
+                errorModel.Errors = e.ErrorResult.Errors;
             }
             catch (Exception e)
             {
-                _errorMessage = e.Message;
+                errorModel.ErrorMessage = e.Message;
             }
-            if (_errorMessage != String.Empty) { ToastService.ShowError(String.Empty, _errorMessage); }
-            if (_errors != null)
+            if (errorModel.Errors != null)
             {
-                foreach (string error in _errors)
+                foreach (string error in errorModel.Errors)
                 {
                     ToastService.ShowError(error);
                 }
             }
-            if (_errorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
+            if (errorModel.ErrorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
+            errorModel.Clear();
             await Refresh();
+        }
+
+        private async Task<bool> ValidateData(SubjectModel subjectToAdd)
+        {
+            bool error = false;
+            foreach (var item in subjectToAdd.groupSubjectList)
+            {
+                if(item.name == null || item.teacher == null || item.hours == null)
+                {
+                    ToastService.ShowError("Podano puste dane");
+                    error = true;
+                }
+                if(item.hours == null || int.Parse(item.hours) < 0)
+                {
+                    ToastService.ShowError("Podano nieprawidłową liczbę godzin");
+                    error = true;
+                }
+                var teacherNames = item.teacher.Split(" ");
+                if (teacherNames.Length != 2)
+                {
+                    ToastService.ShowError("Podano nieprawidłowe dane nauczyciela");
+                    error = true;
+                }
+                bool teacherExists = await TeacherHttpService.TeacherExists(teacherNames[0], teacherNames[1]);
+                if (!teacherExists) 
+                { 
+                    ToastService.ShowError($"Podany nauczyciel - {teacherNames[0]} {teacherNames[1]} nie istnieje");
+                    error = true;
+                }
+            }
+            return error;
         }
 
         private async Task DeleteSubject(int subjectId)
         {
-            error = await ComponentRequestHandler.HandleRequest<int>(SubjectHttpService.DeleteSubjectWithGroups
-                , subjectId, _errorMessage, _errors, ToastService);
-            if (!error)
-            {
-                ToastService.ShowSuccess("Pomyślnie usunięto wybrany przedmiot");
-            }
+            isInvalid = await ComponentRequestHandler.HandleRequest(SubjectHttpService.DeleteSubjectWithGroups, subjectId, ToastService);
+            if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie usunięto wybrany przedmiot"); }
             await Refresh();
         }
 

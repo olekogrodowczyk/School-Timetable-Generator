@@ -10,9 +10,11 @@ namespace Application.Interfaces
     public interface ITimetableService
     {
         Task ChangePhaseNumber(int timetableId, int phaseNumber);
+        Task ChangeUserCurrentTimetable(int timetableId);
         Task<int> CreateTimetable();
         Task<int> GetCurrentPhase(int timetableId);
-        Task<IEnumerable<TimetableVm>> GetGeneratedTimetables();
+        Task<int> GetCurrentUserTimetableId();
+        Task<IEnumerable<TimetableVm>> GetUserTimetables();
         Task<IEnumerable<TimetableOutcomeVm>> GetTimetableGeneretingOutcome(int timetableId);
     }
 }

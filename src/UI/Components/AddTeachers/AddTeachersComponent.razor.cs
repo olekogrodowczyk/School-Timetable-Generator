@@ -15,10 +15,7 @@ namespace UI.Components.AddTeachers
 {
     public partial class AddTeachersComponent
     {
-        protected string value = String.Empty;
-        protected string _errorMessage = String.Empty;
-        protected string[] _errors;
-        private bool error;
+        private bool isInvalid = false;
         private IEnumerable<TeacherVm> teachersCreated = new List<TeacherVm>();
         private Dictionary<int, string> styles = new Dictionary<int, string>();
 
@@ -37,8 +34,12 @@ namespace UI.Components.AddTeachers
         [Inject]
         public NavigationManager NavigationManager { get; set; }
 
+        [Inject]
+        public ITimetableStateHttpService TimetableStateHttpService { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
+            await PhaseGuard();
             await LocalStorageService.RemoveItemAsync("MyTeachers");
         }
 
@@ -53,6 +54,7 @@ namespace UI.Components.AddTeachers
 
         private async Task Refresh()
         {
+            isInvalid = false;
             teachersCreated = await TeacherHttpService.GetAllTeachersFromTimetable();
             await InitializeStyles();
             await Task.Delay(50);
@@ -61,24 +63,22 @@ namespace UI.Components.AddTeachers
 
         private async Task UpdateTeacher()
         {
-            string teacherToEditString = await LocalStorageService.GetItemAsync<string>("TeacherToEdit");
-            TeacherModel teacherToEdit = null;
-            try
-            {
-                teacherToEdit = JsonConvert.DeserializeObject<TeacherModel>(teacherToEditString);
-            }
-            catch (Exception ex)
-            {
-                error = true;
-                ToastService.ShowError("Nastąpił problem z serializacją danych");
-            }
-            error = await ComponentRequestHandler.HandleRequest<TeacherModel>(TeacherHttpService.UpdateTeacherWithAvailabilities
-                , teacherToEdit, _errorMessage, _errors, ToastService);
-            if (!error)
-            {
-                ToastService.ShowSuccess("Pomyślnie zaktualizowano wybranego nauczyciela");               
-            }
+            string teacherToUpdateString = await LocalStorageService.GetItemAsync<string>("TeacherToEdit");
+            var teacherToUpdate = await JsonDeserializer.DeserializeValue<TeacherModel>(teacherToUpdateString, ToastService);
+            isInvalid = await ComponentRequestHandler.HandleRequest(TeacherHttpService.UpdateTeacherWithAvailabilities, teacherToUpdate, ToastService);
+
+            if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie zaktualizowano wybranego nauczyciela"); }
             await Refresh();
+        }
+
+        protected async Task PhaseGuard()
+        {
+            int currentTimetable = await TimetableStateHttpService.GetCurrentTimetable();
+            int currentPhase = await TimetableStateHttpService.GetCurrentPhase(currentTimetable);
+            if (currentPhase != 1)
+            {
+                NavigationManager.NavigateTo("/");
+            }
         }
 
         private Task InitializeStyles()
@@ -99,35 +99,30 @@ namespace UI.Components.AddTeachers
         protected async Task AddTeacher()
         {
             string teacherToAddString = await LocalStorageService.GetItemAsync<string>("TeacherToAdd");
-            TeacherModel teacherToAdd = null;
-            try
-            {
-                teacherToAdd = JsonConvert.DeserializeObject<TeacherModel>(teacherToAddString);
-            }
-            catch (Exception ex)
-            {
-                error = true;
-                ToastService.ShowError("Nastąpił problem z serializacją danych");
-            }
-            if (error) { return; }
-            error = await ComponentRequestHandler.HandleRequest<TeacherModel>(TeacherHttpService.CreateTeacherWithAvailabilities
-                , teacherToAdd, _errorMessage, _errors, ToastService);
-            if (error) { await Refresh(); }
-            if (!error)
-            {
-                ToastService.ShowSuccess("Pomyślnie dodano nowego nauczyciela");               
-            }
+            var teacherToAdd = await JsonDeserializer.DeserializeValue<TeacherModel>(teacherToAddString, ToastService);
+            bool teacherExists = await CheckIfTeacherExists(teacherToAdd.imie, teacherToAdd.nazwisko);
+            if (teacherExists) { return; }
+
+            isInvalid = await ComponentRequestHandler.HandleRequest(TeacherHttpService.UpdateTeacherWithAvailabilities, teacherToAdd, ToastService);
+            if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie dodano wybranego nauczyciela"); }
             await Refresh();
+        }
+
+        public async Task<bool> CheckIfTeacherExists(string firstName, string lastName)
+        {
+            bool teacherExists = await TeacherHttpService.TeacherExists(firstName, lastName);
+            if (teacherExists)
+            {
+                ToastService.ShowError($"Podany nauczyciel - {firstName} {lastName} już istnieje");
+                return true;
+            }
+            return false;
         }
 
         public async Task DeleteTeacher(int teacherId)
         {
-            error = await ComponentRequestHandler.HandleRequest<int>(TeacherHttpService.DeleteTeacher
-                , teacherId, _errorMessage, _errors, ToastService);
-            if (!error)
-            {
-                ToastService.ShowSuccess("Pomyślnie usunięto wybraną salę");              
-            }
+            isInvalid = await ComponentRequestHandler.HandleRequest<int>(TeacherHttpService.DeleteTeacher, teacherId, ToastService);
+            if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie usunięto wybraną salę"); }
             await Refresh();
         }
 

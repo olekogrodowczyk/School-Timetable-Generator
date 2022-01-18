@@ -16,6 +16,7 @@ namespace UI.Services.Interfaces
         Task<IEnumerable<TeacherVm>> GetAllTeachersFromTimetable();
 
         Task<int> GetTeachersCount();
+        Task<bool> TeacherExists(string firstName, string lastName);
         Task UpdateTeacherWithAvailabilities(TeacherModel model);
     }
 }

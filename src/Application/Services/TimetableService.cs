@@ -39,12 +39,22 @@ namespace Application.Services
             var loggedUser = await _userRepository.GetByIdAsync(loggedUserId);
             
             var timetable = new TimeTable();
+            timetable.CurrentPhase = 1;
             timetable.CreatorId = loggedUserId;
             await _timetableRepository.AddAsync(timetable);
             loggedUser.CurrentTimetableId = timetable.Id;
             await _userRepository.UpdateAsync(loggedUser);
 
             return timetable.Id;
+        }
+
+        public async Task<int> GetCurrentUserTimetableId()
+        {
+            int loggedUserId = _userContextService.GetUserId ?? 0;
+            var loggedUser = await _userRepository.GetByIdAsync(loggedUserId);
+            if(loggedUser.CurrentTimetableId is null) 
+            { throw new BadRequestException("Użytkownik nie ma żadnego przypisanego planu lekcji"); }
+            return (int)loggedUser.CurrentTimetableId;
         }
 
         public async Task ChangePhaseNumber(int timetableId, int phaseNumber)
@@ -88,10 +98,21 @@ namespace Application.Services
             return outcomeList;
         }
 
-        public async Task<IEnumerable<TimetableVm>> GetGeneratedTimetables()
+        public async Task ChangeUserCurrentTimetable(int timetableId)
         {
             int loggedUserId = _userContextService.GetUserId ?? 0;
-            var result = await _timetableRepository.GetWhereAsync(x => x.CreatorId == loggedUserId && x.CurrentPhase==3);
+            var timetable = _timetableRepository.SingleOrDefaultAsync(x=>x.CreatorId == loggedUserId && x.Id == timetableId);
+            if(timetable == null) { throw new ForbidException("Nie masz uprawnień do tego planu"); }
+
+            var loggedUser = await _userRepository.GetByIdAsync(loggedUserId);
+            loggedUser.CurrentTimetableId = timetableId;
+            await _userRepository.UpdateAsync(loggedUser);          
+        }
+
+        public async Task<IEnumerable<TimetableVm>> GetUserTimetables()
+        {
+            int loggedUserId = _userContextService.GetUserId ?? 0;
+            var result = await _timetableRepository.GetWhereAsync(x => x.CreatorId == loggedUserId);
             var mappedResult = _mapper.Map<IEnumerable<TimetableVm>>(result);
             return mappedResult;
         }

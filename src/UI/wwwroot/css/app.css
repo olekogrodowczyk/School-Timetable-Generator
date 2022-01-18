@@ -250,12 +250,15 @@ a {
     border: 1px solid rgba( 255, 255, 255, 0.18 );
 }
 
+    
+
     .main-nav .container {
-        width: var(--max-width);
+        width: 100%;
         display: flex;
         align-items: center;
         justify-content: space-between;
         justify-items: center;
+        margin-right:3rem;
     }
 
     .main-nav .logo {
@@ -264,6 +267,12 @@ a {
         margin: 1rem 2rem;
         color: var(--dark-color);
     }
+
+        .main-nav .logo img {
+            width: 110%;
+            filter: invert(100%);
+            -webkit-filter: invert(100%);
+        }
 
     .main-nav ul {
         display: flex;
@@ -345,6 +354,8 @@ a {
         display: flex;
         justify-content: center;
         align-items: center;
+        filter: invert(100%);
+        -webkit-filter: invert(100%);
     }
 
     #basic-add .container, #add .container {
@@ -1081,10 +1092,11 @@ input:focus {
 #add-subject button {
     margin-top: 0 !important;
 }
-
+#fillbackClass,
 #fillback {
     visibility: collapse;
 }
+
 
 #add-subject .panel {
     background: none;
@@ -1103,7 +1115,7 @@ input:focus {
     }
 
     #add-subject .panel .groupAllInfo {
-        max-height: 600px;
+        max-height: 400px;
         overflow-y: auto;
         display: flex;
         flex-direction: column;
@@ -1111,6 +1123,7 @@ input:focus {
         justify-content: right;
         margin: 1rem;
         padding: 1rem;
+        overflow: auto;
     }
 
     #add-subject .panel .groupDetails {
@@ -1190,9 +1203,10 @@ input:focus {
 }
 
 .planUl {
-    width: max-content;
+    min-width: 650px;
+    width: 650px;
     margin: auto;
-    padding: 1rem 3rem;
+    padding: 3rem 3rem;
     background-color: #122a2d;
     display: flex;
     flex-direction: column;
@@ -1200,17 +1214,36 @@ input:focus {
     align-items: center;
 }
 
-    .planUl .title {
-        width: 100%;
-    }
+.planUl .title {
+    width: 600px;
+    margin-bottom: 16px;
+}
 
-    .planDetail{
-        width:100%;
-    }
+.planUl li {
+    margin: 8px 6px;
+}
+
+.planUl .planDetail {
+    width: 600px;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    text-align: start;
+    grid-gap: 2rem;
+    grid-template-columns: 3fr 1fr 1fr;
+}
+
+.planUl .btn {
+    margin-top: 6px;
+    padding: 10px 16px;
+    text-align: center;
+}
 
 .planDetail span {
-    margin-right: 200px;
+    margin: 6px;
+    color: rgba(255, 222, 180, 0.671);
 }
+
 
 .showPlan {
     display: flex;

@@ -41,8 +41,8 @@ namespace Application.Services
             var names = model.TeacherName.Split(" ");
             int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
             await _classRepository.GetAllAsync();
-            var teacher = 
-                await _teacherRepository.SingleOrDefaultAsync(t => t.FirstName == names[0] && t.LastName == names[1] && t.TimetableId == activeTimetableId, x=>x.Class);
+            var teacher = await _teacherRepository.SingleOrDefaultAsync
+                (t => t.FirstName == names[0] && t.LastName == names[1] && t.TimetableId == activeTimetableId, x=>x.Class);
             if(teacher is null) { throw new NotFoundException("Nie znaleziono podanego nauczyciela"); }
             if(teacher.Class is not null) { throw new BadRequestException("Podany nauczyciel już jest wychowawcą"); }
 
@@ -114,12 +114,17 @@ namespace Application.Services
 
         public async Task UpdateClass(UpdateClassDto model)
         {
-            var names = model.TeacherName.Split(" ");
+            var teacherNames = model.TeacherName.Split(" ");
+            var classEntity = await _classRepository.SingleOrDefaultAsync(x => x.Id == model.Id, x => x.Teacher);
             int activeTimetableId = await _userRepository.GetCurrentActiveTimetable();
-            var teacher = await _teacherRepository.SingleOrDefaultAsync(t => t.FirstName == names[0] && t.LastName == names[1] && t.TimetableId == activeTimetableId);
+            var teacher = await _teacherRepository.SingleOrDefaultAsync
+                (t => t.FirstName == teacherNames[0] && t.LastName == teacherNames[1] && t.TimetableId == activeTimetableId, x => x.Class);
+            if (teacher is null) { throw new NotFoundException("Nie znaleziono podanego nauczyciela"); }
+            if (teacher.Class is not null && $"{classEntity.Teacher.FirstName} {classEntity.Teacher.LastName}" != model.TeacherName) { throw new BadRequestException("Podany nauczyciel już jest wychowawcą"); }
 
             var classToUpdate = _mapper.Map<Class>(model);
             classToUpdate.TeacherId = teacher.Id;
+            classToUpdate.Name = model.Name;
             classToUpdate.TimetableId = activeTimetableId;
             await _classRepository.UpdateAsync(classToUpdate);
         }

@@ -28,19 +28,41 @@ namespace UI.Components.AddSubjects
         [Inject]
         public NavigationManager NavigationManager { get; set; }
 
+        [Inject]
+        public ITimetableStateHttpService TimetableStateHttpService { get; set; }
+
+        [Inject]
+        public ITimetableHttpService TimetableHttpService { get; set;}
+
+
         protected override async Task OnInitializedAsync()
-        {
+        {         
             isBusy = true;
+            await PhaseGuard();
             classessNames = await ClassHttpService.GetAllClassessNames();
             isBusy = false;
         }
 
-        protected async Task GenerateTimetable()
+        protected async Task PhaseGuard()
         {
-            await TimetableHttpService.Generate();
+            int currentTimetable = await TimetableStateHttpService.GetCurrentTimetable();
+            int currentPhase = await TimetableStateHttpService.GetCurrentPhase(currentTimetable);
+            if (currentPhase != 3 && currentPhase != 2)
+            {
+                NavigationManager.NavigateTo("/");
+            }
         }
 
-        [Inject]
-        public ITimetableHttpService TimetableHttpService { get; set; }
+        protected async Task GenerateTimetable()
+        {
+            isBusy = true;
+            await TimetableHttpService.Generate();
+            isBusy = false;
+            ToastService.ShowSuccess("Pomyślnie wygenerowano plan lekcji");
+            int currentTimetableId = await TimetableHttpService.GetCurrentUserTimetableId();
+            NavigationManager.NavigateTo($"plans/{currentTimetableId}");
+        }
+
+        
     }
 }

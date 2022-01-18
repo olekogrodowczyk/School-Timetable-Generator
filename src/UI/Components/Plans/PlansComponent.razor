@@ -2,7 +2,7 @@
 <section id="add">
      <div class="container">
             <div class="back-btn">
-               <a class="btn btn-border" href="3card.html">WRÓĆ</a>
+               <a class="btn btn-border" href="/">WRÓĆ</a>
             </div>
 
             <div class="planList">
@@ -15,13 +15,24 @@
                     {
                        <li>
                            <div class="planDetail">
-                               <span>@timetable.GenereteTime</span>
+                            @if(timetable.GenereteTime == DateTime.MinValue)
+                            {
+                                <span>Jeszcze nie wygenerowano</span>
+                            }
+                            else
+                            {
+                                <span>@timetable.GenereteTime</span>
                                <a class="btn btn-border" href="/plans/@timetable.Id">Przejdź</a>
-                               <button class="btn btn-border">Przełącz</button>
-                           </div>
+                            } 
+                            
+                            @if(timetable.Id != currentTimetableId)
+                            {
+                                <button @onclick="async ()=> await ChangeTimetable(timetable.Id)" class="btn btn-border">Przełącz</button>
+                            }
+                        </div>
                        </li>
                     }
-                    <button class="btn btn-border">Nowy plan lekcji</button>
+                    <button @onclick="CreateNewTimetable" class="btn btn-border">Nowy plan lekcji</button>
                 </ul>
             </div>
         </div>

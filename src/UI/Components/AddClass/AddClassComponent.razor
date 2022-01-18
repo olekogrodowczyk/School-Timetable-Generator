@@ -12,14 +12,18 @@
 
 		<div class="card-container">
 			<ul class="ul-add green-shadow">
-				<li> <p>Podaj nazwę klasy: </p> <input type="text" id="name" name="name" placeholder="Nazwa" disabled="@isBusy"></li>
-				<li> <p>Podaj wychowawcę klasy: </p> <input type="text" id="teacherSelect" name="name" placeholder="Nauczyciel" disabled="@isBusy"></li>
+				<li> <p>Podaj nazwę klasy: </p> <input class="selectable" type="text" id="name" name="name" placeholder="Nazwa" disabled="@isBusy"></li>
+				<li> <p>Podaj wychowawcę klasy: </p> <input class="selectable" type="text" id="teacherSelect" name="name" placeholder="Nauczyciel" disabled="@isBusy"></li>
 				<li>
 					<div class="btn-container">
 						<button class="btn btn-dark" id="addNewClass" type="submit" value="DODAJ"
-								disabled="@isBusy">
+								disabled="@isBusy" @onclick="CheckIfTeacherFromLocalStorageExists">
 							DODAJ
 						</button>
+						<button class="btn btn-dark" id="fillbackClass" type="submit" value="COFNIJ"
+								disabled="@isBusy">COFNIJ</button>
+
+
 					</div>
 				</li>
 				<li class="addStudent dark-shadow">
@@ -70,7 +74,7 @@
 							@foreach (var student in item.Students)
 							{
 								<ul class="dark-shadow">
-									<li>@String.Format("{0} {1}", student.FirstName, student.LastName)"</li>
+									<li>@String.Format("{0} {1}", student.FirstName, student.LastName)</li>
 									<li>
 										<div id="@student.Id" class="btn-container">
 											<input id="@student.Id" @onclick="(async()=>await DeleteStudent(student.Id))"

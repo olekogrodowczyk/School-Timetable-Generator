@@ -59,11 +59,25 @@ namespace WebAPI.Controllers
             return Ok(new OkResult<IEnumerable<TimetableOutcomeVm>>(result, "Pomyślnie zwrócono wynik działania algorytmu"));
         }
 
-        [HttpGet("getoutcomelist")]
-        public async Task<IActionResult> GetTimetablesGeneretedForUser()
+        [HttpGet("getusertimetables")]
+        public async Task<IActionResult> GetUserTimetables()
         {
-            var result = await _timetableService.GetGeneratedTimetables();
+            var result = await _timetableService.GetUserTimetables();
             return Ok(new OkResult<IEnumerable<TimetableVm>>(result, "Pomyślnie zwrócono wygenerowane plany lekcji"));
+        }
+
+        [HttpPatch("changecurrenttimetable")]
+        public async Task<IActionResult> ChangeUserCurrentTimetable([FromQuery]int timetableId)
+        {
+            await _timetableService.ChangeUserCurrentTimetable(timetableId);
+            return Ok(new Shared.Responses.OkResult("Pomyślnie zmieniono obecny plan użytkownika"));
+        }
+
+        [HttpGet("getcurrenttimetable")]
+        public async Task<IActionResult> GetUserCurrentTimetable()
+        {
+            var result = await _timetableService.GetCurrentUserTimetableId();
+            return Ok(new OkResult<int>(result, "Pomyślnie zwrócono obecny plan lekcji użytkownika"));
         }
     }
 }

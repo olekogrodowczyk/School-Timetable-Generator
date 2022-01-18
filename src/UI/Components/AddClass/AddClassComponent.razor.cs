@@ -16,10 +16,7 @@ namespace UI.Components.AddClass
 {
     public partial class AddClassComponent : ComponentBase
     {
-        protected string value = String.Empty;
-        protected string _errorMessage = String.Empty;
-        protected string[] _errors;
-        private bool error;
+        private bool isInvalid = false;
         private IEnumerable<ClassVm> classessCreated = new List<ClassVm>();
         private Dictionary<int, string> styles = new Dictionary<int, string>();
         private int teachersCount;
@@ -44,10 +41,14 @@ namespace UI.Components.AddClass
         public IStudentHttpService StudentHttpService { get; set; }
 
         [Inject]
+        public ITimetableStateHttpService TimetableStateHttpService { get; set;}
+
+        [Inject]
         public NavigationManager NavigationManager { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
+            await PhaseGuard();
             isBusy = true;
             teachersCount = await TeacherHttpService.GetTeachersCount();
             if (teachersCount == 0)
@@ -69,29 +70,19 @@ namespace UI.Components.AddClass
             }
         }
 
-        private async Task UpdateClass()
+        protected async Task PhaseGuard()
         {
-            string classToEditString = await LocalStorageService.GetItemAsync<string>("ClassToEdit");
-            ClassModel classToEdit = null;
-            try
+            int currentTimetable = await TimetableStateHttpService.GetCurrentTimetable();
+            int currentPhase = await TimetableStateHttpService.GetCurrentPhase(currentTimetable);
+            if(currentPhase != 1)
             {
-                classToEdit = JsonConvert.DeserializeObject<ClassModel>(classToEditString);
-            }
-            catch (Exception ex)
-            {
-                error = true;
-                ToastService.ShowError("Nastąpił problem z serializacją danych");
-            }
-            error = await ComponentRequestHandler.HandleRequest<ClassModel>(ClassHttpService.UpdateClass
-                , classToEdit, _errorMessage, _errors, ToastService);
-            if (!error)
-            {
-                ToastService.ShowSuccess("Pomyślnie zaktualizowano wybranegą klasę");
+                NavigationManager.NavigateTo("/");
             }
         }
 
         private async Task Refresh()
         {
+            isInvalid = false;
             classessCreated = await ClassHttpService.GetAllClassess();
             await InitializeStyles();
             await Task.Delay(50);
@@ -116,48 +107,51 @@ namespace UI.Components.AddClass
             styles[classId] = styles[classId] == String.Empty ? $"max-height: {maxHeight.ToString()}px;" : String.Empty;
         }
 
+        private async Task UpdateClass()
+        {
+            string classToEditString = await LocalStorageService.GetItemAsync<string>("ClassToEdit");
+            var classToEdit = await JsonDeserializer.DeserializeValue<ClassModel>(classToEditString, ToastService);
+            isInvalid = await ComponentRequestHandler.HandleRequest(ClassHttpService.UpdateClass, classToEdit, ToastService);
+            if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie zaktualizowano wybraną klasę"); }
+            await Refresh();
+        }          
+
         private async Task DeleteStudent(int studentId)
         {
-            error = await ComponentRequestHandler.HandleRequest<int>(StudentHttpService.DeleteStudent
-                , studentId, _errorMessage, _errors, ToastService);
-            if (!error)
-            {
-                ToastService.ShowSuccess("Pomyślnie usunięto wybranego ucznia");
-            }
+            isInvalid = await ComponentRequestHandler.HandleRequest(StudentHttpService.DeleteStudent, studentId, ToastService);
+            if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie usunięto wybranego ucznia"); }
             await Refresh();
         }
 
         private async Task DeleteClass(int classId)
         {
-            error = await ComponentRequestHandler.HandleRequest<int>(ClassHttpService.DeleteClass
-                , classId, _errorMessage, _errors, ToastService);
-            if (!error)
-            {
-                ToastService.ShowSuccess("Pomyślnie usunięto wybraną klasę");
-            }
+            isInvalid = await ComponentRequestHandler.HandleRequest<int>(ClassHttpService.DeleteClass, classId, ToastService);
+            if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie usunięto wybraną klasę"); }
             await Refresh();
+        }
+
+        private async Task<bool> CheckIfTeacherFromLocalStorageExists()
+        {
+            string teacherToCheck = await LocalStorageService.GetItemAsync<string>("TeacherToSelect");
+            var teacherNames = teacherToCheck.Split(" ");
+            if (teacherNames.Length != 2)
+            {
+                ToastService.ShowError("Nieprawidłowe dane nauczyciela");
+                return false;
+            }
+
+            bool teacherExists = await TeacherHttpService.TeacherExists(teacherNames[0], teacherNames[1]);
+            if (!teacherExists) { ToastService.ShowError("Podany nauczyciel nie istnieje"); return false; }
+            await JSRuntime.InvokeVoidAsync("teacherExist");
+            return true;
         }
 
         protected async Task AddClass()
         {
             string classToAddString = await LocalStorageService.GetItemAsync<string>("ClassToAdd");
-            ClassModel classToAdd = null;
-            try
-            {
-                classToAdd = JsonConvert.DeserializeObject<ClassModel>(classToAddString);
-            }
-            catch (Exception ex)
-            {
-                error = true;
-                ToastService.ShowError("Nastąpił problem z serializacją danych");
-            }
-            if (error) { return; }
-            error = await ComponentRequestHandler.HandleRequest<ClassModel>(ClassHttpService.CreateClass
-                , classToAdd, _errorMessage, _errors, ToastService);
-            if (!error)
-            {
-                ToastService.ShowSuccess("Pomyślnie dodano nowego nauczyciela");                
-            }
+            var classToEdit = await JsonDeserializer.DeserializeValue<ClassModel>(classToAddString, ToastService);
+            isInvalid = await ComponentRequestHandler.HandleRequest(ClassHttpService.CreateClass, classToEdit, ToastService);
+            if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie utworzono nową klasę"); }
             await Refresh();
         }
     }

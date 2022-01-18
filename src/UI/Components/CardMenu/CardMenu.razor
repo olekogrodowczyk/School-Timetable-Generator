@@ -1,22 +1,22 @@
-﻿
-<a class="card-container" href="@Link">
-    <div class="card  green-shadow glow">
-        <div class="icon">
-            <i class="@IconName"></i>
-        </div>
-        <div class="tittle-card">
-            @Title
-        </div>
-    </div>
+﻿<a class="card-container" href="@Link">
+	<div class="card  green-shadow glow">
+		<div class="icon">
+			<img src="image/@IconName" />
+		</div>
+		<div class="tittle-card">
+			@Title
+		</div>
+		
+	</div>
 </a>
 
 @code {
-    [Parameter]
-    public string Link { get; set; }
+	[Parameter]
+	public string Link { get; set; }
 
-    [Parameter]
-    public string IconName { get; set; } = "fas fa-users";
+	[Parameter]
+	public string IconName { get; set; }
 
-    [Parameter]
-    public string Title { get; set; }
+	[Parameter]
+	public string Title { get; set; }
 }

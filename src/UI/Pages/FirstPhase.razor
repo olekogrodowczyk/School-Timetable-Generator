@@ -12,9 +12,9 @@
         <div class="container">
             
             <div class="cards-container">
-                <CardMenu Link="addteachers" Title="DODAJ NAUCZYCIELI"></CardMenu>
-                <CardMenu Link="addclassrooms" Title="DODAJ SALE"></CardMenu>
-                <CardMenu Link="addclass" Title="DODAJ UCZNIÓW"></CardMenu>                             
+                <CardMenu Link="addteachers" Title="DODAJ NAUCZYCIELI" IconName="teacher-at-the-blackboard.png"></CardMenu>
+                <CardMenu Link="addclassrooms" Title="DODAJ SALE" IconName="classroom.png"></CardMenu>
+                <CardMenu Link="addclass" Title="DODAJ UCZNIÓW" IconName="class.png"></CardMenu>                             
             </div>
                 
              <ChangePhase></ChangePhase>
@@ -27,8 +27,21 @@
     [Inject]
     public NavigationManager NavigationManager{ get; set; }
 
+    [Inject]
+        public ITimetableStateHttpService TimetableStateHttpService { get; set;}
+
     protected override async Task OnInitializedAsync()
     {
-        
+        await PhaseGuard();
     }
+
+    protected async Task PhaseGuard()
+    {
+      int currentTimetable = await TimetableStateHttpService.GetCurrentTimetable();
+      int currentPhase = await TimetableStateHttpService.GetCurrentPhase(currentTimetable);
+      if (currentPhase != 1)
+      {
+          NavigationManager.NavigateTo("/");
+      }                        
+    }    
 }
