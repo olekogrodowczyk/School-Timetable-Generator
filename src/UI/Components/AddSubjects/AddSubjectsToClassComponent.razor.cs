@@ -89,6 +89,7 @@ namespace UI.Components.AddSubjects
 
         private async Task Refresh()
         {
+            await LocalStorageService.RemoveItemAsync("SubjectToAdd");
             isInvalid = false;
             subjectsCreated = await SubjectHttpService.GetAllSubjectsWithGroups(ClassName);
             await InitializeStyles();
@@ -142,7 +143,6 @@ namespace UI.Components.AddSubjects
             }
             if (errorModel.ErrorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
             errorModel.Clear();
-            await LocalStorageService.RemoveItemAsync("SubjectToAdd");
             await Refresh();
         }
 

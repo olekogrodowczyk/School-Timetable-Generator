@@ -65,6 +65,7 @@ namespace UI.Components.AddClassrooms
 
         private async Task Refresh()
         {
+            await LocalStorageService.RemoveItemAsync("ClassroomToAdd");
             isInvalid = false;
             classroomsCreated = await ClassroomHttpService.GetAllClassroomsCreated();
             StateHasChanged();
@@ -78,7 +79,6 @@ namespace UI.Components.AddClassrooms
             var classroomToAdd = await JsonDeserializer.DeserializeValue<ClassroomModel>(classroomToAddString, ToastService);
             isInvalid = await ComponentRequestHandler.HandleRequest(ClassroomHttpService.CreateClassroom, classroomToAdd, ToastService);          
             if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie dodano nową salę"); }
-            await LocalStorageService.RemoveItemAsync("ClassroomToAdd");
             await Refresh();
         }
 

@@ -54,6 +54,7 @@ namespace UI.Components.AddTeachers
 
         private async Task Refresh()
         {
+            await LocalStorageService.RemoveItemAsync("TeacherToAdd");
             isInvalid = false;
             teachersCreated = await TeacherHttpService.GetAllTeachersFromTimetable();
             await InitializeStyles();
@@ -105,8 +106,7 @@ namespace UI.Components.AddTeachers
             if (teacherExists) { return; }
 
             isInvalid = await ComponentRequestHandler.HandleRequest(TeacherHttpService.UpdateTeacherWithAvailabilities, teacherToAdd, ToastService);
-            if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie dodano wybranego nauczyciela"); }
-            await LocalStorageService.RemoveItemAsync("TeacherToAdd");
+            if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie dodano wybranego nauczyciela"); }            
             await Refresh();
         }
 
