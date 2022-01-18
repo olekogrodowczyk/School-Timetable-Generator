@@ -250,12 +250,15 @@ a {
     border: 1px solid rgba( 255, 255, 255, 0.18 );
 }
 
+    
+
     .main-nav .container {
-        width: var(--max-width);
+        width: 100%;
         display: flex;
         align-items: center;
         justify-content: space-between;
         justify-items: center;
+        margin-right:3rem;
     }
 
     .main-nav .logo {
@@ -264,6 +267,12 @@ a {
         margin: 1rem 2rem;
         color: var(--dark-color);
     }
+
+        .main-nav .logo img {
+            width: 110%;
+            filter: invert(100%);
+            -webkit-filter: invert(100%);
+        }
 
     .main-nav ul {
         display: flex;
@@ -1106,7 +1115,7 @@ input:focus {
     }
 
     #add-subject .panel .groupAllInfo {
-        max-height: 600px;
+        max-height: 400px;
         overflow-y: auto;
         display: flex;
         flex-direction: column;
@@ -1114,6 +1123,7 @@ input:focus {
         justify-content: right;
         margin: 1rem;
         padding: 1rem;
+        overflow: auto;
     }
 
     #add-subject .panel .groupDetails {

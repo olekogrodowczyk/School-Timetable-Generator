@@ -761,7 +761,7 @@ function addGroupSubjectFields() {
         row.className = "groupDetails"
         row.innerHTML = `
         <label for=${i}>Nazwa grupy:</label>
-        <input id=${i} type="text" placeholder="Grupa ${i}" onchange ="setName(this.id, this.value)">
+        <input id=${i} type="text" placeholder="Podaj nazwę grupy" onchange ="setName(this.id, this.value)">
         <label for=${i}>Nauczyciel:</label>
         <input id=${i} type="text" placeholder="Podaj nauczyciela" onchange ="setTeacher(this.id, this.value)">
         <label for=${i}>Ilość godzin w tygodniu:</label>
