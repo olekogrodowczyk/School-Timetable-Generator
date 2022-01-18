@@ -82,6 +82,7 @@ namespace UI.Components.AddClass
 
         private async Task Refresh()
         {
+            await LocalStorageService.RemoveItemAsync("ClassToAdd");
             isInvalid = false;
             classessCreated = await ClassHttpService.GetAllClassess();
             await InitializeStyles();
@@ -153,7 +154,6 @@ namespace UI.Components.AddClass
             var classToEdit = await JsonDeserializer.DeserializeValue<ClassModel>(classToAddString, ToastService);
             isInvalid = await ComponentRequestHandler.HandleRequest(ClassHttpService.CreateClass, classToEdit, ToastService);
             if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie utworzono nową klasę"); }
-            await LocalStorageService.RemoveItemAsync("ClassToAdd");
             await Refresh();
         }
     }
