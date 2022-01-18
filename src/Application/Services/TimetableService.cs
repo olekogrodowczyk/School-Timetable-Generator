@@ -86,7 +86,8 @@ namespace Application.Services
                     a.AddRange(_mapper.Map<List<LessonVm>>(b.Lessons));
                     return a;
                 }).GroupBy(x => x.DayOfWeek, (key, value) =>
-                new DayOfWeekOutcomeVm{ DayOfWeek = MatchDayOfWeekByNumber(key), DayOfWeekNumber=key, Lessons = value.ToList()})
+                new DayOfWeekOutcomeVm{ DayOfWeek = MatchDayOfWeekByNumber(key), DayOfWeekNumber=key
+                , Lessons = value.OrderBy(x=>x.StartsAt).ToList()})
                 .OrderBy(x => x.DayOfWeekNumber).ToList();
 
                 outcomeList.Add(new TimetableOutcomeVm
