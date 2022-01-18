@@ -40,6 +40,7 @@ namespace UI.Components.AddClassrooms
 
         protected override async Task OnInitializedAsync()
         {
+            await PhaseGuard();
             await LocalStorageService.RemoveItemAsync("MyClassrooms");
         }
 
@@ -49,6 +50,16 @@ namespace UI.Components.AddClassrooms
             {           
                 await JSRuntime.InvokeVoidAsync("initializeAddClassrooms");
                 await Refresh();
+            }
+        }
+
+        protected async Task PhaseGuard()
+        {
+            int currentTimetable = await TimetableStateHttpService.GetCurrentTimetable();
+            int currentPhase = await TimetableStateHttpService.GetCurrentPhase(currentTimetable);
+            if (currentPhase != 1)
+            {
+                NavigationManager.NavigateTo("/");
             }
         }
 

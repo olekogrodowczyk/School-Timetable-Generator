@@ -28,11 +28,29 @@ namespace UI.Components.AddSubjects
         [Inject]
         public NavigationManager NavigationManager { get; set; }
 
+        [Inject]
+        public ITimetableStateHttpService TimetableStateHttpService { get; set; }
+
+        [Inject]
+        public ITimetableHttpService TimetableHttpService { get; set;}
+
+
         protected override async Task OnInitializedAsync()
-        {
+        {         
             isBusy = true;
+            await PhaseGuard();
             classessNames = await ClassHttpService.GetAllClassessNames();
             isBusy = false;
+        }
+
+        protected async Task PhaseGuard()
+        {
+            int currentTimetable = await TimetableStateHttpService.GetCurrentTimetable();
+            int currentPhase = await TimetableStateHttpService.GetCurrentPhase(currentTimetable);
+            if (currentPhase != 3 && currentPhase != 2)
+            {
+                NavigationManager.NavigateTo("/");
+            }
         }
 
         protected async Task GenerateTimetable()
@@ -45,7 +63,6 @@ namespace UI.Components.AddSubjects
             NavigationManager.NavigateTo($"plans/{currentTimetableId}");
         }
 
-        [Inject]
-        public ITimetableHttpService TimetableHttpService { get; set; }
+        
     }
 }

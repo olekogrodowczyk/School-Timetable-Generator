@@ -50,7 +50,9 @@ namespace UI.Components.AddSubjects
         [Inject]
         public ITeacherHttpService TeacherHttpService { get; set; }
 
-        
+        [Inject]
+        public ITimetableStateHttpService TimetableStateHttpService { get; set; }
+
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -59,6 +61,31 @@ namespace UI.Components.AddSubjects
                 await Refresh();
             }
         }
+
+        protected override async Task OnInitializedAsync()
+        {
+            await PhaseGuard();
+            students = await ClassHttpService.GetAllStudentsFromClass(ClassName);
+            if (students.Count() == 0)
+            {
+                ToastService.ShowError("W tej klasie nie ma żadnych uczniów!", "Błąd");
+                NavigationManager.NavigateTo("/");
+                return;
+            }
+            await LocalStorageService.SetItemAsync("MyStudents", students);
+            await JSRuntime.InvokeVoidAsync("initializeSubjects");
+        }
+
+        protected async Task PhaseGuard()
+        {
+            int currentTimetable = await TimetableStateHttpService.GetCurrentTimetable();
+            int currentPhase = await TimetableStateHttpService.GetCurrentPhase(currentTimetable);
+            if (currentPhase != 3 && currentPhase != 2)
+            {
+                NavigationManager.NavigateTo("/");
+            }
+        }
+
 
         private async Task Refresh()
         {
@@ -83,20 +110,6 @@ namespace UI.Components.AddSubjects
         {
             int maxHeight = 427;
             styles[classId] = styles[classId] == String.Empty ? $"max-height: {maxHeight.ToString()}px;" : String.Empty;
-        }
-
-        protected override async Task OnInitializedAsync()
-        {
-            await LocalStorageService.RemoveItemAsync("MySubjects");
-            students = await ClassHttpService.GetAllStudentsFromClass(ClassName);
-            if (students.Count() == 0)
-            {
-                ToastService.ShowError("W tej klasie nie ma żadnych uczniów!", "Błąd");
-                NavigationManager.NavigateTo("/");
-                return;
-            }
-            await LocalStorageService.SetItemAsync("MyStudents", students);
-            await JSRuntime.InvokeVoidAsync("initializeSubjects");
         }
 
         protected async Task AddSubject()
