@@ -174,7 +174,7 @@
 								@foreach (var row in transformAvailabilitiesIntoMatrix(teacher.Availabilities))
 								{
 									<tr id="@String.Format("{0}.{1}panel",counter,teacher.Id)">
-										<td>8-9</td>
+										<td>@($"{counter}-{(counter+1)}")</td>
 										@foreach (var column in row)
 										{
 											<td>
