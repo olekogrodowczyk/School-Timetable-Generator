@@ -41,10 +41,14 @@ namespace UI.Components.AddClass
         public IStudentHttpService StudentHttpService { get; set; }
 
         [Inject]
+        public ITimetableStateHttpService TimetableStateHttpService { get; set;}
+
+        [Inject]
         public NavigationManager NavigationManager { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
+            await PhaseGuard();
             isBusy = true;
             teachersCount = await TeacherHttpService.GetTeachersCount();
             if (teachersCount == 0)
@@ -63,6 +67,16 @@ namespace UI.Components.AddClass
             {
                 await JSRuntime.InvokeVoidAsync("initializeAddClass");
                 await Refresh();
+            }
+        }
+
+        protected async Task PhaseGuard()
+        {
+            int currentTimetable = await TimetableStateHttpService.GetCurrentTimetable();
+            int currentPhase = await TimetableStateHttpService.GetCurrentPhase(currentTimetable);
+            if(currentPhase != 1)
+            {
+                NavigationManager.NavigateTo("/");
             }
         }
 

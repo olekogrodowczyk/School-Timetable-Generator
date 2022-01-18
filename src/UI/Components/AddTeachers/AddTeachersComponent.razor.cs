@@ -34,8 +34,12 @@ namespace UI.Components.AddTeachers
         [Inject]
         public NavigationManager NavigationManager { get; set; }
 
+        [Inject]
+        public ITimetableStateHttpService TimetableStateHttpService { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
+            await PhaseGuard();
             await LocalStorageService.RemoveItemAsync("MyTeachers");
         }
 
@@ -65,6 +69,16 @@ namespace UI.Components.AddTeachers
 
             if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie zaktualizowano wybranego nauczyciela"); }
             await Refresh();
+        }
+
+        protected async Task PhaseGuard()
+        {
+            int currentTimetable = await TimetableStateHttpService.GetCurrentTimetable();
+            int currentPhase = await TimetableStateHttpService.GetCurrentPhase(currentTimetable);
+            if (currentPhase != 1)
+            {
+                NavigationManager.NavigateTo("/");
+            }
         }
 
         private Task InitializeStyles()
