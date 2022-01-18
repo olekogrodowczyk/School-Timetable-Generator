@@ -31,11 +31,11 @@ namespace UI.Components
                 errorModel.ErrorMessage = e.Message;
             }
             if (errorModel.ErrorMessage != String.Empty) { toastService.ShowError(errorModel.ErrorMessage, "Błąd"); }
-            if (errorModel.Errors != null) 
+            if (errorModel.Errors != null)
             {
                 foreach (string error in errorModel.Errors)
                 {
-                    toastService.ShowError(error);
+                    toastService.ShowError(error, "Błąd");
                 }
             }
             errorModel.Clear();
