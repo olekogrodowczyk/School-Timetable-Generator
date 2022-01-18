@@ -22,7 +22,6 @@ namespace Domain.Entities
         public int? ClassroomId { get; set; }
         public virtual Classroom Classroom { get; set; }
         public virtual ICollection<Assignment> Assignments { get; set; }
-        public virtual ICollection<Lesson> Lessons { get; set; }
-        public virtual ICollection<UnassignedLesson> UnassignedLessons { get; set; }
+        public virtual ICollection<Lesson> Lessons { get; set; }        
     }
 }

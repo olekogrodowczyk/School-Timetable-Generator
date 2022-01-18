@@ -286,8 +286,9 @@ namespace Application.Services
                 Console.WriteLine("Nauczyciel: " + errorList[i].TeacherId + " Klasa: " + errorList[i].ClassId);
                 UnassignedLesson unassignedLesson = new UnassignedLesson
                 {
-                    GroupId = errorList[i].ClassId,
+                    ClassId = errorList[i].ClassId,
                     TeacherId = errorList[i].TeacherId,
+                    TimetableId= activeTimetableId,
                 };
                 await _unassignedLessonRepository.AddAsync(unassignedLesson);
             }
@@ -301,10 +302,15 @@ namespace Application.Services
 
         private async Task DeleteLessonsFromTimetable()
         {
+            var unassignedLessons = await _unassignedLessonRepository.GetWhereAsync(x => x.TimetableId == activeTimetableId);
             var lessons = await _lessonRepository.GetWhereAsync(x => x.TimetableId == activeTimetableId);
             foreach (var lesson in lessons)
             {
                 await _lessonRepository.DeleteAsync(lesson.Id);
+            }
+            foreach (var unassignedLesson in unassignedLessons)
+            {
+                await _unassignedLessonRepository.DeleteAsync(unassignedLesson.Id);
             }
         }
 

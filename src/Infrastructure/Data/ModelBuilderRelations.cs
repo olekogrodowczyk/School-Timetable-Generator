@@ -118,9 +118,9 @@ namespace Infrastructure.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<UnassignedLesson>()
-                .HasOne<Group>(x => x.Group)
+                .HasOne<Class>(x => x.Class)
                 .WithMany(x => x.UnassignedLessons)
-                .HasForeignKey(x => x.GroupId)
+                .HasForeignKey(x => x.ClassId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<UnassignedLesson>()

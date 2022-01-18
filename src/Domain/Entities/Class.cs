@@ -17,5 +17,6 @@ namespace Domain.Entities
         public virtual ICollection<Group> Groups { get; set; }
         public virtual ICollection<Student> Students { get; set; }
         public virtual ICollection<Subject> Subjects { get; set; }
+        public virtual ICollection<UnassignedLesson> UnassignedLessons { get; set; }
     }
 }

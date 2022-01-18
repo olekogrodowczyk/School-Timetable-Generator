@@ -9,8 +9,8 @@ namespace Domain.Entities
 {
     public class UnassignedLesson : AuditableEntity
     {
-        public int GroupId { get; set; }
-        public virtual Group Group { get; set; }
+        public int ClassId { get; set; }
+        public virtual Class Class { get; set; }
         public int TeacherId { get; set; }
         public virtual Teacher Teacher { get; set; }
         public int? TimetableId { get; set; }
