@@ -74,10 +74,11 @@ namespace UI.Components.AddClassrooms
         protected async Task AddClassroom()
         {
             string classroomToAddString = await LocalStorageService.GetItemAsync<string>("ClassroomToAdd");
+            if(classroomToAddString is null) { return; }
             var classroomToAdd = await JsonDeserializer.DeserializeValue<ClassroomModel>(classroomToAddString, ToastService);
-            isInvalid = await ComponentRequestHandler.HandleRequest(ClassroomHttpService.CreateClassroom, classroomToAdd, ToastService);
-           
+            isInvalid = await ComponentRequestHandler.HandleRequest(ClassroomHttpService.CreateClassroom, classroomToAdd, ToastService);          
             if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie dodano nową salę"); }
+            await LocalStorageService.RemoveItemAsync("ClassroomToAdd");
             await Refresh();
         }
 

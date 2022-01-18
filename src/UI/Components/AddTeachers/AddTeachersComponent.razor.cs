@@ -99,12 +99,14 @@ namespace UI.Components.AddTeachers
         protected async Task AddTeacher()
         {
             string teacherToAddString = await LocalStorageService.GetItemAsync<string>("TeacherToAdd");
+            if (teacherToAddString is null) { return; }
             var teacherToAdd = await JsonDeserializer.DeserializeValue<TeacherModel>(teacherToAddString, ToastService);
             bool teacherExists = await CheckIfTeacherExists(teacherToAdd.imie, teacherToAdd.nazwisko);
             if (teacherExists) { return; }
 
             isInvalid = await ComponentRequestHandler.HandleRequest(TeacherHttpService.UpdateTeacherWithAvailabilities, teacherToAdd, ToastService);
             if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie dodano wybranego nauczyciela"); }
+            await LocalStorageService.RemoveItemAsync("TeacherToAdd");
             await Refresh();
         }
 

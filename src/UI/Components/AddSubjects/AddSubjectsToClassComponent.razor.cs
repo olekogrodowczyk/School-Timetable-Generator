@@ -115,6 +115,7 @@ namespace UI.Components.AddSubjects
         protected async Task AddSubject()
         {           
             string subjectToAddString = await LocalStorageService.GetItemAsync<string>("SubjectToAdd");
+            if (subjectToAddString is null) { return; }
             var subjectToAdd = await JsonDeserializer.DeserializeValue<SubjectModel>(subjectToAddString, ToastService);
             errorModel = new ErrorModel();
             if (await ValidateData(subjectToAdd)) { return; }
@@ -141,6 +142,7 @@ namespace UI.Components.AddSubjects
             }
             if (errorModel.ErrorMessage == String.Empty) { ToastService.ShowSuccess("Pomyślnie zapisano dane"); }
             errorModel.Clear();
+            await LocalStorageService.RemoveItemAsync("SubjectToAdd");
             await Refresh();
         }
 
