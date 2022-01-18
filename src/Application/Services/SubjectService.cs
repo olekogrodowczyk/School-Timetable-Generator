@@ -18,14 +18,16 @@ namespace Application.Services
         private readonly ISubjectRepository _subjectRepository;
         private readonly IUserRepository _userRepository;
         private readonly IClassRepository _classRepository;
+        private readonly ILessonRepository _lessonRepository;
 
         public SubjectService(IMapper mapper, ISubjectRepository subjectRepository, IUserRepository userRepository
-            , IClassRepository classRepository)
+            , IClassRepository classRepository, ILessonRepository lessonRepository)
         {
             _mapper = mapper;
             _subjectRepository = subjectRepository;
             _userRepository = userRepository;
             _classRepository = classRepository;
+            _lessonRepository = lessonRepository;
         }
 
         public async Task<int> CreateSubject(CreateSubjectDto createSubjectDto)
@@ -58,6 +60,11 @@ namespace Application.Services
 
         public async Task DeleteSubject(int subjectId)
         {
+            var subject = await _subjectRepository.SingleOrDefaultAsync(s=> s.Id == subjectId,s=>s.Lessons);
+            foreach (var lesson in subject.Lessons)
+            {
+                await _lessonRepository.DeleteAsync(lesson.Id);
+            }
             await _subjectRepository.DeleteAsync(subjectId);
         }
     }
