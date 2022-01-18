@@ -99,16 +99,8 @@ namespace UI.Components.AddSubjects
             await JSRuntime.InvokeVoidAsync("initializeSubjects");
         }
 
-        protected async Task DeleteGroup(int groupId)
-        {
-            isInvalid = await ComponentRequestHandler.HandleRequest(GroupHttpService.DeleteGroupWithAssignments, groupId, ToastService);
-            if (!isInvalid) { ToastService.ShowSuccess("Pomyślnie usunięto wybraną grupę"); }
-            await Refresh();
-        }
-
         protected async Task AddSubject()
-        {
-            
+        {           
             string subjectToAddString = await LocalStorageService.GetItemAsync<string>("SubjectToAdd");
             var subjectToAdd = await JsonDeserializer.DeserializeValue<SubjectModel>(subjectToAddString, ToastService);
             errorModel = new ErrorModel();
